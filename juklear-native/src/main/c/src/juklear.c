@@ -3,6 +3,8 @@
 #include <jni.h>
 #include <stdio.h>
 
+JuklearGlobal_t JUKLEAR_GLOBAL;
+
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env;
     int supported_version = (*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_8);
@@ -20,9 +22,10 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         // Hmm, ok, we also accept later versions, apparently 1.1 is not supported?!
         (*vm)->GetEnv(vm, (void **) &env, supported_version);
         if(env == NULL) {
-            fprintf(stderr,
-                    "JVM did not fill JniEnv even after requesting an explicitly supported version, "
-                    "unable to initialize juklear!");
+            fprintf(
+                stderr,
+                "JVM did not fill JniEnv even after requesting an explicitly supported version, "
+                "unable to initialize juklear!");
             return 0;
         }
     }
@@ -32,24 +35,47 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     // Now collect collect things we need the entire time
     jclass c_accessible_object_class = (*env)->FindClass(env, "net/janrupf/juklear/ffi/CAccessibleObject");
     if(!c_accessible_object_class) {
-        fprintf(stderr,
-                "JVM did not provide the class net.janrupf.juklear.ffi.CAccessibleObject, did the "
-                "native library get loaded without the java part? (Unable to initialize)");
+        fprintf(
+            stderr,
+            "JVM did not provide the class net.janrupf.juklear.ffi.CAccessibleObject, did the "
+            "native library get loaded without the java part? (Unable to initialize)");
         return 0;
     }
 
     JUKLEAR_GLOBAL.c_accessible_object_class = (*env)->NewGlobalRef(env, c_accessible_object_class);
 
-    JUKLEAR_GLOBAL.c_accessible_object_get_handle = (*env)->GetMethodID(env,
-                                                                        c_accessible_object_class,
-                                                                        "getHandle",
-                                                                        "j()");
+    JUKLEAR_GLOBAL
+        .c_accessible_object_get_handle = (*env)->GetMethodID(env, c_accessible_object_class, "getHandle", "()J");
 
     (*env)->DeleteLocalRef(env, c_accessible_object_class);
 
     if(!JUKLEAR_GLOBAL.c_accessible_object_get_handle) {
-        fprintf(stderr, "JVM did not provide the method getHandle with the signature j(), does the java "
-                        "version of the library mismatch the native version? (Unable to initialize)");
+        fprintf(
+            stderr,
+            "JVM did not provide the method getHandle with the signature ()J, does the java "
+            "version of the library mismatch the native version? (Unable to initialize)");
+        return 0;
+    }
+
+    jclass out_of_memory_error_class = (*env)->FindClass(env, "java/lang/OutOfMemoryError");
+    if(!out_of_memory_error_class) {
+        fprintf(
+            stderr,
+            "JVM did not provide the class java.lang.OutOfMemoryError, what kind of JRE are we running on?"
+            "(Unable to initialize)");
+        return 0;
+    }
+
+    JUKLEAR_GLOBAL.out_of_memory_error_class = (*env)->NewGlobalRef(env, out_of_memory_error_class);
+    JUKLEAR_GLOBAL.out_of_memory_error_constructor =
+        (*env)->GetMethodID(env, out_of_memory_error_class, "<init>", "(Ljava/lang/String;)V");
+    (*env)->DeleteLocalRef(env, out_of_memory_error_class);
+
+    if(!JUKLEAR_GLOBAL.out_of_memory_error_constructor) {
+        fprintf(
+            stderr,
+            "JVM did not provide the constructor of java.lang.OutOfMemoryError with the signature "
+            "(Ljava/lang/String;), what kind of JRE are we running on? (Unable to initialize)");
         return 0;
     }
 
@@ -59,5 +85,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
 void JNI_OnUnload(JavaVM *vm, void *reserved) {
     JNIEnv *env;
     (*vm)->GetEnv(vm, (void **) &env, JUKLEAR_GLOBAL.active_jni_version);
+
+    (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.out_of_memory_error_class);
     (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.c_accessible_object_class);
 }

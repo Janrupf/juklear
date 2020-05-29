@@ -36,6 +36,8 @@ set(JUKLEAR_INCLUDE_DIR
 set(JUKLEAR_SOURCE
         src/juklear.c
         src/juklear_context.c
+        src/juklear_font_atlas.c
+        src/juklear_font_atlas_editor.c
         src/juklear_nuklear_impl.c)
 
 ##############

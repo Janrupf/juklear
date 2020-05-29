@@ -46,6 +46,10 @@ public abstract class CAllocatedObject<T> implements AutoCloseable, CAccessibleO
             this.handle = handle;
         }
 
+        public CAllocatedObject<T> withoutFree() {
+            return new NoFreeCAllocatedObject<>(handle);
+        }
+
         public Builder<T> freeFunction(Consumer<Long> freeFunction) {
             this.freeFunction = freeFunction;
             return this;
@@ -74,5 +78,14 @@ public abstract class CAllocatedObject<T> implements AutoCloseable, CAccessibleO
         protected void doFree() {
             freeFunction.accept(this.handle);
         }
+    }
+
+    private static final class NoFreeCAllocatedObject<T> extends CAllocatedObject<T> {
+        protected NoFreeCAllocatedObject(long handle) {
+            super(handle);
+        }
+
+        @Override
+        protected void doFree() {}
     }
 }

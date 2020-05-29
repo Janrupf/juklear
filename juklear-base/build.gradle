@@ -7,6 +7,9 @@ plugins {
 group 'net.janrupf'
 
 final def NATIVE_CLASSES = [
+        "net.janrupf.juklear.font.JuklearFont",
+        "net.janrupf.juklear.font.JuklearFontAtlas",
+        "net.janrupf.juklear.font.JuklearFontAtlasEditor",
         "net.janrupf.juklear.JuklearContext"
 ]
 
