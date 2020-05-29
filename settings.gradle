@@ -1,0 +1,4 @@
+rootProject.name = 'juklear'
+include 'juklear-native'
+include 'juklear-base'
+

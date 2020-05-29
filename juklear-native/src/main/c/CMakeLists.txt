@@ -1,0 +1,53 @@
+#################
+# Project setup #
+#################
+cmake_minimum_required(VERSION 3.17)
+project(juklear C)
+
+#####################
+# Set CMake options #
+#####################
+set(CMAKE_C_STANDARD 11)
+
+#####################
+# Find dependencies #
+#####################
+find_package(JNI REQUIRED)
+
+#####################
+# Configure project #
+#####################
+if(NOT DEFINED GENERATED_JNI_HEADERS_DIR)
+    message(FATAL_ERROR "Please run cmake with -DGENERATED_JNI_HEADERS_DIR=/path/to/generated/headers or simply use "
+            "the gradle build task")
+endif()
+
+##########
+# Source #
+##########
+set(JUKLEAR_INCLUDE_DIR
+        "${CMAKE_CURRENT_LIST_DIR}/include")
+
+set(JUKLEAR_SOURCE
+        src/juklear.c
+        src/juklear_context.c)
+
+##############
+# Add target #
+##############
+add_library(juklear SHARED ${JUKLEAR_SOURCE})
+target_link_libraries(juklear PUBLIC ${JNI_LIBRARIES})
+target_include_directories(juklear PUBLIC ${JUKLEAR_INCLUDE_DIR})
+target_include_directories(juklear PRIVATE ${JNI_INCLUDE_DIRS} ${GENERATED_JNI_HEADERS_DIR})
+
+#######################
+# Set compile options #
+#######################
+if(NOT MSVC)
+    target_compile_options(juklear PRIVATE -fPIC -fstack-protector)
+else()
+    set_property(
+            TARGET juklear
+            PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebug"
+    )
+endif()

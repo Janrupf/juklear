@@ -1,0 +1,132 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+group 'net.janrupf'
+version '0.1.0'
+
+ext.generatedHeadersDir = new File(buildDir, "generatedHeaders")
+if(!ext.generatedHeadersDir.exists() && !ext.generatedHeadersDir.mkdirs()) {
+    throw new GradleException("Failed to create directory ${ext.generatedHeadersDir.absolutePath}")
+}
+
+ext.nativeBinariesDir = new File(buildDir, "nativeBinaries")
+if(!ext.nativeBinariesDir.exists() && !ext.nativeBinariesDir.mkdirs()) {
+    throw new GradleException("Failed to create directory ${ext.nativeBinariesDir.absolutePath}")
+}
+
+def isExternalBuild = false
+def ciBuild = project.hasProperty("CI") && Boolean.parseBoolean(project.property("CI").toString())
+
+if(!project.hasProperty("nativeBinaryExternalDir")) {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        // WARNING, this assumes CMake uses visual studio
+        // For GCC or Clang the output should be $nativeBinariesDir/libjuklear.dll
+        ext.nativeBinaries = Arrays.asList(new File(nativeBinariesDir, "Debug/juklear.dll"))
+    } else if (Os.isFamily(Os.FAMILY_MAC)) {
+        ext.nativeBinaries = Arrays.asList(new File(nativeBinariesDir, "libjuklear.dylib"))
+    } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+        ext.nativeBinaries = Arrays.asList(new File(nativeBinariesDir, "libjuklear.so"))
+    } else {
+        if (!project.hasProperty("nativeBinaryLibrary")) {
+            throw new GradleException("Unable to determine native output library, " +
+                    "pass -PnativeBinaryLibrary=/path/to/native/binary to gradle")
+        } else {
+            ext.nativeBinaries = [new File(project.property("nativeBinaryLibrary").toString())]
+        }
+    }
+} else {
+    def nativeBinaryExternalDir = file(project.property("nativeBinaryExternalDir").toString())
+    if(!nativeBinaryExternalDir.exists()) {
+        throw new GradleException("nativeBinaryExternalDir ${nativeBinaryExternalDir.absolutePath} does not exist")
+    }
+
+    ext.nativeBinaries = new ArrayList<File>()
+
+    for(def file in nativeBinaryExternalDir.listFiles()) {
+        println "Found native binary ${file.absolutePath}"
+        ext.nativeBinaries.add(file)
+    }
+
+    isExternalBuild = true
+}
+
+if(project.hasProperty("32bit")) {
+    ext.is32bit = true
+} else {
+    ext.is32bit = false
+}
+
+project(":juklear-base").afterEvaluate { javaProject ->
+    project(":juklear-native").afterEvaluate { nativeProject ->
+        nativeProject.tasks["build"].dependsOn(javaProject.tasks["generateJniHeaders"])
+
+        if(!isExternalBuild) {
+            javaProject.tasks["processResources"].dependsOn(nativeProject.tasks["build"])
+        }
+    }
+}
+
+def getExtension(File file) {
+    String fileName = file.getName()
+
+    if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1)
+    } else {
+        return ""
+    }
+}
+
+def getPathWithoutExtension(File file) {
+    String fileName = file.getAbsolutePath()
+
+    if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
+        return fileName.substring(0, fileName.lastIndexOf("."))
+    } else {
+        return ""
+    }
+}
+
+def processBinary(File binary, boolean doMove) {
+    String extension = getExtension(binary)
+    String path = getPathWithoutExtension(binary)
+
+    File newPath = null
+    if(ext.is32bit) {
+        newPath = new File(path + "-32." + extension)
+    } else {
+        newPath = new File(path + "-64." + extension)
+    }
+
+    if(doMove) {
+        println "Moving ${binary.absolutePath} to ${newPath.absolutePath}"
+        binary.renameTo(newPath)
+    }
+
+    return newPath
+}
+
+if(ciBuild) {
+    def ciDir = file("ci")
+    if(!ciDir.exists() && !ciDir.mkdirs()) {
+        throw new GradleException("Failed to create directory ${ciDir.absolutePath}")
+    }
+
+    new File(ciDir, "binaries").withWriter {
+        for(File binary in ext.nativeBinaries) {
+            it.write(processBinary(binary, false).absolutePath)
+        }
+    }
+
+    def binaries = ext.nativeBinaries
+
+    task moveNativeBinaries {
+        doLast {
+            for (File binary in binaries) {
+                processBinary(binary, true)
+            }
+        }
+    }
+
+    project(":juklear-native").afterEvaluate { nativeProject ->
+        nativeProject.tasks["build"].finalizedBy(moveNativeBinaries)
+    }
+}
