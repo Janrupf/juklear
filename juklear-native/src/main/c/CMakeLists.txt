@@ -9,6 +9,11 @@ project(juklear C)
 #####################
 set(CMAKE_C_STANDARD 11)
 
+################################
+# Set up 3rdparty dependencies #
+################################
+add_subdirectory(3rdparty)
+
 #####################
 # Find dependencies #
 #####################
@@ -30,13 +35,14 @@ set(JUKLEAR_INCLUDE_DIR
 
 set(JUKLEAR_SOURCE
         src/juklear.c
-        src/juklear_context.c)
+        src/juklear_context.c
+        src/juklear_nuklear_impl.c)
 
 ##############
 # Add target #
 ##############
 add_library(juklear SHARED ${JUKLEAR_SOURCE})
-target_link_libraries(juklear PUBLIC ${JNI_LIBRARIES})
+target_link_libraries(juklear PUBLIC ${JNI_LIBRARIES} nuklear)
 target_include_directories(juklear PUBLIC ${JUKLEAR_INCLUDE_DIR})
 target_include_directories(juklear PRIVATE ${JNI_INCLUDE_DIRS} ${GENERATED_JNI_HEADERS_DIR})
 

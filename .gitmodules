@@ -1,0 +1,3 @@
+[submodule "juklear-native/src/main/c/3rdparty/Nuklear"]
+	path = juklear-native/src/main/c/3rdparty/Nuklear
+	url = https://github.com/Immediate-Mode-UI/Nuklear
