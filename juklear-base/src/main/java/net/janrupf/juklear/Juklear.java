@@ -3,6 +3,7 @@ package net.janrupf.juklear;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.font.JuklearFontAtlas;
+import net.janrupf.juklear.util.JuklearBuffer;
 
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
@@ -55,5 +56,9 @@ public class Juklear {
 
     public JuklearFontAtlas defaultFontAtlas() {
         return JuklearFontAtlas.createDefault(this);
+    }
+
+    public JuklearBuffer defaultBuffer() {
+        return JuklearBuffer.createDefault(this);
     }
 }

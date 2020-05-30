@@ -47,6 +47,11 @@ public abstract class CAllocatedObject<T> implements AutoCloseable, CAccessibleO
         }
 
         public CAllocatedObject<T> withoutFree() {
+            if(freeFunction != null) {
+                throw new IllegalStateException(
+                        "Cannot set freeFunction when constructing an object without a free function");
+            }
+
             return new NoFreeCAllocatedObject<>(handle);
         }
 

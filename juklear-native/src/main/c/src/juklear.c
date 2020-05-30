@@ -79,6 +79,29 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         return 0;
     }
 
+    jclass fatal_juklear_exception_class = (*env)->FindClass(env, "net/janrupf/juklear/exception/FatalJuklearException");
+    if(!fatal_juklear_exception_class) {
+        fprintf(
+            stderr,
+            "JVM did not provide the class net.janrupf.juklear.exception.FatalJuklearException, does the java "
+            "version of the library mismatch the native version? (Unable to initialize)");
+        return 0;
+    }
+
+    JUKLEAR_GLOBAL.fatal_juklear_exception_class = (*env)->NewGlobalRef(env, fatal_juklear_exception_class);
+    JUKLEAR_GLOBAL.fatal_juklear_exception_constructor =
+        (*env)->GetMethodID(env, out_of_memory_error_class, "<init>", "(Ljava/lang/String;)V");
+    (*env)->DeleteLocalRef(env, out_of_memory_error_class);
+
+    if(!JUKLEAR_GLOBAL.fatal_juklear_exception_constructor) {
+        fprintf(
+            stderr,
+            "JVM did not provide the constructor of net.janrupf.juklear.exception.FatalJuklearException "
+            "with the signature (Ljava/lang/String;), does the java version of the library mismatch the "
+            "native version? (Unable to initialize)");
+        return 0;
+    }
+
     return supported_version;
 }
 
@@ -86,6 +109,7 @@ void JNI_OnUnload(JavaVM *vm, void *reserved) {
     JNIEnv *env;
     (*vm)->GetEnv(vm, (void **) &env, JUKLEAR_GLOBAL.active_jni_version);
 
+    (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.fatal_juklear_exception_class);
     (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.out_of_memory_error_class);
     (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.c_accessible_object_class);
 }

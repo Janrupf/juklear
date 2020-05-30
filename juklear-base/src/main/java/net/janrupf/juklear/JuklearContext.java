@@ -1,6 +1,7 @@
 package net.janrupf.juklear;
 
 import net.janrupf.juklear.annotation.AntiFreeReference;
+import net.janrupf.juklear.exception.FatalJuklearException;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.font.JuklearFont;

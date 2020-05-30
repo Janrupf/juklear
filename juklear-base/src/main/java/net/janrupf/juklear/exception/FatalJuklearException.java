@@ -1,4 +1,4 @@
-package net.janrupf.juklear;
+package net.janrupf.juklear.exception;
 
 public class FatalJuklearException extends RuntimeException {
     public FatalJuklearException(String message) {

@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+}
+
+group 'net.janrupf'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.lwjgl', name: 'lwjgl', version: '3.2.3'
+    runtimeOnly group: 'org.lwjg', name: 'lwjgl', version: '3.2.3', classifier: 'natives-linux'
+
+    implementation group: 'org.lwjgl', name: 'lwjgl-opengl', version: '3.2.3'
+    runtimeOnly group: 'org.lwjgl', name: 'lwjgl-opengl', version: '3.2.3', classifier: 'natives-linux'
+
+    implementation project(':juklear-base')
+}

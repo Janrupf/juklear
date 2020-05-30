@@ -1,5 +1,5 @@
 rootProject.name = 'juklear'
 include 'juklear-native'
 include 'juklear-base'
-include 'juklear-glfw3'
+include 'juklear-lwjgl3-opengl'
 

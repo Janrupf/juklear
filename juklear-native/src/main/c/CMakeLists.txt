@@ -35,10 +35,18 @@ set(JUKLEAR_INCLUDE_DIR
 
 set(JUKLEAR_SOURCE
         src/juklear.c
+        src/juklear_antialiasing.c
+        src/juklear_buffer.c
         src/juklear_context.c
+        src/juklear_convert_config.c
+        src/juklear_draw_null_texture.c
+        src/juklear_draw_vertex_layout_attribute.c
+        src/juklear_draw_vertex_layout_element.c
+        src/juklear_draw_vertex_layout_format.c
         src/juklear_font_atlas.c
         src/juklear_font_atlas_editor.c
-        src/juklear_nuklear_impl.c)
+        src/juklear_nuklear_impl.c
+        src/juklear_vec2.c)
 
 ##############
 # Add target #

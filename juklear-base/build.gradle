@@ -7,9 +7,17 @@ plugins {
 group 'net.janrupf'
 
 final def NATIVE_CLASSES = [
+        "net.janrupf.juklear.drawing.JuklearAntialiasing",
+        "net.janrupf.juklear.drawing.JuklearConvertConfig",
+        "net.janrupf.juklear.drawing.JuklearDrawVertexLayoutAttribute",
+        "net.janrupf.juklear.drawing.JuklearDrawVertexLayoutElement",
+        "net.janrupf.juklear.drawing.JuklearDrawVertexLayoutFormat",
+        "net.janrupf.juklear.drawing.JuklearDrawNullTexture",
         "net.janrupf.juklear.font.JuklearFont",
         "net.janrupf.juklear.font.JuklearFontAtlas",
         "net.janrupf.juklear.font.JuklearFontAtlasEditor",
+        "net.janrupf.juklear.util.JuklearBuffer",
+        "net.janrupf.juklear.math.JuklearVec2",
         "net.janrupf.juklear.JuklearContext"
 ]
 
