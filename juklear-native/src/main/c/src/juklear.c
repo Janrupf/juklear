@@ -15,7 +15,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     if(env == NULL) {
         if(supported_version < JNI_VERSION_1_8) {
             // That is weird...
-            fprintf(stderr, "JVM does not seem to support JNI at all, unable to initialize juklear!");
+            fprintf(stderr, "JVM does not seem to support JNI at all, unable to initialize juklear!\n");
             return 0;
         }
 
@@ -25,7 +25,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
             fprintf(
                 stderr,
                 "JVM did not fill JniEnv even after requesting an explicitly supported version, "
-                "unable to initialize juklear!");
+                "unable to initialize juklear!\n");
             return 0;
         }
     }
@@ -38,7 +38,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         fprintf(
             stderr,
             "JVM did not provide the class net.janrupf.juklear.ffi.CAccessibleObject, did the "
-            "native library get loaded without the java part? (Unable to initialize)");
+            "native library get loaded without the java part? (Unable to initialize)\n");
         return 0;
     }
 
@@ -53,7 +53,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         fprintf(
             stderr,
             "JVM did not provide the method getHandle with the signature ()J, does the java "
-            "version of the library mismatch the native version? (Unable to initialize)");
+            "version of the library mismatch the native version? (Unable to initialize)\n");
         return 0;
     }
 
@@ -62,52 +62,31 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         fprintf(
             stderr,
             "JVM did not provide the class java.lang.OutOfMemoryError, what kind of JRE are we running on?"
-            "(Unable to initialize)");
+            "(Unable to initialize)\n");
         return 0;
     }
 
     JUKLEAR_GLOBAL.out_of_memory_error_class = (*env)->NewGlobalRef(env, out_of_memory_error_class);
-    JUKLEAR_GLOBAL.out_of_memory_error_constructor =
-        (*env)->GetMethodID(env, out_of_memory_error_class, "<init>", "(Ljava/lang/String;)V");
     (*env)->DeleteLocalRef(env, out_of_memory_error_class);
-
-    if(!JUKLEAR_GLOBAL.out_of_memory_error_constructor) {
-        fprintf(
-            stderr,
-            "JVM did not provide the constructor of java.lang.OutOfMemoryError with the signature "
-            "(Ljava/lang/String;)V, what kind of JRE are we running on? (Unable to initialize)");
-        return 0;
-    }
 
     jclass fatal_juklear_exception_class = (*env)->FindClass(env, "net/janrupf/juklear/exception/FatalJuklearException");
     if(!fatal_juklear_exception_class) {
         fprintf(
             stderr,
             "JVM did not provide the class net.janrupf.juklear.exception.FatalJuklearException, does the java "
-            "version of the library mismatch the native version? (Unable to initialize)");
+            "version of the library mismatch the native version? (Unable to initialize)\n");
         return 0;
     }
 
     JUKLEAR_GLOBAL.fatal_juklear_exception_class = (*env)->NewGlobalRef(env, fatal_juklear_exception_class);
-    JUKLEAR_GLOBAL.fatal_juklear_exception_constructor =
-        (*env)->GetMethodID(env, out_of_memory_error_class, "<init>", "(Ljava/lang/String;)V");
     (*env)->DeleteLocalRef(env, out_of_memory_error_class);
-
-    if(!JUKLEAR_GLOBAL.fatal_juklear_exception_constructor) {
-        fprintf(
-            stderr,
-            "JVM did not provide the constructor of net.janrupf.juklear.exception.FatalJuklearException "
-            "with the signature (Ljava/lang/String;)V, does the java version of the library mismatch the "
-            "native version? (Unable to initialize)");
-        return 0;
-    }
 
     jclass long_consumer_class = (*env)->FindClass(env, "java/util/function/LongConsumer");
     if(!long_consumer_class) {
         fprintf(
             stderr,
             "JVM did not provide the class java.util.function.LongConsumer, are we running on a pre 1.8 JRE? "
-            "(Unable to initialize)");
+            "(Unable to initialize)\ņ");
         return 0;
     }
 
@@ -120,7 +99,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         fprintf(
             stderr,
             "JVM did not provide the method accept of java.util.function.LongConsumer with the signature "
-            "(J)V, are we running on a non standard JRE? (Unable to initialize)");
+            "(J)V, are we running on a non standard JRE? (Unable to initialize)\n");
         return 0;
     }
 

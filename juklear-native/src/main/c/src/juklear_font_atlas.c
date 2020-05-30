@@ -38,7 +38,14 @@ JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkF
     nk_font_atlas_t *atlas = JAVA_HANDLE(env, instance);
     jint *dimensions = (*env)->GetDirectBufferAddress(env, java_dimensions);
 
-    return (jlong) nk_font_atlas_bake(atlas, &dimensions[0], &dimensions[1], format);
+    jint width;
+    jint height;
+
+    const void *image = nk_font_atlas_bake(atlas, &width, &height, format);
+    dimensions[0] = htobe32(width);
+    dimensions[1] = htobe32(height);
+
+    return (jlong) image;
 }
 
 JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkFontAtlasEnd

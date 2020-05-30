@@ -1,6 +1,7 @@
 package net.janrupf.juklear;
 
 import net.janrupf.juklear.annotation.AntiFreeReference;
+import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.drawing.JuklearConvertConfig;
 import net.janrupf.juklear.drawing.JuklearDrawCommand;
 import net.janrupf.juklear.exception.FatalJuklearException;
@@ -77,6 +78,10 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     }
 
     private native void nativeNkClear();
+
+    public void draw(int width, int height, JuklearVec2 scale, JuklearAntialiasing antialiasing) {
+        juklear.getBackend().draw(this, width, height, scale, antialiasing);
+    }
 
     @Override
     public long getHandle() {

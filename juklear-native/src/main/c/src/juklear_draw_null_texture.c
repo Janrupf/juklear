@@ -18,7 +18,7 @@ JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_drawing_JuklearDrawNullTexture_
     null_texture->texture.ptr = texture;
     null_texture->uv = *uv;
 
-    return (jlong) texture;
+    return (jlong) null_texture;
 }
 
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_drawing_JuklearDrawNullTexture_nativeFreeNkDrawNullTexture

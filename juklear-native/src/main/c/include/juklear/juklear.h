@@ -11,10 +11,8 @@ typedef struct JuklearGlobal {
     jmethodID c_accessible_object_get_handle;
 
     jclass out_of_memory_error_class;
-    jmethodID out_of_memory_error_constructor;
 
     jclass fatal_juklear_exception_class;
-    jmethodID fatal_juklear_exception_constructor;
 
     jclass long_consumer_class;
     jmethodID long_consumer_accept_method;

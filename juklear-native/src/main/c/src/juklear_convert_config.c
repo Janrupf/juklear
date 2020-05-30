@@ -19,7 +19,7 @@ JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_drawing_JuklearConvertConfig_na
     jlong vertex_alignment) {
 
     size_t vertex_layout_size = (*env)->GetArrayLength(env, java_vertex_layout);
-    size_t vertex_layout_malloc_size = (vertex_layout_size * sizeof(nk_draw_vertex_layout_element_t)) + 1;
+    size_t vertex_layout_malloc_size = ((vertex_layout_size + 1) * sizeof(nk_draw_vertex_layout_element_t));
     size_t convert_config_size = sizeof(nk_convert_config_t);
 
     char *alloc_data = malloc(convert_config_size + vertex_layout_malloc_size);
@@ -56,11 +56,6 @@ JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_drawing_JuklearConvertConfig_na
     return (jlong) config;
 }
 
-/*
- * Class:     net_janrupf_juklear_drawing_JuklearConvertConfig
- * Method:    nativeFreeInstanceStruct
- * Signature: (J)V
- */
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_drawing_JuklearConvertConfig_nativeFreeInstanceStruct(
     JNIEnv *env, jclass caller_class, jlong handle) {
     free((void *) handle);

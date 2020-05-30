@@ -3,7 +3,6 @@ package net.janrupf.juklear.drawing;
 import net.janrupf.juklear.Juklear;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
-import net.janrupf.juklear.ffi.NullPointer;
 import net.janrupf.juklear.math.JuklearVec2;
 
 public class JuklearDrawNullTexture {

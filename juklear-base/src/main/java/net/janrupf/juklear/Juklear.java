@@ -3,6 +3,7 @@ package net.janrupf.juklear;
 import net.janrupf.juklear.backend.JuklearBackend;
 import net.janrupf.juklear.drawing.JuklearConvertConfig;
 import net.janrupf.juklear.drawing.JuklearDrawVertexLayoutElement;
+import net.janrupf.juklear.exception.JuklearInitializationException;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.font.JuklearFontAtlas;
@@ -18,29 +19,36 @@ public class Juklear {
     private final Thread gcThread;
     private final JuklearBackend backend;
 
-    public static Juklear usingInternalGarbageCollection(JuklearBackend backend) {
+    public static Juklear usingInternalGarbageCollection(JuklearBackend backend)
+            throws JuklearInitializationException{
         return new Juklear(backend);
     }
 
     public static Juklear usingExternalGarbageCollection(
-            JuklearBackend backend, ReferenceQueue<CAllocatedObject<?>> nativeObjectQueue) {
+            JuklearBackend backend, ReferenceQueue<CAllocatedObject<?>> nativeObjectQueue)
+            throws JuklearInitializationException {
         return new Juklear(backend, nativeObjectQueue);
     }
 
-    private Juklear(JuklearBackend backend) {
+    private Juklear(JuklearBackend backend) throws JuklearInitializationException {
         this.backend = backend;
 
         this.nativeObjectQueue = new ReferenceQueue<>();
         this.gcThread = new Thread(this::gcLoop);
         this.gcThread.setName("Juklear native garbage collector");
         this.gcThread.start();
+
+        backend.init(this);
     }
 
-    private Juklear(JuklearBackend backend, ReferenceQueue<CAllocatedObject<?>> nativeObjectQueue) {
+    private Juklear(JuklearBackend backend, ReferenceQueue<CAllocatedObject<?>> nativeObjectQueue)
+            throws JuklearInitializationException{
         this.backend = backend;
 
         this.nativeObjectQueue = nativeObjectQueue;
         this.gcThread = null;
+
+        backend.init(this);
     }
 
     private void gcLoop() {
@@ -86,5 +94,11 @@ public class Juklear {
 
     public JuklearBackend getBackend() {
         return backend;
+    }
+
+    public void teardown() {
+        if(this.gcThread != null) {
+            this.gcThread.interrupt();
+        }
     }
 }
