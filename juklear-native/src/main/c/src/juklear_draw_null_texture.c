@@ -25,3 +25,15 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_drawing_JuklearDrawNullTexture_n
     (JNIEnv *env, jclass caller_class, jlong handle) {
     free((void *) handle);
 }
+
+JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_drawing_JuklearDrawNullTexture_nativeGetTexture
+    (JNIEnv *env, jclass caller_class, jobject instance) {
+    nk_draw_null_texture_t *null_texture = JAVA_HANDLE(env, instance);
+    return (jlong) null_texture->texture.ptr;
+}
+
+JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_drawing_JuklearDrawNullTexture_nativeGetUvHandle
+    (JNIEnv *env, jclass caller_class, jobject instance) {
+    nk_draw_null_texture_t *null_texture = JAVA_HANDLE(env, instance);
+    return (jlong) &null_texture->uv;
+}

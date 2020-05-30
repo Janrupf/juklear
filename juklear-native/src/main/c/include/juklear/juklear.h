@@ -15,6 +15,9 @@ typedef struct JuklearGlobal {
 
     jclass fatal_juklear_exception_class;
     jmethodID fatal_juklear_exception_constructor;
+
+    jclass long_consumer_class;
+    jmethodID long_consumer_accept_method;
 } JuklearGlobal_t;
 
 extern JuklearGlobal_t JUKLEAR_GLOBAL;

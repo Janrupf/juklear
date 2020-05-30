@@ -29,8 +29,7 @@ public class JuklearFontAtlasEditor implements CAccessibleObject<JuklearFontAtla
     }
 
     public void end() {
-        // TODO: Notify edit done
-        atlas.clearEditor();
+        atlas.end();
     }
 
     public JuklearFontAtlas getAtlas() {

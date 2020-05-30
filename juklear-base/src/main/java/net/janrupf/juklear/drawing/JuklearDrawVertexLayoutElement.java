@@ -36,6 +36,10 @@ public class JuklearDrawVertexLayoutElement implements CAccessibleObject<Juklear
         return instance.getHandle();
     }
 
+    public static Builder builder(Juklear juklear) {
+        return new Builder(juklear);
+    }
+
     public static class Builder {
         private final Juklear juklear;
 

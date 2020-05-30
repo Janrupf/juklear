@@ -75,7 +75,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         fprintf(
             stderr,
             "JVM did not provide the constructor of java.lang.OutOfMemoryError with the signature "
-            "(Ljava/lang/String;), what kind of JRE are we running on? (Unable to initialize)");
+            "(Ljava/lang/String;)V, what kind of JRE are we running on? (Unable to initialize)");
         return 0;
     }
 
@@ -97,8 +97,30 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         fprintf(
             stderr,
             "JVM did not provide the constructor of net.janrupf.juklear.exception.FatalJuklearException "
-            "with the signature (Ljava/lang/String;), does the java version of the library mismatch the "
+            "with the signature (Ljava/lang/String;)V, does the java version of the library mismatch the "
             "native version? (Unable to initialize)");
+        return 0;
+    }
+
+    jclass long_consumer_class = (*env)->FindClass(env, "java/util/function/LongConsumer");
+    if(!long_consumer_class) {
+        fprintf(
+            stderr,
+            "JVM did not provide the class java.util.function.LongConsumer, are we running on a pre 1.8 JRE? "
+            "(Unable to initialize)");
+        return 0;
+    }
+
+    JUKLEAR_GLOBAL.long_consumer_class = (*env)->NewGlobalRef(env, long_consumer_class);
+    JUKLEAR_GLOBAL.long_consumer_accept_method =
+        (*env)->GetMethodID(env, long_consumer_class, "accept", "(J)V");
+    (*env)->DeleteLocalRef(env, long_consumer_class);
+
+    if(!JUKLEAR_GLOBAL.long_consumer_accept_method) {
+        fprintf(
+            stderr,
+            "JVM did not provide the method accept of java.util.function.LongConsumer with the signature "
+            "(J)V, are we running on a non standard JRE? (Unable to initialize)");
         return 0;
     }
 
@@ -109,6 +131,7 @@ void JNI_OnUnload(JavaVM *vm, void *reserved) {
     JNIEnv *env;
     (*vm)->GetEnv(vm, (void **) &env, JUKLEAR_GLOBAL.active_jni_version);
 
+    (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.long_consumer_class);
     (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.fatal_juklear_exception_class);
     (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.out_of_memory_error_class);
     (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.c_accessible_object_class);

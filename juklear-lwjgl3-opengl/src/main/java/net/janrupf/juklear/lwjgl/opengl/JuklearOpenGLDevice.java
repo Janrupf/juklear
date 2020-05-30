@@ -1,10 +1,15 @@
 package net.janrupf.juklear.lwjgl.opengl;
 
 import net.janrupf.juklear.Juklear;
-import net.janrupf.juklear.drawing.JuklearAntialiasing;
+import net.janrupf.juklear.JuklearContext;
+import net.janrupf.juklear.drawing.*;
+import net.janrupf.juklear.ffi.CAccessibleObject;
+import net.janrupf.juklear.ffi.CAllocatedObject;
+import net.janrupf.juklear.lwjgl.opengl.exception.JuklearOpenGLFatalException;
 import net.janrupf.juklear.lwjgl.opengl.exception.JuklearOpenGLInitializationException;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearBuffer;
+import net.janrupf.juklear.util.JuklearConvertResult;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.ByteArrayOutputStream;
@@ -13,6 +18,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL30.*;
 
@@ -20,6 +27,7 @@ public class JuklearOpenGLDevice implements AutoCloseable {
     private static final int MAX_VERTEX_MEMORY = 512 * 1024;
     private static final int MAX_ELEMENT_MEMORY = 128 * 2014;
 
+    private final Juklear juklear;
     private final JuklearBuffer commandBuffer;
 
     private final int shaderProgram;
@@ -37,8 +45,11 @@ public class JuklearOpenGLDevice implements AutoCloseable {
     private final int vertexArray;
 
     private int fontTexture;
+    private JuklearDrawNullTexture nullTexture;
 
     public JuklearOpenGLDevice(Juklear juklear) throws JuklearOpenGLInitializationException {
+        this.juklear = juklear;
+
         commandBuffer = juklear.defaultBuffer();
 
         shaderProgram = glCreateProgram();
@@ -151,7 +162,8 @@ public class JuklearOpenGLDevice implements AutoCloseable {
         glDeleteBuffers(elementArrayBuffer);
     }
 
-    public void draw(int width, int height, JuklearVec2 scale, JuklearAntialiasing antialiasing) {
+    public void draw(
+            JuklearContext context, int width, int height, JuklearVec2 scale, JuklearAntialiasing antialiasing) {
         float[][] ortho = {
                 {2.0f, 0.0f, 0.0f, 0.0f},
                 {0.0f, -2.0f, 0.0f, 0.0f},
@@ -184,6 +196,87 @@ public class JuklearOpenGLDevice implements AutoCloseable {
         ByteBuffer vertices = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
         ByteBuffer elements = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY);
 
+        JuklearConvertConfig convertConfig = juklear.convertConfig()
+                 .addVertexLayout(juklear.drawVertexLayoutElement()
+                    .attribute(JuklearDrawVertexLayoutAttribute.POSITION)
+                    .format(JuklearDrawVertexLayoutFormat.FLOAT)
+                    .offset(JuklearOpenGLVertex.positionOffset())
+                    .build())
+                .addVertexLayout(juklear.drawVertexLayoutElement()
+                    .attribute(JuklearDrawVertexLayoutAttribute.TEXCOORD)
+                    .format(JuklearDrawVertexLayoutFormat.FLOAT)
+                    .offset(JuklearOpenGLVertex.uvOffset())
+                    .build())
+                .addVertexLayout(juklear.drawVertexLayoutElement()
+                    .attribute(JuklearDrawVertexLayoutAttribute.COLOR)
+                    .format(JuklearDrawVertexLayoutFormat.R8G8B8A8)
+                    .build())
+                .vertexSize(JuklearOpenGLVertex.byteSize())
+                .vertexAlignment(1)
+                .nullTexture(nullTexture)
+                .circleSegmentCount(22)
+                .curveSegmentCount(22)
+                .arcSegmentCount(22)
+                .globalAlpha(1.0f)
+                .shapeAA(antialiasing)
+                .lineAA(antialiasing)
+                .build();
 
+        JuklearBuffer juklearVertices = juklear.fixedBuffer(vertices);
+        JuklearBuffer juklearElements = juklear.fixedBuffer(elements);
+
+        JuklearConvertResult result = context.convert(commandBuffer, juklearVertices, juklearElements, convertConfig);
+        if(result != JuklearConvertResult.SUCCESS) {
+            throw new JuklearOpenGLFatalException("Failed to convert draw commands: " + result.name());
+        }
+
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+        glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+
+        List<JuklearDrawCommand> drawCommands = new ArrayList<>();
+        context.drawForEach(commandBuffer, drawCommands::add);
+
+        int offset = 0;
+        for(JuklearDrawCommand command : drawCommands) {
+            if(command.getElementCount() < 1) {
+                continue;
+            }
+
+            glBindTexture(GL_TEXTURE_2D, (int) command.getTexture().getHandle());
+            glScissor(
+                    (int) (command.getClipRect().getX() * scale.getX()),
+                    (int) ((height - (command.getClipRect().getY() + command.getClipRect().getHeight())) * scale.getY()),
+                    (int) (command.getClipRect().getWidth() * scale.getX()),
+                    (int) (command.getClipRect().getHeight() * scale.getY())
+            );
+
+            glDrawElements(GL_TRIANGLES, (int) command.getElementCount(), GL_UNSIGNED_SHORT, offset);
+            offset += command.getElementCount();
+        }
+
+        context.clear();
+        commandBuffer.clear();
+
+        glUseProgram(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+        glDisable(GL_BLEND);
+        glDisable(GL_SCISSOR_TEST);
+    }
+
+    public CAccessibleObject<?> uploadFontAtlas(CAccessibleObject<?> image, int width, int height) {
+        fontTexture = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, fontTexture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(
+                GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getHandle());
+
+        return CAllocatedObject.of(fontTexture).withoutFree();
+    }
+
+    public void setNullTexture(JuklearDrawNullTexture nullTexture) {
+        this.nullTexture = nullTexture;
     }
 }

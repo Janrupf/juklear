@@ -26,3 +26,18 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_util_JuklearBuffer_nativeNkInitB
     nk_buffer_t *buffer = JAVA_HANDLE(env, instance);
     nk_buffer_init_default(buffer);
 }
+
+JNIEXPORT void JNICALL Java_net_janrupf_juklear_util_JuklearBuffer_nativeNkBufferInitFixed
+    (JNIEnv *env, jclass caller_class, jobject instance, jobject java_buffer) {
+    nk_buffer_t *buffer = JAVA_HANDLE(env, instance);
+    void *memory = (*env)->GetDirectBufferAddress(env, java_buffer);
+    size_t capacity = (*env)->GetDirectBufferCapacity(env, java_buffer);
+
+    nk_buffer_init_fixed(buffer, memory, capacity);
+}
+
+JNIEXPORT void JNICALL Java_net_janrupf_juklear_util_JuklearBuffer_nkBufferClear
+    (JNIEnv *env, jobject instance) {
+    nk_buffer_t *buffer = JAVA_HANDLE(env, instance);
+    nk_buffer_clear(buffer);
+}

@@ -15,3 +15,5 @@ typedef struct nk_vec2 nk_vec2_t;
 typedef struct nk_draw_null_texture nk_draw_null_texture_t;
 typedef struct nk_convert_config nk_convert_config_t;
 typedef struct nk_draw_vertex_layout_element nk_draw_vertex_layout_element_t;
+typedef struct nk_draw_command nk_draw_command_t;
+typedef struct nk_rect nk_rect_t;

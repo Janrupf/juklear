@@ -21,8 +21,31 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeFree
     free((void *) handle);
 }
 
-JNIEXPORT void JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nkInitDefault
+JNIEXPORT void JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkInitDefault
     (JNIEnv *env, jclass caller_class, jobject instance) {
     nk_font_atlas_t *atlas = JAVA_HANDLE(env, instance);
     nk_font_atlas_init_default(atlas);
+}
+
+JNIEXPORT void JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkFontAtlasBegin
+    (JNIEnv *env, jobject instance) {
+    nk_font_atlas_t *atlas = JAVA_HANDLE(env, instance);
+    nk_font_atlas_begin(atlas);
+}
+
+JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkFontAtlasBake
+    (JNIEnv *env, jobject instance, jobject java_dimensions, jint format) {
+    nk_font_atlas_t *atlas = JAVA_HANDLE(env, instance);
+    jint *dimensions = (*env)->GetDirectBufferAddress(env, java_dimensions);
+
+    return (jlong) nk_font_atlas_bake(atlas, &dimensions[0], &dimensions[1], format);
+}
+
+JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkFontAtlasEnd
+    (JNIEnv *env, jobject instance, jobject texture) {
+    nk_font_atlas_t *atlas = JAVA_HANDLE(env, instance);
+
+    nk_draw_null_texture_t *null_texture = malloc(sizeof(nk_draw_null_texture_t));
+    nk_font_atlas_end(atlas, nk_handle_ptr(JAVA_HANDLE(env, texture)), null_texture);
+    return (jlong) null_texture;
 }

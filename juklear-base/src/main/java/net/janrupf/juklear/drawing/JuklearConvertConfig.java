@@ -5,17 +5,13 @@ import net.janrupf.juklear.annotation.AntiFreeReference;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 
-public class JuklearConvertConfig implements CAccessibleObject<JuklearConvertConfig> {
-    @AntiFreeReference
-    private final JuklearDrawVertexLayoutElement vertexLayout;
+import java.util.ArrayList;
+import java.util.List;
 
+public class JuklearConvertConfig implements CAccessibleObject<JuklearConvertConfig> {
     private final CAllocatedObject<JuklearConvertConfig> instance;
 
-    private JuklearConvertConfig(
-            JuklearDrawVertexLayoutElement vertexLayout,
-            CAllocatedObject<JuklearConvertConfig> instance
-    ) {
-        this.vertexLayout = vertexLayout;
+    private JuklearConvertConfig(CAllocatedObject<JuklearConvertConfig> instance) {
         this.instance = instance;
     }
 
@@ -27,7 +23,7 @@ public class JuklearConvertConfig implements CAccessibleObject<JuklearConvertCon
             int arcSegmentCount,
             int curveSegmentCount,
             CAccessibleObject<JuklearDrawNullTexture> nullTexture,
-            CAccessibleObject<JuklearDrawVertexLayoutElement> vertexLayout,
+            CAccessibleObject<JuklearDrawVertexLayoutElement>[] vertexLayout,
             long vertexSize,
             long vertexAlignment
     );
@@ -37,6 +33,10 @@ public class JuklearConvertConfig implements CAccessibleObject<JuklearConvertCon
     @Override
     public long getHandle() {
         return instance.getHandle();
+    }
+
+    public static Builder builder(Juklear juklear) {
+        return new Builder(juklear);
     }
 
     public static class Builder {
@@ -49,12 +49,13 @@ public class JuklearConvertConfig implements CAccessibleObject<JuklearConvertCon
         private int arcSegmentCount;
         private int curveSegmentCount;
         private JuklearDrawNullTexture nullTexture;
-        private JuklearDrawVertexLayoutElement vertexLayout;
+        private List<JuklearDrawVertexLayoutElement> vertexLayout;
         private long vertexSize;
         private long vertexAlignment;
 
         private Builder(Juklear juklear) {
             this.juklear = juklear;
+            this.vertexLayout = new ArrayList<>();
         }
 
         public Builder globalAlpha(float globalAlpha) {
@@ -92,8 +93,13 @@ public class JuklearConvertConfig implements CAccessibleObject<JuklearConvertCon
             return this;
         }
 
-        public Builder vertexLayout(JuklearDrawVertexLayoutElement vertexLayout) {
+        public Builder vertexLayout(List<JuklearDrawVertexLayoutElement> vertexLayout) {
             this.vertexLayout = vertexLayout;
+            return this;
+        }
+
+        public Builder addVertexLayout(JuklearDrawVertexLayoutElement element) {
+            this.vertexLayout.add(element);
             return this;
         }
 
@@ -108,39 +114,46 @@ public class JuklearConvertConfig implements CAccessibleObject<JuklearConvertCon
         }
 
         public JuklearConvertConfig build() {
-            if(lineAA == null) {
+            if (lineAA == null) {
                 throw new IllegalStateException("lineAA cannot be null", new NullPointerException("lineAA"));
             }
 
-            if(shapeAA == null) {
+            if (shapeAA == null) {
                 throw new IllegalStateException("shapeAA cannot be null", new NullPointerException("shapeAA"));
             }
 
-            if(nullTexture == null) {
+            if (nullTexture == null) {
                 throw new IllegalStateException("nullTexture cannot be null", new NullPointerException("nullTexture"));
             }
 
-            if(vertexLayout == null) {
+            if (vertexLayout == null) {
                 throw new IllegalStateException("vertexLayout cannot be null", new NullPointerException("vertexLayout"));
             }
 
+            @SuppressWarnings("unchecked")
+            CAccessibleObject<JuklearDrawVertexLayoutElement>[] vertexLayoutArray =
+                    new CAccessibleObject[vertexLayout.size()];
+
+            for(int i = 0; i < vertexLayoutArray.length; i++) {
+                vertexLayoutArray[i] = vertexLayout.get(i);
+            }
+
             return new JuklearConvertConfig(
-                    vertexLayout,
                     CAllocatedObject
-                    .<JuklearConvertConfig>of(nativeAllocateInstanceStruct(
-                            globalAlpha,
-                            lineAA.toNative(),
-                            shapeAA.toNative(),
-                            circleSegmentCount,
-                            arcSegmentCount,
-                            curveSegmentCount,
-                            nullTexture.toNative(juklear),
-                            vertexLayout,
-                            vertexSize,
-                            vertexAlignment
-                    ))
-                    .freeFunction(JuklearConvertConfig::nativeFreeInstanceStruct)
-                    .submit(juklear)
+                            .<JuklearConvertConfig>of(nativeAllocateInstanceStruct(
+                                    globalAlpha,
+                                    lineAA.toNative(),
+                                    shapeAA.toNative(),
+                                    circleSegmentCount,
+                                    arcSegmentCount,
+                                    curveSegmentCount,
+                                    nullTexture.toNative(juklear),
+                                    vertexLayoutArray,
+                                    vertexSize,
+                                    vertexAlignment
+                            ))
+                            .freeFunction(JuklearConvertConfig::nativeFreeInstanceStruct)
+                            .submit(juklear)
             );
         }
     }

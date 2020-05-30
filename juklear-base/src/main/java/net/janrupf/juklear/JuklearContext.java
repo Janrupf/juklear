@@ -1,10 +1,18 @@
 package net.janrupf.juklear;
 
 import net.janrupf.juklear.annotation.AntiFreeReference;
+import net.janrupf.juklear.drawing.JuklearConvertConfig;
+import net.janrupf.juklear.drawing.JuklearDrawCommand;
 import net.janrupf.juklear.exception.FatalJuklearException;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.font.JuklearFont;
+import net.janrupf.juklear.math.JuklearVec2;
+import net.janrupf.juklear.util.JuklearBuffer;
+import net.janrupf.juklear.util.JuklearConvertResult;
+
+import java.util.function.Consumer;
+import java.util.function.LongConsumer;
 
 public class JuklearContext implements CAccessibleObject<JuklearContext> {
     private final Juklear juklear;
@@ -40,6 +48,35 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     private static native void nativeFreeAllocatedInstanceStruct(long handle);
 
     private static native boolean nativeNkInitDefault(CAccessibleObject<JuklearContext> context, JuklearFont font);
+
+    public JuklearConvertResult convert(
+            JuklearBuffer commandBuffer,
+            JuklearBuffer vertexBuffer,
+            JuklearBuffer elementBuffer,
+            JuklearConvertConfig convertConfig
+    ) {
+        return JuklearConvertResult.fromNative(
+                nativeNkConvert(commandBuffer, vertexBuffer, elementBuffer, convertConfig));
+    }
+
+    private native int nativeNkConvert(
+            CAccessibleObject<JuklearBuffer> commandBuffer,
+            CAccessibleObject<JuklearBuffer> vertexBuffer,
+            CAccessibleObject<JuklearBuffer> elementBuffer,
+            CAccessibleObject<JuklearConvertConfig> convertConfig
+    );
+
+    public void drawForEach(JuklearBuffer commandBuffer, Consumer<JuklearDrawCommand> consumer) {
+        nativeNkDrawForEach(commandBuffer, (handle) -> consumer.accept(JuklearDrawCommand.copyFromNative(handle)));
+    }
+
+    private native void nativeNkDrawForEach(JuklearBuffer commandBuffer, LongConsumer consumer);
+
+    public void clear() {
+        nativeNkClear();
+    }
+
+    private native void nativeNkClear();
 
     @Override
     public long getHandle() {
