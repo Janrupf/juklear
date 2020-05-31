@@ -83,6 +83,8 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     private native void nativeNkClear();
 
     public void draw(int width, int height, JuklearVec2 scale, JuklearAntialiasing antialiasing) {
+        layouter.checkDrawingAllowed();
+
         juklear.getBackend().draw(this, width, height, scale, antialiasing);
     }
 

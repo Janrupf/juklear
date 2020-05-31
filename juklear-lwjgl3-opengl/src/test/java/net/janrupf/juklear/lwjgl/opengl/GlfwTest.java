@@ -109,13 +109,14 @@ public class GlfwTest {
 
                 glfwGetFramebufferSize(window, widthPointer, heightPointer);
 
-                glViewport(0, 0, widthPointer.get(), heightPointer.get());
+                glViewport(0, 0, widthPointer.get(0), heightPointer.get(0));
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                renderJuklear(context.layouter());
+
+                context.draw(widthPointer.get(0), heightPointer.get(0),
+                        new JuklearVec2(1.0f, 1.0f), JuklearAntialiasing.ON);
             }
-
-            renderJuklear(context.layouter());
-
-            context.draw(300, 300, new JuklearVec2(1.0f, 1.0f), JuklearAntialiasing.ON);
 
             glfwSwapBuffers(window);
         }
@@ -133,7 +134,7 @@ public class GlfwTest {
     }
 
     private void renderJuklear(JuklearLayouter layouter) {
-        layouter.begin("Juklear", 0, 0, 400, 600,
+        layouter.begin("Juklear", 0, 0, 100, 150,
                 JuklearPanelFlags.MOVABLE, JuklearPanelFlags.BORDER, JuklearPanelFlags.NO_SCROLLBAR, JuklearPanelFlags.TITLE).end();
     }
 }

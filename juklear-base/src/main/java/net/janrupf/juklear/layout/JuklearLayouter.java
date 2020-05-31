@@ -48,6 +48,12 @@ public class JuklearLayouter implements CAccessibleObject<JuklearContext> {
                 this::nativeNkEnd);
     }
 
+    public void checkDrawingAllowed() {
+        if(!stateStack.isEmpty()) {
+            throw new IllegalStateException("The layout still contains opened states, probably missing an end() call");
+        }
+    }
+
     private native boolean nativeNkBegin(String title, CAccessibleObject<JuklearRect> bounds, int flags);
 
     private native void nativeNkEnd();

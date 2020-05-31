@@ -7,16 +7,15 @@ import net.janrupf.juklear.exception.JuklearInitializationException;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.font.JuklearFontAtlas;
+import net.janrupf.juklear.gc.JuklearDefaultGarbageCollector;
+import net.janrupf.juklear.gc.JuklearDestructibleObject;
+import net.janrupf.juklear.gc.JuklearGarbageCollector;
 import net.janrupf.juklear.util.JuklearBuffer;
 
-import java.lang.ref.Reference;
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
 import java.nio.Buffer;
 
 public class Juklear {
-    private final ReferenceQueue<CAllocatedObject<?>> nativeObjectQueue;
-    private final Thread gcThread;
+    private final JuklearGarbageCollector garbageCollector;
     private final JuklearBackend backend;
 
     public static Juklear usingInternalGarbageCollection(JuklearBackend backend)
@@ -25,47 +24,32 @@ public class Juklear {
     }
 
     public static Juklear usingExternalGarbageCollection(
-            JuklearBackend backend, ReferenceQueue<CAllocatedObject<?>> nativeObjectQueue)
+            JuklearBackend backend, JuklearGarbageCollector garbageCollector)
             throws JuklearInitializationException {
-        return new Juklear(backend, nativeObjectQueue);
+        return new Juklear(backend, garbageCollector);
     }
 
     private Juklear(JuklearBackend backend) throws JuklearInitializationException {
         this.backend = backend;
-
-        this.nativeObjectQueue = new ReferenceQueue<>();
-        this.gcThread = new Thread(this::gcLoop);
-        this.gcThread.setName("Juklear native garbage collector");
-        this.gcThread.start();
+        this.garbageCollector = new JuklearDefaultGarbageCollector();
+        ((JuklearDefaultGarbageCollector) this.garbageCollector).run();
 
         backend.init(this);
     }
 
-    private Juklear(JuklearBackend backend, ReferenceQueue<CAllocatedObject<?>> nativeObjectQueue)
+    private Juklear(JuklearBackend backend, JuklearGarbageCollector garbageCollector)
             throws JuklearInitializationException{
         this.backend = backend;
 
-        this.nativeObjectQueue = nativeObjectQueue;
-        this.gcThread = null;
+        this.garbageCollector = garbageCollector;
 
         backend.init(this);
     }
 
-    private void gcLoop() {
-        try {
-            while (true) {
-                Reference<? extends CAllocatedObject<?>> ref = nativeObjectQueue.remove();
-                CAllocatedObject<?> object;
-
-                if((object = ref.get()) != null) {
-                    object.free();
-                }
-            }
-        } catch (InterruptedException ignored) {}
-    }
-
     public void registerNativeObject(CAllocatedObject<?> object) {
-        new WeakReference<>(object, this.nativeObjectQueue);
+        if(object instanceof JuklearDestructibleObject) {
+            garbageCollector.register((JuklearDestructibleObject) object);
+        }
     }
 
     public JuklearContext defaultContext(JuklearFont font) {
@@ -97,8 +81,9 @@ public class Juklear {
     }
 
     public void teardown() {
-        if(this.gcThread != null) {
-            this.gcThread.interrupt();
+        if(garbageCollector instanceof JuklearDefaultGarbageCollector) {
+            ((JuklearDefaultGarbageCollector) garbageCollector).stop();
+            ((JuklearDefaultGarbageCollector) garbageCollector).step();
         }
     }
 }

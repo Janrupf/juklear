@@ -1,29 +1,18 @@
 package net.janrupf.juklear.ffi;
 
 import net.janrupf.juklear.Juklear;
+import net.janrupf.juklear.gc.JuklearDestructibleObject;
+import net.janrupf.juklear.gc.JuklearObjectDestructor;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public abstract class CAllocatedObject<T> implements AutoCloseable, CAccessibleObject<T> {
+public abstract class CAllocatedObject<T> implements CAccessibleObject<T> {
     protected long handle;
 
     protected CAllocatedObject(long handle) {
         this.handle = handle;
     }
-
-    public void free() {
-        if(handle != 0) {
-            doFree();
-        }
-    }
-
-    @Override
-    public void close() {
-        free();
-    }
-
-    protected abstract void doFree();
 
     @Override
     public long getHandle() {
@@ -71,17 +60,33 @@ public abstract class CAllocatedObject<T> implements AutoCloseable, CAccessibleO
         }
     }
 
-    private static final class StandardCAllocatedObject<T> extends CAllocatedObject<T> {
-        private final Consumer<Long> freeFunction;
+    private static final class StandardCAllocatedObject<T> extends CAllocatedObject<T>
+            implements JuklearDestructibleObject {
+        private final StandardCObjectDestructor destructor;
 
         protected StandardCAllocatedObject(long handle, Consumer<Long> freeFunction) {
             super(handle);
+            this.destructor = new StandardCObjectDestructor(handle, freeFunction);
+        }
+
+        @Override
+        public JuklearObjectDestructor destructor() {
+            return destructor;
+        }
+    }
+
+    private static class StandardCObjectDestructor implements JuklearObjectDestructor {
+        private final long handle;
+        private final Consumer<Long> freeFunction;
+
+        public StandardCObjectDestructor(long handle, Consumer<Long> freeFunction) {
+            this.handle = handle;
             this.freeFunction = freeFunction;
         }
 
         @Override
-        protected void doFree() {
-            freeFunction.accept(this.handle);
+        public void destruct() {
+            freeFunction.accept(handle);
         }
     }
 
@@ -89,8 +94,5 @@ public abstract class CAllocatedObject<T> implements AutoCloseable, CAccessibleO
         protected NoFreeCAllocatedObject(long handle) {
             super(handle);
         }
-
-        @Override
-        protected void doFree() {}
     }
 }
