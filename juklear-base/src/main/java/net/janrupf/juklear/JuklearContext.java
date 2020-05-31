@@ -8,6 +8,7 @@ import net.janrupf.juklear.exception.FatalJuklearException;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.font.JuklearFont;
+import net.janrupf.juklear.layout.JuklearLayouter;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearBuffer;
 import net.janrupf.juklear.util.JuklearConvertResult;
@@ -21,11 +22,13 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     @AntiFreeReference
     private final JuklearFont font;
     private final CAllocatedObject<JuklearContext> instance;
+    private final JuklearLayouter layouter;
 
     private JuklearContext(Juklear juklear, JuklearFont font, CAllocatedObject<JuklearContext> instance) {
         this.juklear = juklear;
         this.font = font;
         this.instance = instance;
+        this.layouter = new JuklearLayouter(juklear, this);
     }
 
     static JuklearContext createDefault(Juklear juklear, JuklearFont font) {
@@ -81,6 +84,10 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
 
     public void draw(int width, int height, JuklearVec2 scale, JuklearAntialiasing antialiasing) {
         juklear.getBackend().draw(this, width, height, scale, antialiasing);
+    }
+
+    public JuklearLayouter layouter() {
+        return layouter;
     }
 
     @Override

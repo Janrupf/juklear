@@ -37,6 +37,7 @@ set(JUKLEAR_SOURCE
         src/juklear.c
         src/juklear_antialiasing.c
         src/juklear_buffer.c
+        src/juklear_constants.c
         src/juklear_context.c
         src/juklear_convert_config.c
         src/juklear_convert_result.c
@@ -48,6 +49,7 @@ set(JUKLEAR_SOURCE
         src/juklear_font_atlas.c
         src/juklear_font_atlas_editor.c
         src/juklear_font_atlas_format.c
+        src/juklear_layouter.c
         src/juklear_nuklear_impl.c
         src/juklear_rect.c
         src/juklear_vec2.c)

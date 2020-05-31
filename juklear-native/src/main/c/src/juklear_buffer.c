@@ -41,3 +41,13 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_util_JuklearBuffer_nkBufferClear
     nk_buffer_t *buffer = JAVA_HANDLE(env, instance);
     nk_buffer_clear(buffer);
 }
+
+JNIEXPORT jobject JNICALL Java_net_janrupf_juklear_util_JuklearBuffer_nativeNkBufferMemoryConst
+    (JNIEnv *env, jobject instance) {
+    nk_buffer_t *buffer = JAVA_HANDLE(env, instance);
+
+    const void *data = nk_buffer_memory_const(buffer);
+    nk_size buffer_size = nk_buffer_total(buffer);
+
+    return (*env)->NewDirectByteBuffer(env, (void *) data, buffer_size);
+}

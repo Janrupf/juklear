@@ -5,6 +5,7 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
 public class JuklearBuffer implements CAccessibleObject<JuklearBuffer> {
     private final CAllocatedObject<JuklearBuffer> instance;
@@ -49,6 +50,12 @@ public class JuklearBuffer implements CAccessibleObject<JuklearBuffer> {
     }
 
     private native void nkBufferClear();
+
+    public ByteBuffer constMemory() {
+        return nativeNkBufferMemoryConst().asReadOnlyBuffer();
+    }
+
+    private native ByteBuffer nativeNkBufferMemoryConst();
 
     @Override
     public long getHandle() {

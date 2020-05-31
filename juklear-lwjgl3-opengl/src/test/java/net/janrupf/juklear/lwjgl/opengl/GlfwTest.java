@@ -6,12 +6,15 @@ import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.font.JuklearFontAtlas;
 import net.janrupf.juklear.font.JuklearFontAtlasEditor;
+import net.janrupf.juklear.layout.JuklearLayouter;
+import net.janrupf.juklear.layout.JuklearPanelFlags;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
@@ -78,8 +81,10 @@ public class GlfwTest {
         glfwShowWindow(window);
 
         GL.createCapabilities();
+        GLUtil.setupDebugMessageCallback(System.err);
 
         JuklearNatives.setupWithTemporaryFolder();
+        // System.loadLibrary("juklear");
         juklear = Juklear.usingInternalGarbageCollection(new JuklearOpenGL());
 
         JuklearFontAtlas fontAtlas = juklear.defaultFontAtlas();
@@ -97,11 +102,22 @@ public class GlfwTest {
         glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 
         while (!glfwWindowShouldClose(window)) {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glfwPollEvents();
+            try(MemoryStack stack = MemoryStack.stackPush()) {
+                IntBuffer widthPointer = stack.mallocInt(1);
+                IntBuffer heightPointer = stack.mallocInt(1);
+
+                glfwGetFramebufferSize(window, widthPointer, heightPointer);
+
+                glViewport(0, 0, widthPointer.get(), heightPointer.get());
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            }
+
+            renderJuklear(context.layouter());
+
             context.draw(300, 300, new JuklearVec2(1.0f, 1.0f), JuklearAntialiasing.ON);
 
             glfwSwapBuffers(window);
-            glfwPollEvents();
         }
     }
 
@@ -114,5 +130,10 @@ public class GlfwTest {
 
         juklear.teardown();
         juklear = null;
+    }
+
+    private void renderJuklear(JuklearLayouter layouter) {
+        layouter.begin("Juklear", 0, 0, 400, 600,
+                JuklearPanelFlags.MOVABLE, JuklearPanelFlags.BORDER, JuklearPanelFlags.NO_SCROLLBAR, JuklearPanelFlags.TITLE).end();
     }
 }
