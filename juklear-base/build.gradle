@@ -14,15 +14,21 @@ final def NATIVE_CLASSES = [
         "net.janrupf.juklear.drawing.JuklearDrawVertexLayoutElement",
         "net.janrupf.juklear.drawing.JuklearDrawVertexLayoutFormat",
         "net.janrupf.juklear.drawing.JuklearDrawNullTexture",
+
         "net.janrupf.juklear.font.JuklearFont",
         "net.janrupf.juklear.font.JuklearFontAtlas",
         "net.janrupf.juklear.font.JuklearFontAtlasEditor",
         "net.janrupf.juklear.font.JuklearFontAtlasFormat",
-        "net.janrupf.juklear.input.JuklearButton",
+
         "net.janrupf.juklear.input.JuklearInput",
         "net.janrupf.juklear.input.JuklearKey",
+        "net.janrupf.juklear.input.JuklearMouseButton",
+
+        "net.janrupf.juklear.layout.component.JuklearButton",
         "net.janrupf.juklear.layout.component.JuklearWindow",
         "net.janrupf.juklear.layout.JuklearLayouter",
+        "net.janrupf.juklear.layout.JuklearLayoutUtils",
+
         "net.janrupf.juklear.util.JuklearBuffer",
         "net.janrupf.juklear.util.JuklearConstants",
         "net.janrupf.juklear.util.JuklearConvertResult",

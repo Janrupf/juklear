@@ -1,6 +1,6 @@
 package net.janrupf.juklear.input;
 
-public enum JuklearButton {
+public enum JuklearMouseButton {
     LEFT(0),
     MIDDLE(1),
     RIGHT(2),
@@ -8,7 +8,7 @@ public enum JuklearButton {
 
     private final int id;
 
-    JuklearButton(int id) {
+    JuklearMouseButton(int id) {
         this.id = id;
     }
 

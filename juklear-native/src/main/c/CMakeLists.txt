@@ -34,29 +34,38 @@ set(JUKLEAR_INCLUDE_DIR
         "${CMAKE_CURRENT_LIST_DIR}/include")
 
 set(JUKLEAR_SOURCE
+        src/drawing/juklear_antialiasing.c
+        src/drawing/juklear_convert_config.c
+        src/drawing/juklear_convert_result.c
+        src/drawing/juklear_draw_command.c
+        src/drawing/juklear_draw_null_texture.c
+        src/drawing/juklear_draw_vertex_layout_attribute.c
+        src/drawing/juklear_draw_vertex_layout_element.c
+        src/drawing/juklear_draw_vertex_layout_format.c
+
+        src/font/juklear_font_atlas.c
+        src/font/juklear_font_atlas_editor.c
+        src/font/juklear_font_atlas_format.c
+
+        src/input/juklear_mouse_button.c
+        src/input/juklear_input.c
+        src/input/juklear_key.c
+
+        src/layout/component/juklear_button.c
+        src/layout/component/juklear_window.c
+        src/layout/juklear_layout_utils.c
+        src/layout/juklear_layouter.c
+
+        src/math/juklear_rect.c
+        src/math/juklear_vec2.c
+
+        src/util/juklear_buffer.c
+        src/util/juklear_constants.c
+
         src/juklear.c
-        src/juklear_antialiasing.c
-        src/juklear_buffer.c
-        src/juklear_button.c
-        src/juklear_constants.c
         src/juklear_context.c
-        src/juklear_convert_config.c
-        src/juklear_convert_result.c
-        src/juklear_draw_command.c
-        src/juklear_draw_null_texture.c
-        src/juklear_draw_vertex_layout_attribute.c
-        src/juklear_draw_vertex_layout_element.c
-        src/juklear_draw_vertex_layout_format.c
-        src/juklear_font_atlas.c
-        src/juklear_font_atlas_editor.c
-        src/juklear_font_atlas_format.c
-        src/juklear_input.c
-        src/juklear_key.c
-        src/juklear_layouter.c
         src/juklear_nuklear_impl.c
-        src/juklear_rect.c
-        src/juklear_vec2.c
-        src/juklear_window.c)
+        )
 
 ##############
 # Add target #

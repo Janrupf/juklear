@@ -50,6 +50,7 @@ public class JuklearOpenGLDevice {
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
 
+        // TODO: Move out of here
         JuklearConvertConfig convertConfig = juklear.convertConfig()
                 .addVertexLayout(juklear.drawVertexLayoutElement()
                     .attribute(JuklearDrawVertexLayoutAttribute.POSITION)

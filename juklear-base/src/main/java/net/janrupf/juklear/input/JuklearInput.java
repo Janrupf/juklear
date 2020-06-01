@@ -57,7 +57,7 @@ public class JuklearInput implements CAccessibleObject<JuklearContext>, AutoClos
 
     private native void nativeNkInputMotion(int x, int y);
 
-    public JuklearInput button(JuklearButton button, int x, int y, boolean isPressed) {
+    public JuklearInput button(JuklearMouseButton button, int x, int y, boolean isPressed) {
         checkActive();
         nativeNkInputButton(button.toNative(), x, y, isPressed);
         return this;

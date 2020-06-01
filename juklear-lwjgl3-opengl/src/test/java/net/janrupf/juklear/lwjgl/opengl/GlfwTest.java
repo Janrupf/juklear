@@ -6,12 +6,13 @@ import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.font.JuklearFontAtlas;
 import net.janrupf.juklear.font.JuklearFontAtlasEditor;
-import net.janrupf.juklear.input.JuklearButton;
+import net.janrupf.juklear.input.JuklearMouseButton;
 import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.input.JuklearKey;
+import net.janrupf.juklear.layout.JuklearLayoutUtils;
 import net.janrupf.juklear.layout.JuklearLayouter;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
-import net.janrupf.juklear.layout.JuklearWindowFlags;
+import net.janrupf.juklear.layout.component.JuklearButton;
 import net.janrupf.juklear.layout.component.JuklearWindow;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
@@ -40,8 +41,10 @@ public class GlfwTest {
 
     private Juklear juklear;
     private JuklearContext context;
+    private JuklearLayoutUtils layoutUtils;
 
     private JuklearWindow testWindow;
+    private JuklearButton testButton;
 
     private GlfwTest() throws Exception {
         GLFWErrorCallback.createPrint(System.err).set();
@@ -102,6 +105,8 @@ public class GlfwTest {
         fontAtlasEditor.end();
 
         context = juklear.defaultContext(defaultFont);
+        layoutUtils = context.layouter().utils();
+
         testWindow = context.layouter().windowBuilder()
                 .title("TestWindow")
                 .position(50, 50)
@@ -111,6 +116,7 @@ public class GlfwTest {
                 .flag(JuklearPanelFlags.SCALABLE)
                 .flag(JuklearPanelFlags.MOVABLE)
                 .build();
+        testButton = context.layouter().labelButton("Click me!");
     }
 
     public void loop() {
@@ -162,7 +168,12 @@ public class GlfwTest {
     }
 
     private void renderJuklear(JuklearLayouter layouter) {
-        testWindow.begin();
+        if(testWindow.begin()) {
+            layoutUtils.dynamicRow(30, 1);
+            if(testButton.draw()) {
+                System.out.println("Hi");
+            }
+        }
         testWindow.end();
     }
 
@@ -205,10 +216,10 @@ public class GlfwTest {
 
         input
                 .motion(mouseX, mouseY)
-                .button(JuklearButton.LEFT, mouseX, mouseY, mousePressed(GLFW_MOUSE_BUTTON_LEFT))
-                .button(JuklearButton.MIDDLE, mouseX, mouseY, mousePressed(GLFW_MOUSE_BUTTON_MIDDLE))
-                .button(JuklearButton.RIGHT, mouseX, mouseY, mousePressed(GLFW_MOUSE_BUTTON_RIGHT))
-                .button(JuklearButton.DOUBLE, mouseX, mouseY,
+                .button(JuklearMouseButton.LEFT, mouseX, mouseY, mousePressed(GLFW_MOUSE_BUTTON_LEFT))
+                .button(JuklearMouseButton.MIDDLE, mouseX, mouseY, mousePressed(GLFW_MOUSE_BUTTON_MIDDLE))
+                .button(JuklearMouseButton.RIGHT, mouseX, mouseY, mousePressed(GLFW_MOUSE_BUTTON_RIGHT))
+                .button(JuklearMouseButton.DOUBLE, mouseX, mouseY,
                         mousePressed(GLFW_MOUSE_BUTTON_LEFT) && mousePressed(GLFW_MOUSE_BUTTON_RIGHT));
     }
 

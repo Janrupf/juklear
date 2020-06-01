@@ -3,6 +3,7 @@ package net.janrupf.juklear.layout;
 import net.janrupf.juklear.Juklear;
 import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
+import net.janrupf.juklear.layout.component.JuklearButton;
 import net.janrupf.juklear.layout.component.JuklearWindow;
 import net.janrupf.juklear.math.JuklearRect;
 import net.janrupf.juklear.util.JuklearFlag;
@@ -13,6 +14,7 @@ public class JuklearLayouter implements CAccessibleObject<JuklearContext> {
     private final Juklear juklear;
     private final JuklearContext context;
     private final Stack<JuklearLayoutState> stateStack;
+    private final JuklearLayoutUtils layoutUtils;
 
     private long nextComponentId;
 
@@ -20,6 +22,8 @@ public class JuklearLayouter implements CAccessibleObject<JuklearContext> {
         this.juklear = juklear;
         this.context = context;
         this.stateStack = new Stack<>();
+        this.layoutUtils = new JuklearLayoutUtils(context);
+
         this.nextComponentId = 0;
     }
 
@@ -54,6 +58,14 @@ public class JuklearLayouter implements CAccessibleObject<JuklearContext> {
 
     public JuklearWindow.Builder windowBuilder() {
         return new JuklearWindow.Builder(juklear, context);
+    }
+
+    public JuklearButton labelButton(String label) {
+        return new JuklearButton(juklear, context, nextName("button"), label);
+    }
+
+    public JuklearLayoutUtils utils() {
+        return layoutUtils;
     }
 
     private native boolean nativeNkBegin(String title, CAccessibleObject<JuklearRect> bounds, int flags);
