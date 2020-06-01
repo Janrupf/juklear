@@ -4,7 +4,7 @@ import net.janrupf.juklear.annotation.AntiFreeReference;
 import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.drawing.JuklearConvertConfig;
 import net.janrupf.juklear.drawing.JuklearDrawCommand;
-import net.janrupf.juklear.exception.FatalJuklearException;
+import net.janrupf.juklear.exception.JuklearFatalException;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.font.JuklearFont;
@@ -37,7 +37,7 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     static JuklearContext createDefault(Juklear juklear, JuklearFont font) {
         CAllocatedObject<JuklearContext> instance = allocateInstanceStruct(juklear);
         if (!nativeNkInitDefault(instance, font)) {
-            throw new FatalJuklearException("nk_init_default returned false");
+            throw new JuklearFatalException("nk_init_default returned false");
         }
 
         return new JuklearContext(juklear, font, instance);

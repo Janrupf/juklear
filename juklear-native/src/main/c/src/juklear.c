@@ -19,7 +19,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
             return 0;
         }
 
-        // Hmm, ok, we also accept later versions, apparently 1.1 is not supported?!
+        // Hmm, ok, we also accept later versions, apparently 1.8 is not supported?!
         (*vm)->GetEnv(vm, (void **) &env, supported_version);
         if(env == NULL) {
             fprintf(
@@ -69,17 +69,17 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     JUKLEAR_GLOBAL.out_of_memory_error_class = (*env)->NewGlobalRef(env, out_of_memory_error_class);
     (*env)->DeleteLocalRef(env, out_of_memory_error_class);
 
-    jclass fatal_juklear_exception_class = (*env)->FindClass(env, "net/janrupf/juklear/exception/FatalJuklearException");
-    if(!fatal_juklear_exception_class) {
+    jclass juklear_fatal_exception_class = (*env)->FindClass(env, "net/janrupf/juklear/exception/JuklearFatalException");
+    if(!juklear_fatal_exception_class) {
         fprintf(
             stderr,
-            "JVM did not provide the class net.janrupf.juklear.exception.FatalJuklearException, does the java "
+            "JVM did not provide the class net.janrupf.juklear.exception.JuklearFatalException, does the java "
             "version of the library mismatch the native version? (Unable to initialize)\n");
         return 0;
     }
 
-    JUKLEAR_GLOBAL.fatal_juklear_exception_class = (*env)->NewGlobalRef(env, fatal_juklear_exception_class);
-    (*env)->DeleteLocalRef(env, out_of_memory_error_class);
+    JUKLEAR_GLOBAL.juklear_fatal_exception_class = (*env)->NewGlobalRef(env, juklear_fatal_exception_class);
+    (*env)->DeleteLocalRef(env, juklear_fatal_exception_class);
 
     jclass long_consumer_class = (*env)->FindClass(env, "java/util/function/LongConsumer");
     if(!long_consumer_class) {
@@ -111,7 +111,7 @@ void JNI_OnUnload(JavaVM *vm, void *reserved) {
     (*vm)->GetEnv(vm, (void **) &env, JUKLEAR_GLOBAL.active_jni_version);
 
     (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.long_consumer_class);
-    (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.fatal_juklear_exception_class);
+    (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.juklear_fatal_exception_class);
     (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.out_of_memory_error_class);
     (*env)->DeleteGlobalRef(env, JUKLEAR_GLOBAL.c_accessible_object_class);
 }

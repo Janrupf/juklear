@@ -12,7 +12,7 @@ typedef struct JuklearGlobal {
 
     jclass out_of_memory_error_class;
 
-    jclass fatal_juklear_exception_class;
+    jclass juklear_fatal_exception_class;
 
     jclass long_consumer_class;
     jmethodID long_consumer_accept_method;
@@ -30,4 +30,4 @@ extern JuklearGlobal_t JUKLEAR_GLOBAL;
     (*env)->ThrowNew(env, JUKLEAR_GLOBAL.out_of_memory_error_class, JUKLEAR_SOURCE_LOCATION " => " message)
 
 #define JAVA_FATAL_ERROR(env, message) \
-    (*env)->ThrowNew(env, JUKLEAR_GLOBAL.fatal_juklear_exception_class, JUKLEAR_SOURCE_LOCATION " => " message)
+    (*env)->ThrowNew(env, JUKLEAR_GLOBAL.juklear_fatal_exception_class, JUKLEAR_SOURCE_LOCATION " => " message)
