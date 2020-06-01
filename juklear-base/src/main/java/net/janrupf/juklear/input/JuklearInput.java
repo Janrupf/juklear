@@ -87,6 +87,14 @@ public class JuklearInput implements CAccessibleObject<JuklearContext>, AutoClos
 
     private native void nativeNkInputUnicode(int codePoint);
 
+    public JuklearInput scroll(float x, float y) {
+        checkActive();
+        nativeNkInputScroll(x, y);
+        return this;
+    }
+
+    private native void nativeNkInputScroll(float x, float y);
+
     private void checkActive() {
         if(!active) {
             throw new IllegalStateException("Input is not active");

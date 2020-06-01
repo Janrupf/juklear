@@ -10,9 +10,7 @@ import net.janrupf.juklear.input.JuklearButton;
 import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.input.JuklearKey;
 import net.janrupf.juklear.layout.JuklearLayouter;
-import net.janrupf.juklear.layout.JuklearPanelFlag;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
-import net.janrupf.juklear.layout.JuklearWindowFlags;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
 import org.lwjgl.glfw.Callbacks;
@@ -110,6 +108,7 @@ public class GlfwTest {
         JuklearInput input = context.getInput();
 
         glfwSetCharCallback(window, (window, c) -> input.unicode(c));
+        glfwSetScrollCallback(window, (window, x, y) -> input.scroll((float) x, (float) y));
 
         // TODO: Scrolling
 

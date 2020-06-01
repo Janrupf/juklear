@@ -43,3 +43,9 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_input_JuklearInput_nativeNkInput
     nk_context_t *context = JAVA_HANDLE(env, instance);
     nk_input_unicode(context, codePoint);
 }
+
+JNIEXPORT void JNICALL Java_net_janrupf_juklear_input_JuklearInput_nativeNkInputScroll
+    (JNIEnv *env, jobject instance, jfloat x, jfloat y) {
+    nk_context_t *context = JAVA_HANDLE(env, instance);
+    nk_input_scroll(context, nk_vec2(x, y));
+}
