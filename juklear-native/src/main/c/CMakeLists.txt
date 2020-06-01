@@ -55,7 +55,8 @@ set(JUKLEAR_SOURCE
         src/juklear_layouter.c
         src/juklear_nuklear_impl.c
         src/juklear_rect.c
-        src/juklear_vec2.c)
+        src/juklear_vec2.c
+        src/juklear_window.c)
 
 ##############
 # Add target #

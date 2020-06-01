@@ -11,6 +11,8 @@ import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.input.JuklearKey;
 import net.janrupf.juklear.layout.JuklearLayouter;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
+import net.janrupf.juklear.layout.JuklearWindowFlags;
+import net.janrupf.juklear.layout.component.JuklearWindow;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
 import org.lwjgl.glfw.Callbacks;
@@ -38,6 +40,8 @@ public class GlfwTest {
 
     private Juklear juklear;
     private JuklearContext context;
+
+    private JuklearWindow testWindow;
 
     private GlfwTest() throws Exception {
         GLFWErrorCallback.createPrint(System.err).set();
@@ -98,6 +102,15 @@ public class GlfwTest {
         fontAtlasEditor.end();
 
         context = juklear.defaultContext(defaultFont);
+        testWindow = context.layouter().windowBuilder()
+                .title("TestWindow")
+                .position(50, 50)
+                .size(200, 400)
+                .flag(JuklearPanelFlags.BORDER)
+                .flag(JuklearPanelFlags.TITLE)
+                .flag(JuklearPanelFlags.SCALABLE)
+                .flag(JuklearPanelFlags.MOVABLE)
+                .build();
     }
 
     public void loop() {
@@ -149,14 +162,8 @@ public class GlfwTest {
     }
 
     private void renderJuklear(JuklearLayouter layouter) {
-        layouter.begin("Juklear", 0, 0, 100, 150,
-                JuklearPanelFlags.MOVABLE,
-                JuklearPanelFlags.BORDER,
-                JuklearPanelFlags.NO_SCROLLBAR,
-                JuklearPanelFlags.SCALABLE,
-                JuklearPanelFlags.TITLE,
-                JuklearPanelFlags.CLOSABLE
-        ).end();
+        testWindow.begin();
+        testWindow.end();
     }
 
     private void updateInput(JuklearInput input) {
