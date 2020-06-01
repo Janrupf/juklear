@@ -6,7 +6,11 @@ import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.font.JuklearFontAtlas;
 import net.janrupf.juklear.font.JuklearFontAtlasEditor;
+import net.janrupf.juklear.input.JuklearButton;
+import net.janrupf.juklear.input.JuklearInput;
+import net.janrupf.juklear.input.JuklearKey;
 import net.janrupf.juklear.layout.JuklearLayouter;
+import net.janrupf.juklear.layout.JuklearPanelFlag;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
@@ -17,6 +21,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.MemoryStack;
 
+import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -101,8 +106,18 @@ public class GlfwTest {
 
         glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 
+        JuklearInput input = context.getInput();
+
+        glfwSetCharCallback(window, (window, c) -> input.unicode(c));
+
+        // TODO: Scrolling
+
         while (!glfwWindowShouldClose(window)) {
+            input.begin();
             glfwPollEvents();
+            updateInput(input);
+            input.end();
+
             try(MemoryStack stack = MemoryStack.stackPush()) {
                 IntBuffer widthPointer = stack.mallocInt(1);
                 IntBuffer heightPointer = stack.mallocInt(1);
@@ -135,6 +150,65 @@ public class GlfwTest {
 
     private void renderJuklear(JuklearLayouter layouter) {
         layouter.begin("Juklear", 0, 0, 100, 150,
-                JuklearPanelFlags.MOVABLE, JuklearPanelFlags.BORDER, JuklearPanelFlags.NO_SCROLLBAR, JuklearPanelFlags.TITLE).end();
+                JuklearPanelFlags.MOVABLE,
+                JuklearPanelFlags.BORDER,
+                JuklearPanelFlags.NO_SCROLLBAR,
+                JuklearPanelFlags.TITLE,
+                JuklearPanelFlags.CLOSABLE
+        ).end();
+    }
+
+    private void updateInput(JuklearInput input) {
+        input
+                .key(JuklearKey.DEL, keyPressed(GLFW_KEY_DELETE))
+                .key(JuklearKey.ENTER, keyPressed(GLFW_KEY_ENTER))
+                .key(JuklearKey.TAB, keyPressed(GLFW_KEY_TAB))
+                .key(JuklearKey.BACKSPACE, keyPressed(GLFW_KEY_BACKSPACE))
+                .key(JuklearKey.LEFT, keyPressed(GLFW_KEY_LEFT))
+                .key(JuklearKey.RIGHT, keyPressed(GLFW_KEY_RIGHT))
+                .key(JuklearKey.UP, keyPressed(GLFW_KEY_UP))
+                .key(JuklearKey.DOWN, keyPressed(GLFW_KEY_DOWN))
+                .key(JuklearKey.SHIFT, keyPressed(GLFW_KEY_LEFT_SHIFT) || keyPressed(GLFW_KEY_RIGHT_SHIFT));
+
+        if(keyPressed(GLFW_KEY_LEFT_CONTROL) || keyPressed(GLFW_KEY_RIGHT_CONTROL)) {
+            input
+                    .key(JuklearKey.COPY, keyPressed(GLFW_KEY_C))
+                    .key(JuklearKey.PASTE, keyPressed(GLFW_KEY_P))
+                    .key(JuklearKey.CUT, keyPressed(GLFW_KEY_X));
+        } else {
+            input
+                    .key(JuklearKey.COPY, false)
+                    .key(JuklearKey.PASTE, false)
+                    .key(JuklearKey.COPY, false);
+        }
+
+        int mouseX;
+        int mouseY;
+
+        try(MemoryStack stack = MemoryStack.stackPush()) {
+            DoubleBuffer xPointer = stack.callocDouble(1);
+            DoubleBuffer yPointer = stack.callocDouble(1);
+
+            glfwGetCursorPos(window, xPointer, yPointer);
+
+            mouseX = (int) xPointer.get(0);
+            mouseY = (int) yPointer.get(0);
+        }
+
+        input
+                .motion(mouseX, mouseY)
+                .button(JuklearButton.LEFT, mouseX, mouseY, mousePressed(GLFW_MOUSE_BUTTON_LEFT))
+                .button(JuklearButton.MIDDLE, mouseX, mouseY, mousePressed(GLFW_MOUSE_BUTTON_MIDDLE))
+                .button(JuklearButton.RIGHT, mouseX, mouseY, mousePressed(GLFW_MOUSE_BUTTON_RIGHT))
+                .button(JuklearButton.DOUBLE, mouseX, mouseY,
+                        mousePressed(GLFW_MOUSE_BUTTON_LEFT) && mousePressed(GLFW_MOUSE_BUTTON_RIGHT));
+    }
+
+    private boolean keyPressed(int key) {
+        return glfwGetKey(window, key) == GLFW_PRESS;
+    }
+
+    private boolean mousePressed(int button) {
+        return glfwGetMouseButton(window, button) == GLFW_PRESS;
     }
 }

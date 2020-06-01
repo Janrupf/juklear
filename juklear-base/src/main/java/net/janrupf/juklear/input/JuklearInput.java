@@ -31,6 +31,8 @@ public class JuklearInput implements CAccessibleObject<JuklearContext>, AutoClos
             throw new IllegalStateException(
                     "Tried to end an input which was not active anymore, probably too many end() calls");
         }
+
+        active = false;
     }
 
     public JuklearInput key(JuklearKey key, boolean isPressed) {
@@ -71,7 +73,13 @@ public class JuklearInput implements CAccessibleObject<JuklearContext>, AutoClos
         return this;
     }
 
-    private native void nativeNkInputUnicode(char codePoint);
+    public JuklearInput unicode(int codePoint) {
+        checkActive();
+        nativeNkInputUnicode(codePoint);
+        return this;
+    }
+
+    private native void nativeNkInputUnicode(int codePoint);
 
     private void checkActive() {
         if(!active) {

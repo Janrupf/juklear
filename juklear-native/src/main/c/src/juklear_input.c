@@ -27,7 +27,7 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_input_JuklearInput_nativeNkInput
 }
 
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_input_JuklearInput_nativeNkInputUnicode
-    (JNIEnv *env, jobject instance, jchar codePoint) {
+    (JNIEnv *env, jobject instance, jint codePoint) {
     nk_context_t *context = JAVA_HANDLE(env, instance);
     nk_input_unicode(context, codePoint);
 }

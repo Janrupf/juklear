@@ -96,8 +96,12 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
         return layouter;
     }
 
-    public JuklearInput input() {
+    public JuklearInput beginInput() {
         input.begin();
+        return input;
+    }
+
+    public JuklearInput getInput() {
         return input;
     }
 
