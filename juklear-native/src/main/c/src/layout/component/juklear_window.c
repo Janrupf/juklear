@@ -2,7 +2,7 @@
 
 #include "net_janrupf_juklear_layout_component_JuklearWindow.h"
 
-JNIEXPORT jboolean JNICALL Java_net_janrupf_juklear_layout_component_JuklearWindow_nativeNkBegin(
+JNIEXPORT jboolean JNICALL Java_net_janrupf_juklear_layout_component_JuklearWindow_nativeNkBeginTitled(
     JNIEnv *env,
     jclass caller_class,
     jobject instance,

@@ -51,10 +51,10 @@ set(JUKLEAR_SOURCE
         src/input/juklear_input.c
         src/input/juklear_key.c
 
+        src/layout/component/row/juklear_static_row.c
+
         src/layout/component/juklear_button.c
         src/layout/component/juklear_window.c
-        src/layout/juklear_layout_utils.c
-        src/layout/juklear_layouter.c
 
         src/math/juklear_rect.c
         src/math/juklear_vec2.c

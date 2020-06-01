@@ -10,10 +10,12 @@ import net.janrupf.juklear.input.JuklearMouseButton;
 import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.input.JuklearKey;
 import net.janrupf.juklear.layout.JuklearLayoutUtils;
-import net.janrupf.juklear.layout.JuklearLayouter;
+import net.janrupf.juklear.layout.JuklearPanelFlag;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
+import net.janrupf.juklear.layout.JuklearWindowFlags;
 import net.janrupf.juklear.layout.component.JuklearButton;
 import net.janrupf.juklear.layout.component.JuklearWindow;
+import net.janrupf.juklear.layout.component.row.JuklearStaticRow;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
 import org.lwjgl.glfw.Callbacks;
@@ -43,8 +45,8 @@ public class GlfwTest {
     private JuklearContext context;
     private JuklearLayoutUtils layoutUtils;
 
-    private JuklearWindow testWindow;
-    private JuklearButton testButton;
+    private final JuklearWindow testWindow;
+    private final JuklearButton testButton;
 
     private GlfwTest() throws Exception {
         GLFWErrorCallback.createPrint(System.err).set();
@@ -105,18 +107,21 @@ public class GlfwTest {
         fontAtlasEditor.end();
 
         context = juklear.defaultContext(defaultFont);
-        layoutUtils = context.layouter().utils();
 
-        testWindow = context.layouter().windowBuilder()
-                .title("TestWindow")
-                .position(50, 50)
-                .size(200, 400)
-                .flag(JuklearPanelFlags.BORDER)
-                .flag(JuklearPanelFlags.TITLE)
-                .flag(JuklearPanelFlags.SCALABLE)
-                .flag(JuklearPanelFlags.MOVABLE)
-                .build();
-        testButton = context.layouter().labelButton("Click me!");
+        testWindow = new JuklearWindow("Juklear", 0, 0, 600, 400);
+        testWindow.addFlag(JuklearPanelFlags.MOVABLE);
+        testWindow.addFlag(JuklearPanelFlags.BORDER);
+        testWindow.addFlag(JuklearPanelFlags.TITLE);
+
+        testButton = new JuklearButton("Click me!");
+        testButton.addListener(context, (e) -> testButton.setLabel("Clicked!"));
+
+        JuklearStaticRow row = new JuklearStaticRow(100);
+        row.addChild(testButton);
+
+        testWindow.addChild(row);
+
+        context.addTopLevel(testWindow);
     }
 
     public void loop() {
@@ -146,13 +151,13 @@ public class GlfwTest {
                 glViewport(0, 0, widthPointer.get(0), heightPointer.get(0));
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                renderJuklear(context.layouter());
-
                 context.draw(widthPointer.get(0), heightPointer.get(0),
                         new JuklearVec2(1.0f, 1.0f), JuklearAntialiasing.ON);
             }
 
             glfwSwapBuffers(window);
+
+            context.processEvents();
         }
     }
 
@@ -165,16 +170,6 @@ public class GlfwTest {
 
         juklear.teardown();
         juklear = null;
-    }
-
-    private void renderJuklear(JuklearLayouter layouter) {
-        if(testWindow.begin()) {
-            layoutUtils.dynamicRow(30, 1);
-            if(testButton.draw()) {
-                System.out.println("Hi");
-            }
-        }
-        testWindow.end();
     }
 
     private void updateInput(JuklearInput input) {

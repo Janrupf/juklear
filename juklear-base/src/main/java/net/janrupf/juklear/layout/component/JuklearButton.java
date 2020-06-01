@@ -2,14 +2,16 @@ package net.janrupf.juklear.layout.component;
 
 import net.janrupf.juklear.Juklear;
 import net.janrupf.juklear.JuklearContext;
+import net.janrupf.juklear.event.JuklearButtonClickedEvent;
 import net.janrupf.juklear.ffi.CAccessibleObject;
-import net.janrupf.juklear.layout.component.base.JuklearValueComponent;
+import net.janrupf.juklear.layout.component.base.JuklearAbstractEventComponent;
 
-public class JuklearButton extends JuklearValueComponent<Boolean> {
+public class JuklearButton extends JuklearAbstractEventComponent<JuklearButtonClickedEvent> {
     private String label;
 
-    public JuklearButton(Juklear juklear, JuklearContext context, String name, String label) {
-        super(juklear, context, name);
+    public JuklearButton(String label) {
+        super(new JuklearButtonClickedEvent());
+        event.setSource(this);
         this.label = label;
     }
 
@@ -17,9 +19,15 @@ public class JuklearButton extends JuklearValueComponent<Boolean> {
         this.label = label;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
     @Override
-    protected Boolean doDraw() {
-        return nativeNkButtonLabel(context, label);
+    public void draw(Juklear juklear, JuklearContext context) {
+        if(nativeNkButtonLabel(context, label)) {
+            emitEvent(context);
+        }
     }
 
     private static native boolean nativeNkButtonLabel(CAccessibleObject<JuklearContext> context, String title);
