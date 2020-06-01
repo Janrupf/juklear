@@ -86,7 +86,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         fprintf(
             stderr,
             "JVM did not provide the class java.util.function.LongConsumer, are we running on a pre 1.8 JRE? "
-            "(Unable to initialize)\ņ");
+            "(Unable to initialize)\n");
         return 0;
     }
 

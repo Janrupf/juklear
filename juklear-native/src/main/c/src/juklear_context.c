@@ -17,6 +17,7 @@ Java_net_janrupf_juklear_JuklearContext_nativeAllocateInstanceStruct(JNIEnv *env
 
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_JuklearContext_nativeFreeAllocatedInstanceStruct(
     JNIEnv *env, jclass caller_class, jlong handle) {
+    nk_free((nk_context_t *) handle);
     free((void *) handle);
 }
 
