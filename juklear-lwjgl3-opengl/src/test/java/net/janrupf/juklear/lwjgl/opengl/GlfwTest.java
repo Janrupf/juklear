@@ -12,6 +12,7 @@ import net.janrupf.juklear.input.JuklearKey;
 import net.janrupf.juklear.layout.JuklearLayouter;
 import net.janrupf.juklear.layout.JuklearPanelFlag;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
+import net.janrupf.juklear.layout.JuklearWindowFlags;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
 import org.lwjgl.glfw.Callbacks;
@@ -153,6 +154,7 @@ public class GlfwTest {
                 JuklearPanelFlags.MOVABLE,
                 JuklearPanelFlags.BORDER,
                 JuklearPanelFlags.NO_SCROLLBAR,
+                JuklearPanelFlags.SCALABLE,
                 JuklearPanelFlags.TITLE,
                 JuklearPanelFlags.CLOSABLE
         ).end();

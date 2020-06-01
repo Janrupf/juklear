@@ -17,8 +17,11 @@ public class JuklearInput implements CAccessibleObject<JuklearContext>, AutoClos
             throw new IllegalStateException("This input has already begun");
         }
 
+        nativeNkInputBegin();
         active = true;
     }
+
+    private native void nativeNkInputBegin();
 
     public void checkDrawingAllowed() {
         if(active) {
@@ -32,8 +35,11 @@ public class JuklearInput implements CAccessibleObject<JuklearContext>, AutoClos
                     "Tried to end an input which was not active anymore, probably too many end() calls");
         }
 
+        nativeNkInputEnd();
         active = false;
     }
+
+    private native void nativeNkInputEnd();
 
     public JuklearInput key(JuklearKey key, boolean isPressed) {
         checkActive();

@@ -2,6 +2,18 @@
 
 #include "net_janrupf_juklear_input_JuklearInput.h"
 
+JNIEXPORT void JNICALL Java_net_janrupf_juklear_input_JuklearInput_nativeNkInputBegin
+    (JNIEnv *env, jobject instance) {
+    nk_context_t *context = JAVA_HANDLE(env, instance);
+    nk_input_begin(context);
+}
+
+JNIEXPORT void JNICALL Java_net_janrupf_juklear_input_JuklearInput_nativeNkInputEnd
+    (JNIEnv *env, jobject instance) {
+    nk_context_t *context = JAVA_HANDLE(env, instance);
+    nk_input_end(context);
+}
+
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_input_JuklearInput_nativeNkInputKey(
     JNIEnv *env, jobject instance, jint key, jboolean is_pressed) {
     nk_context_t *context = JAVA_HANDLE(env, instance);
