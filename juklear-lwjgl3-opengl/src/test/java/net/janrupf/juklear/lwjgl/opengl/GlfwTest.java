@@ -8,7 +8,6 @@ import net.janrupf.juklear.font.JuklearFontAtlas;
 import net.janrupf.juklear.font.JuklearFontAtlasEditor;
 import net.janrupf.juklear.image.JuklearImage;
 import net.janrupf.juklear.image.JuklearImageConvert;
-import net.janrupf.juklear.image.JuklearImageSizing;
 import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.input.JuklearKey;
 import net.janrupf.juklear.input.JuklearMouseButton;
@@ -135,7 +134,6 @@ public class GlfwTest {
 
         JuklearImage juklearImage = JuklearImageConvert.fromBufferedImage(
                 juklear,
-                JuklearImageSizing.STRETCH,
                 ImageIO.read(getClass().getResource("/downscaled_logo.png"))
         );
 

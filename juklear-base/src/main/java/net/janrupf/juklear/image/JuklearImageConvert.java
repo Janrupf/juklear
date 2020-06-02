@@ -5,7 +5,7 @@ import net.janrupf.juklear.Juklear;
 import java.awt.image.BufferedImage;
 
 public class JuklearImageConvert {
-    public static JuklearImage fromBufferedImage(Juklear juklear, JuklearImageSizing sizing, BufferedImage image)
+    public static JuklearImage fromBufferedImage(Juklear juklear, BufferedImage image)
             throws JuklearImageException {
         // TODO: This might be damn slow, we possibly want to support ARGB images, since OpenGL is able to
         //       load them directly, at least on newer versions, and buffered images return ARGB
@@ -29,6 +29,6 @@ public class JuklearImageConvert {
         }
 
         return new JuklearImage(
-                juklear, JuklearImageFormat.UNSIGNED_BYTE_RGBA, sizing, data, image.getWidth(), image.getHeight());
+                juklear, JuklearImageFormat.UNSIGNED_BYTE_RGBA, data, image.getWidth(), image.getHeight());
     }
 }

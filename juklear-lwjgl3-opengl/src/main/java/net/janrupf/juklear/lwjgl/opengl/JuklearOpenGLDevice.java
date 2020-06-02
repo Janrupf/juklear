@@ -6,7 +6,6 @@ import net.janrupf.juklear.drawing.*;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.image.JuklearImage;
-import net.janrupf.juklear.image.JuklearImageSizing;
 import net.janrupf.juklear.lwjgl.opengl.exception.JuklearOpenGLFatalException;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearBuffer;
@@ -165,8 +164,8 @@ public class JuklearOpenGLDevice {
         glBindTexture(GL_TEXTURE_2D, id);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        applyTextureWrapMode(GL_TEXTURE_WRAP_S, image.getSizing());
-        applyTextureWrapMode(GL_TEXTURE_WRAP_T, image.getSizing());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 
         ByteBuffer buffer = ByteBuffer.allocateDirect(image.getData().length);
         buffer.put(image.getData());
@@ -185,31 +184,6 @@ public class JuklearOpenGLDevice {
         }
 
         return id;
-    }
-
-    private void applyTextureWrapMode(int wrap, JuklearImageSizing sizing) {
-        int mode;
-        switch (sizing) {
-            case STRETCH:
-            case STRETCH_BORDER:
-                mode = GL_CLAMP_TO_EDGE;
-                break;
-
-            case CLAMP_TO_SIZE:
-                mode = GL_CLAMP_TO_BORDER;
-                glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, new float[]{0, 0, 0, 0});
-                break;
-
-            case REPEAT:
-                mode = GL_REPEAT;
-                break;
-
-            default:
-                throw new UnsupportedOperationException(
-                        "The OpenGL2 backend does not support the sizing mode " + sizing.name());
-        }
-
-        glTexParameteri(GL_TEXTURE_2D, wrap, mode);
     }
 
     public void setNullTexture(JuklearDrawNullTexture nullTexture) {

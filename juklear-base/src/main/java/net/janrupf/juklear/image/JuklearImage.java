@@ -7,7 +7,6 @@ import net.janrupf.juklear.ffi.CAllocatedObject;
 
 public class JuklearImage implements CAccessibleObject<JuklearImage> {
     private final JuklearImageFormat format;
-    private final JuklearImageSizing sizing;
     private final byte[] data;
     private final int width;
     private final int height;
@@ -16,11 +15,10 @@ public class JuklearImage implements CAccessibleObject<JuklearImage> {
     private final CAccessibleObject<?> backendObject;
     private final CAccessibleObject<JuklearImage> instance;
 
-    public JuklearImage(Juklear juklear, JuklearImageFormat format, JuklearImageSizing sizing, byte[] data,
+    public JuklearImage(Juklear juklear, JuklearImageFormat format,byte[] data,
                         int width, int height) throws JuklearImageException {
         format.check(data, width, height);
         this.format = format;
-        this.sizing = sizing;
         this.data = data;
         this.width = width;
         this.height = height;
@@ -33,10 +31,6 @@ public class JuklearImage implements CAccessibleObject<JuklearImage> {
 
     public JuklearImageFormat getFormat() {
         return format;
-    }
-
-    public JuklearImageSizing getSizing() {
-        return sizing;
     }
 
     public byte[] getData() {
