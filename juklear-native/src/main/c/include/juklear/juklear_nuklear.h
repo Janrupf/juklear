@@ -17,3 +17,4 @@ typedef struct nk_convert_config nk_convert_config_t;
 typedef struct nk_draw_vertex_layout_element nk_draw_vertex_layout_element_t;
 typedef struct nk_draw_command nk_draw_command_t;
 typedef struct nk_rect nk_rect_t;
+typedef struct nk_image nk_image_t;

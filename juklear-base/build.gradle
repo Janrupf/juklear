@@ -20,6 +20,8 @@ final def NATIVE_CLASSES = [
         "net.janrupf.juklear.font.JuklearFontAtlasEditor",
         "net.janrupf.juklear.font.JuklearFontAtlasFormat",
 
+        "net.janrupf.juklear.image.JuklearImage",
+
         "net.janrupf.juklear.input.JuklearInput",
         "net.janrupf.juklear.input.JuklearKey",
         "net.janrupf.juklear.input.JuklearMouseButton",
@@ -28,6 +30,7 @@ final def NATIVE_CLASSES = [
         "net.janrupf.juklear.layout.component.row.JuklearStaticRow",
 
         "net.janrupf.juklear.layout.component.JuklearButton",
+        "net.janrupf.juklear.layout.component.JuklearImageDisplay",
         "net.janrupf.juklear.layout.component.JuklearLabel",
         "net.janrupf.juklear.layout.component.JuklearSpacing",
         "net.janrupf.juklear.layout.component.JuklearWindow",

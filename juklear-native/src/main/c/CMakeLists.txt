@@ -47,6 +47,8 @@ set(JUKLEAR_SOURCE
         src/font/juklear_font_atlas_editor.c
         src/font/juklear_font_atlas_format.c
 
+        src/image/juklear_image.c
+
         src/input/juklear_mouse_button.c
         src/input/juklear_input.c
         src/input/juklear_key.c
@@ -55,6 +57,7 @@ set(JUKLEAR_SOURCE
         src/layout/component/row/juklear_static_row.c
 
         src/layout/component/juklear_button.c
+        src/layout/component/juklear_image_display.c
         src/layout/component/juklear_label.c
         src/layout/component/juklear_spacing.c
         src/layout/component/juklear_window.c

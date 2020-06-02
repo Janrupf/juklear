@@ -7,6 +7,7 @@ import net.janrupf.juklear.drawing.JuklearDrawNullTexture;
 import net.janrupf.juklear.exception.JuklearInitializationException;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.font.JuklearFontAtlasFormat;
+import net.janrupf.juklear.image.JuklearImageFormat;
 import net.janrupf.juklear.math.JuklearVec2;
 
 public interface JuklearBackend {
@@ -16,4 +17,6 @@ public interface JuklearBackend {
     JuklearFontAtlasFormat fontAtlasFormat();
     CAccessibleObject<?> uploadFontAtlas(CAccessibleObject<?> image, int width, int height);
     void setNullTexture(JuklearDrawNullTexture texture);
+
+    CAccessibleObject<?> createImage(JuklearImageFormat format, byte[] data);
 }

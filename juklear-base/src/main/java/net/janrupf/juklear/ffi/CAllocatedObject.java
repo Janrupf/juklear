@@ -54,7 +54,7 @@ public abstract class CAllocatedObject<T> implements CAccessibleObject<T> {
                 throw new IllegalStateException("freeFunction cannot be null", new NullPointerException("freeFunction"));
             }
 
-            CAllocatedObject<T> object = new StandardCAllocatedObject<T>(this.handle, this.freeFunction);
+            CAllocatedObject<T> object = new StandardCAllocatedObject<>(this.handle, this.freeFunction);
             juklear.registerNativeObject(object);
             return object;
         }
