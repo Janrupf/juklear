@@ -6,15 +6,15 @@ import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.font.JuklearFontAtlas;
 import net.janrupf.juklear.font.JuklearFontAtlasEditor;
+import net.janrupf.juklear.image.JuklearImage;
+import net.janrupf.juklear.image.JuklearImageConvert;
+import net.janrupf.juklear.image.JuklearImageSizing;
 import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.input.JuklearKey;
 import net.janrupf.juklear.input.JuklearMouseButton;
 import net.janrupf.juklear.layout.JuklearLayoutUtils;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
-import net.janrupf.juklear.layout.component.JuklearButton;
-import net.janrupf.juklear.layout.component.JuklearLabel;
-import net.janrupf.juklear.layout.component.JuklearSpacing;
-import net.janrupf.juklear.layout.component.JuklearWindow;
+import net.janrupf.juklear.layout.component.*;
 import net.janrupf.juklear.layout.component.row.JuklearDynamicRow;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
@@ -25,6 +25,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.MemoryStack;
 
+import javax.imageio.ImageIO;
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 
@@ -129,6 +130,17 @@ public class GlfwTest {
         secondRow.addChild(new JuklearButton("Next row"));
         secondRow.addChild(new JuklearSpacing(1));
         testWindow.addChild(secondRow);
+
+        JuklearDynamicRow thirdRow = new JuklearDynamicRow(256);
+
+        JuklearImage juklearImage = JuklearImageConvert.fromBufferedImage(
+                juklear,
+                JuklearImageSizing.STRETCH,
+                ImageIO.read(getClass().getResource("/downscaled_logo.png"))
+        );
+
+        thirdRow.addChild(new JuklearImageDisplay(juklearImage));
+        testWindow.addChild(thirdRow);
 
         context.addTopLevel(testWindow);
     }

@@ -5,9 +5,9 @@ import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.backend.JuklearBackend;
 import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.drawing.JuklearDrawNullTexture;
-import net.janrupf.juklear.exception.JuklearInitializationException;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.font.JuklearFontAtlasFormat;
+import net.janrupf.juklear.image.JuklearImage;
 import net.janrupf.juklear.math.JuklearVec2;
 
 public class JuklearOpenGL implements JuklearBackend {
@@ -15,7 +15,7 @@ public class JuklearOpenGL implements JuklearBackend {
     private JuklearOpenGLDevice device;
 
     @Override
-    public void init(Juklear juklear) throws JuklearInitializationException {
+    public void init(Juklear juklear) {
         this.juklear = juklear;
         this.device = new JuklearOpenGLDevice(juklear);
     }
@@ -39,5 +39,10 @@ public class JuklearOpenGL implements JuklearBackend {
     @Override
     public void setNullTexture(JuklearDrawNullTexture texture) {
         device.setNullTexture(texture);
+    }
+
+    @Override
+    public CAccessibleObject<?> createImage(JuklearImage image) {
+        return new JuklearOpenGLImage(device.getPreFrameTasks(), device.uploadTexture(image));
     }
 }

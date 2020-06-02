@@ -5,6 +5,8 @@ import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.drawing.*;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
+import net.janrupf.juklear.image.JuklearImage;
+import net.janrupf.juklear.image.JuklearImageSizing;
 import net.janrupf.juklear.lwjgl.opengl.exception.JuklearOpenGLFatalException;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearBuffer;
@@ -13,22 +15,32 @@ import net.janrupf.juklear.util.JuklearConvertResult;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.ByteBuffer;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import static org.lwjgl.opengl.GL20.*;
 
 public class JuklearOpenGLDevice {
     private final Juklear juklear;
     private final JuklearBuffer commandBuffer;
+    private final Queue<Runnable> preFrameTasks;
 
     private JuklearDrawNullTexture nullTexture;
 
     public JuklearOpenGLDevice(Juklear juklear) {
         this.juklear = juklear;
         this.commandBuffer = juklear.defaultBuffer();
+        this.preFrameTasks = new LinkedList<>();
+    }
+
+    public Queue<Runnable> getPreFrameTasks() {
+        return preFrameTasks;
     }
 
     public void draw(
             JuklearContext context, int width, int height, JuklearVec2 scale, JuklearAntialiasing antialiasing) {
+        preFrameTasks.forEach(Runnable::run);
+
         glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
         glDisable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
@@ -146,6 +158,58 @@ public class JuklearOpenGLDevice {
                 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getHandle());
 
         return CAllocatedObject.of(fontTexture).withoutFree();
+    }
+
+    public int uploadTexture(JuklearImage image) {
+        int id = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, id);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        applyTextureWrapMode(GL_TEXTURE_WRAP_S, image.getSizing());
+        applyTextureWrapMode(GL_TEXTURE_WRAP_T, image.getSizing());
+
+        ByteBuffer buffer = ByteBuffer.allocateDirect(image.getData().length);
+        buffer.put(image.getData());
+        buffer.flip();
+
+        switch (image.getFormat()) {
+            case UNSIGNED_BYTE_RGBA:
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(),
+                        0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+                break;
+
+            default:
+                glDeleteTextures(id);
+                throw new UnsupportedOperationException(
+                        "The OpenGL2 backend does not support the image format " + image.getFormat().name());
+        }
+
+        return id;
+    }
+
+    private void applyTextureWrapMode(int wrap, JuklearImageSizing sizing) {
+        int mode;
+        switch (sizing) {
+            case STRETCH:
+            case STRETCH_BORDER:
+                mode = GL_CLAMP_TO_EDGE;
+                break;
+
+            case CLAMP_TO_SIZE:
+                mode = GL_CLAMP_TO_BORDER;
+                glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, new float[]{0, 0, 0, 0});
+                break;
+
+            case REPEAT:
+                mode = GL_REPEAT;
+                break;
+
+            default:
+                throw new UnsupportedOperationException(
+                        "The OpenGL2 backend does not support the sizing mode " + sizing.name());
+        }
+
+        glTexParameteri(GL_TEXTURE_2D, wrap, mode);
     }
 
     public void setNullTexture(JuklearDrawNullTexture nullTexture) {
