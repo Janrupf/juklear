@@ -12,6 +12,7 @@ import net.janrupf.juklear.input.JuklearMouseButton;
 import net.janrupf.juklear.layout.JuklearLayoutUtils;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
 import net.janrupf.juklear.layout.component.JuklearButton;
+import net.janrupf.juklear.layout.component.JuklearLabel;
 import net.janrupf.juklear.layout.component.JuklearSpacing;
 import net.janrupf.juklear.layout.component.JuklearWindow;
 import net.janrupf.juklear.layout.component.row.JuklearDynamicRow;
@@ -124,7 +125,7 @@ public class GlfwTest {
         testWindow.addChild(firstRow);
 
         JuklearDynamicRow secondRow = new JuklearDynamicRow(100);
-        secondRow.addChild(new JuklearSpacing(1));
+        secondRow.addChild(new JuklearLabel("Hello, World!"));
         secondRow.addChild(new JuklearButton("Next row"));
         secondRow.addChild(new JuklearSpacing(1));
         testWindow.addChild(secondRow);

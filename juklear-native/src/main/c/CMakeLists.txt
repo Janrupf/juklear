@@ -55,8 +55,11 @@ set(JUKLEAR_SOURCE
         src/layout/component/row/juklear_static_row.c
 
         src/layout/component/juklear_button.c
+        src/layout/component/juklear_label.c
         src/layout/component/juklear_spacing.c
         src/layout/component/juklear_window.c
+
+        src/layout/juklear_text_alignment_flags.c
 
         src/math/juklear_rect.c
         src/math/juklear_vec2.c

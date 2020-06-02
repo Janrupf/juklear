@@ -149,7 +149,7 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     }
 
     public String provideUniqueId(Object o) {
-        return o.getClass().getName() + Long.toString(nextUniqueId++);
+        return o.getClass().getName() + nextUniqueId++;
     }
 
     public void addTopLevel(JuklearTopLevelComponent component) {
