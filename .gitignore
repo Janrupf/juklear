@@ -4,3 +4,4 @@ build/
 out/
 cmake-build-*/
 hs_err_pid*.log
+renderdoc.cap
