@@ -51,6 +51,7 @@ set(JUKLEAR_SOURCE
         src/input/juklear_input.c
         src/input/juklear_key.c
 
+        src/layout/component/row/juklear_dynamic_row.c
         src/layout/component/row/juklear_static_row.c
 
         src/layout/component/juklear_button.c

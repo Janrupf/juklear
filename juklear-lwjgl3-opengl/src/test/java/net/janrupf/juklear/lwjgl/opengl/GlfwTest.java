@@ -15,6 +15,7 @@ import net.janrupf.juklear.layout.JuklearPanelFlags;
 import net.janrupf.juklear.layout.JuklearWindowFlags;
 import net.janrupf.juklear.layout.component.JuklearButton;
 import net.janrupf.juklear.layout.component.JuklearWindow;
+import net.janrupf.juklear.layout.component.row.JuklearDynamicRow;
 import net.janrupf.juklear.layout.component.row.JuklearStaticRow;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
@@ -116,7 +117,7 @@ public class GlfwTest {
         testButton = new JuklearButton("Click me!");
         testButton.addListener(context, (e) -> testButton.setLabel("Clicked!"));
 
-        JuklearStaticRow row = new JuklearStaticRow(100);
+        JuklearDynamicRow row = new JuklearDynamicRow(100);
         row.addChild(testButton);
 
         testWindow.addChild(row);

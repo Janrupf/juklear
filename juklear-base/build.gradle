@@ -24,7 +24,9 @@ final def NATIVE_CLASSES = [
         "net.janrupf.juklear.input.JuklearKey",
         "net.janrupf.juklear.input.JuklearMouseButton",
 
+        "net.janrupf.juklear.layout.component.row.JuklearDynamicRow",
         "net.janrupf.juklear.layout.component.row.JuklearStaticRow",
+
         "net.janrupf.juklear.layout.component.JuklearButton",
         "net.janrupf.juklear.layout.component.JuklearWindow",
 
