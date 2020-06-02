@@ -28,6 +28,7 @@ final def NATIVE_CLASSES = [
         "net.janrupf.juklear.layout.component.row.JuklearStaticRow",
 
         "net.janrupf.juklear.layout.component.JuklearButton",
+        "net.janrupf.juklear.layout.component.JuklearSpacing",
         "net.janrupf.juklear.layout.component.JuklearWindow",
 
         "net.janrupf.juklear.util.JuklearBuffer",

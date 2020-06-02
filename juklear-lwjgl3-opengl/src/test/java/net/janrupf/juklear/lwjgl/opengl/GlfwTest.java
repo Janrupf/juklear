@@ -6,17 +6,15 @@ import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.font.JuklearFontAtlas;
 import net.janrupf.juklear.font.JuklearFontAtlasEditor;
-import net.janrupf.juklear.input.JuklearMouseButton;
 import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.input.JuklearKey;
+import net.janrupf.juklear.input.JuklearMouseButton;
 import net.janrupf.juklear.layout.JuklearLayoutUtils;
-import net.janrupf.juklear.layout.JuklearPanelFlag;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
-import net.janrupf.juklear.layout.JuklearWindowFlags;
 import net.janrupf.juklear.layout.component.JuklearButton;
+import net.janrupf.juklear.layout.component.JuklearSpacing;
 import net.janrupf.juklear.layout.component.JuklearWindow;
 import net.janrupf.juklear.layout.component.row.JuklearDynamicRow;
-import net.janrupf.juklear.layout.component.row.JuklearStaticRow;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
 import org.lwjgl.glfw.Callbacks;
@@ -113,14 +111,23 @@ public class GlfwTest {
         testWindow.addFlag(JuklearPanelFlags.MOVABLE);
         testWindow.addFlag(JuklearPanelFlags.BORDER);
         testWindow.addFlag(JuklearPanelFlags.TITLE);
+        testWindow.addFlag(JuklearPanelFlags.SCALABLE);
+        testWindow.addFlag(JuklearPanelFlags.NO_SCROLLBAR);
 
         testButton = new JuklearButton("Click me!");
         testButton.addListener(context, (e) -> testButton.setLabel("Clicked!"));
 
-        JuklearDynamicRow row = new JuklearDynamicRow(100);
-        row.addChild(testButton);
+        JuklearDynamicRow firstRow = new JuklearDynamicRow(100);
+        firstRow.addChild(testButton);
+        firstRow.addChild(new JuklearSpacing(1));
+        firstRow.addChild(new JuklearButton("Another button"));
+        testWindow.addChild(firstRow);
 
-        testWindow.addChild(row);
+        JuklearDynamicRow secondRow = new JuklearDynamicRow(100);
+        secondRow.addChild(new JuklearSpacing(1));
+        secondRow.addChild(new JuklearButton("Next row"));
+        secondRow.addChild(new JuklearSpacing(1));
+        testWindow.addChild(secondRow);
 
         context.addTopLevel(testWindow);
     }
@@ -134,8 +141,6 @@ public class GlfwTest {
 
         glfwSetCharCallback(window, (window, c) -> input.unicode(c));
         glfwSetScrollCallback(window, (window, x, y) -> input.scroll((float) x, (float) y));
-
-        // TODO: Scrolling
 
         while (!glfwWindowShouldClose(window)) {
             input.begin();
