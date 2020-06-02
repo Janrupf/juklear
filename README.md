@@ -17,7 +17,8 @@ management.
 ### Backends
 The library does not depend on a particular rendering engine, but provides a way to simply
 plug in your own. However, an OpenGL backend for LWJGL3 will be provided in this repository
-too.<
+too. This includes exposing the API of Nuklear, allowing a simple implementation of
+other rendering backends.
 
 ### Using the library
 Currently, there are no builds available, this will change as soon as the library gets to a
