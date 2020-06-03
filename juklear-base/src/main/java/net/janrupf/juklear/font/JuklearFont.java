@@ -1,17 +1,25 @@
 package net.janrupf.juklear.font;
 
-import net.janrupf.juklear.annotation.AntiFreeReference;
 import net.janrupf.juklear.ffi.CAccessibleObject;
+import net.janrupf.juklear.ffi.CAllocatedObject;
 
 public class JuklearFont implements CAccessibleObject<JuklearFont> {
-    @AntiFreeReference
-    private final JuklearFontAtlas fontAtlas;
     private final CAccessibleObject<JuklearFont> instance;
 
-    JuklearFont(JuklearFontAtlas fontAtlas, CAccessibleObject<JuklearFont> instance) {
-        this.fontAtlas = fontAtlas;
+    JuklearFont(CAccessibleObject<JuklearFont> instance) {
         this.instance = instance;
     }
+
+    public JuklearUserFont getUserFont() {
+        return new JuklearUserFont(
+                CAllocatedObject
+                    .<JuklearUserFont>of(nativeGetUserFontHandle())
+                    .dependsOn(this)
+                    .withoutFree()
+        );
+    }
+
+    private native long nativeGetUserFontHandle();
 
     @Override
     public long getHandle() {

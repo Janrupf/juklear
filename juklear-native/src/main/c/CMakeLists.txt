@@ -43,6 +43,7 @@ set(JUKLEAR_SOURCE
         src/drawing/juklear_draw_vertex_layout_element.c
         src/drawing/juklear_draw_vertex_layout_format.c
 
+        src/font/juklear_font.c
         src/font/juklear_font_atlas.c
         src/font/juklear_font_atlas_editor.c
         src/font/juklear_font_atlas_format.c

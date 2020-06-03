@@ -12,9 +12,9 @@ public class JuklearFontAtlasEditor implements CAccessibleObject<JuklearFontAtla
 
     public JuklearFont addDefault(float fontSize) {
         return new JuklearFont(
-                atlas,
                 CAllocatedObject
                     .<JuklearFont>of(nativeNkFontAtlasAddDefault(fontSize))
+                    .dependsOn(atlas)
                     .withoutFree()
         );
     }
