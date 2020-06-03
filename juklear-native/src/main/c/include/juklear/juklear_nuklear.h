@@ -18,3 +18,6 @@ typedef struct nk_draw_vertex_layout_element nk_draw_vertex_layout_element_t;
 typedef struct nk_draw_command nk_draw_command_t;
 typedef struct nk_rect nk_rect_t;
 typedef struct nk_image nk_image_t;
+typedef struct nk_color nk_color_t;
+typedef struct nk_style nk_style_t;
+typedef struct nk_style_text nk_style_text_t;

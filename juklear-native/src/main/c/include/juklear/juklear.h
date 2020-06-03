@@ -23,6 +23,12 @@ extern JuklearGlobal_t JUKLEAR_GLOBAL;
 #define JAVA_HANDLE(env, object_ref) \
     ((void *) (*env)->CallLongMethod(env, object_ref, JUKLEAR_GLOBAL.c_accessible_object_get_handle))
 
+#define NATIVE_FIELD(env, type, instance, field_name) \
+    (((type *) JAVA_HANDLE(env, instance))->field_name)
+
+#define NATIVE_HANDLE(env, type, instance, field_name) \
+    ((jlong) &NATIVE_FIELD(env, type, instance, field_name))
+
 #define JUKLEAR_STRINGIFY(x) #x
 #define JUKLEAR_SOURCE_LOCATION __FILE__ ":" JUKLEAR_STRINGIFY(__LINE__)
 

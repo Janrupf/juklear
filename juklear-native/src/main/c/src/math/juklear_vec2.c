@@ -24,21 +24,17 @@ Java_net_janrupf_juklear_math_JuklearVec2_nativeFreeNkVec2(JNIEnv *env, jclass c
 }
 
 JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_math_JuklearVec2_nativeGetX(JNIEnv *env, jobject instance) {
-    nk_vec2_t *vec = JAVA_HANDLE(env, instance);
-    return vec->x;
+    return NATIVE_FIELD(env, nk_vec2_t, instance, x);
 }
 
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_math_JuklearVec2_nativeSetX(JNIEnv *env, jobject instance, jfloat x) {
-    nk_vec2_t *vec = JAVA_HANDLE(env, instance);
-    vec->x = x;
+    NATIVE_FIELD(env, nk_vec2_t, instance, x) = x;
 }
 
 JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_math_JuklearVec2_nativeGetY(JNIEnv *env, jobject instance) {
-    nk_vec2_t *vec = JAVA_HANDLE(env, instance);
-    return vec->y;
+    return NATIVE_FIELD(env, nk_vec2_t, instance, y);
 }
 
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_math_JuklearVec2_nativeSetY(JNIEnv *env, jobject instance, jfloat y) {
-    nk_vec2_t *vec = JAVA_HANDLE(env, instance);
-    vec->y = y;
+    NATIVE_FIELD(env, nk_vec2_t, instance, y) = y;
 }

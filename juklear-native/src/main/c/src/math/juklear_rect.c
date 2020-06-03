@@ -27,20 +27,20 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_math_JuklearRect_nativeFreeNkRec
 
 JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_math_JuklearRect_nativeGetX
     (JNIEnv *env, jobject instance) {
-    return ((nk_rect_t *) JAVA_HANDLE(env, instance))->x;
+    return NATIVE_FIELD(env, nk_rect_t, instance, x);
 }
 
 JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_math_JuklearRect_nativeGetY
     (JNIEnv *env, jobject instance) {
-    return ((nk_rect_t *) JAVA_HANDLE(env, instance))->y;
+    return NATIVE_FIELD(env, nk_rect_t, instance, y);
 }
 
 JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_math_JuklearRect_nativeGetWidth
     (JNIEnv *env, jobject instance) {
-    return ((nk_rect_t *) JAVA_HANDLE(env, instance))->w;
+    return NATIVE_FIELD(env, nk_rect_t, instance, w);
 }
 
 JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_math_JuklearRect_nativeGetHeight
     (JNIEnv *env, jobject instance) {
-    return ((nk_rect_t *) JAVA_HANDLE(env, instance))->h;
+    return NATIVE_FIELD(env, nk_rect_t, instance, h);
 }

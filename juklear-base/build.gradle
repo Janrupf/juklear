@@ -37,11 +37,17 @@ final def NATIVE_CLASSES = [
 
         "net.janrupf.juklear.layout.JuklearTextAlignmentFlags",
 
+        "net.janrupf.juklear.math.JuklearRect",
+        "net.janrupf.juklear.math.JuklearVec2",
+
+        "net.janrupf.juklear.style.JuklearColor",
+        "net.janrupf.juklear.style.JuklearStyle",
+        "net.janrupf.juklear.style.JuklearTextStyle",
+
         "net.janrupf.juklear.util.JuklearBuffer",
         "net.janrupf.juklear.util.JuklearConstants",
         "net.janrupf.juklear.util.JuklearConvertResult",
-        "net.janrupf.juklear.math.JuklearRect",
-        "net.janrupf.juklear.math.JuklearVec2",
+
         "net.janrupf.juklear.JuklearContext"
 ]
 

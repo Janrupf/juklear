@@ -68,6 +68,10 @@ set(JUKLEAR_SOURCE
         src/math/juklear_rect.c
         src/math/juklear_vec2.c
 
+        src/style/juklear_color.c
+        src/style/juklear_style.c
+        src/style/juklear_text_style.c
+
         src/util/juklear_buffer.c
         src/util/juklear_constants.c
 
