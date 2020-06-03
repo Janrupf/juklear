@@ -5,28 +5,26 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.math.JuklearVec2;
 
-public class JuklearDrawNullTexture {
-    private final CAccessibleObject<?> texture;
-    private final JuklearVec2 uv;
+public class JuklearDrawNullTexture implements CAccessibleObject<JuklearDrawNullTexture> {
+    private final CAccessibleObject<JuklearDrawNullTexture> instance;
 
-    public JuklearDrawNullTexture(CAccessibleObject<?> texture, JuklearVec2 uv) {
-        this.texture = texture;
-        this.uv = uv;
+    public JuklearDrawNullTexture(CAccessibleObject<JuklearDrawNullTexture> instance) {
+        this.instance = instance;
     }
 
     public CAccessibleObject<?> getTexture() {
-        return texture;
+        return CAllocatedObject
+                .of(nativeGetTexture())
+                .withoutFree();
     }
 
     public JuklearVec2 getUv() {
-        return uv;
-    }
-
-    public CAllocatedObject<JuklearDrawNullTexture> toNative(Juklear juklear) {
-        return CAllocatedObject.
-                <JuklearDrawNullTexture>of(nativeAllocateNkDrawNullTexture(texture, uv.toNative(juklear)))
-                .freeFunction(JuklearDrawNullTexture::nativeFreeNkDrawNullTexture)
-                .submit(juklear);
+        return new JuklearVec2(
+                CAllocatedObject
+                    .<JuklearVec2>of(nativeGetUvHandle())
+                    .dependsOn(this)
+                    .withoutFree()
+        );
     }
 
     public static JuklearDrawNullTexture takeOwnership(Juklear juklear, long handle) {
@@ -35,16 +33,16 @@ public class JuklearDrawNullTexture {
                 .freeFunction(JuklearDrawNullTexture::nativeFreeNkDrawNullTexture)
                 .submit(juklear);
 
-        CAccessibleObject<?> texture = CAllocatedObject.of(nativeGetTexture(instance)).withoutFree();
-        JuklearVec2 uv = JuklearVec2.copyFromNative(nativeGetUvHandle(instance));
-
-        return new JuklearDrawNullTexture(texture, uv);
+        return new JuklearDrawNullTexture(instance);
     }
 
-    private static native long nativeAllocateNkDrawNullTexture(
-            CAccessibleObject<?> texture, CAccessibleObject<JuklearVec2> uv);
     private static native void nativeFreeNkDrawNullTexture(long handle);
 
-    private static native long nativeGetTexture(CAccessibleObject<JuklearDrawNullTexture> instance);
-    private static native long nativeGetUvHandle(CAccessibleObject<JuklearDrawNullTexture> instance);
+    private native long nativeGetTexture();
+    private native long nativeGetUvHandle();
+
+    @Override
+    public long getHandle() {
+        return instance.getHandle();
+    }
 }

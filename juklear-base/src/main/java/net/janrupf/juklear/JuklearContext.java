@@ -84,7 +84,9 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     );
 
     public void drawForEach(JuklearBuffer commandBuffer, Consumer<JuklearDrawCommand> consumer) {
-        nativeNkDrawForEach(commandBuffer, (handle) -> consumer.accept(JuklearDrawCommand.copyFromNative(handle)));
+        nativeNkDrawForEach(commandBuffer, (handle) -> consumer.accept(
+                new JuklearDrawCommand(CAllocatedObject.<JuklearDrawCommand>of(handle).withoutFree())
+        ));
     }
 
     private native void nativeNkDrawForEach(JuklearBuffer commandBuffer, LongConsumer consumer);

@@ -147,11 +147,13 @@ public class JuklearConvertConfig implements CAccessibleObject<JuklearConvertCon
                                     circleSegmentCount,
                                     arcSegmentCount,
                                     curveSegmentCount,
-                                    nullTexture.toNative(juklear),
+                                    nullTexture,
                                     vertexLayoutArray,
                                     vertexSize,
                                     vertexAlignment
                             ))
+                            .dependsOn(nullTexture)
+                            .dependsOn(vertexLayoutArray)
                             .freeFunction(JuklearConvertConfig::nativeFreeInstanceStruct)
                             .submit(juklear)
             );

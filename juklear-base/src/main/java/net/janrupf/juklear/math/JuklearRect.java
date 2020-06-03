@@ -4,53 +4,47 @@ import net.janrupf.juklear.Juklear;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 
-public class JuklearRect {
-    private final float x;
-    private final float y;
-    private final float width;
-    private final float height;
+public class JuklearRect implements CAccessibleObject<JuklearRect> {
+    private final CAccessibleObject<JuklearRect> instance;
 
-    public JuklearRect(float x, float y, float width, float height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+
+    public JuklearRect(CAccessibleObject<JuklearRect> instance) {
+        this.instance = instance;
     }
 
-    public static JuklearRect copyFromNative(long handle) {
-        CAccessibleObject<JuklearRect> instance = CAllocatedObject.<JuklearRect>of(handle).withoutFree();
-        return new JuklearRect(
-                nativeGetX(instance), nativeGetY(instance), nativeGetWidth(instance), nativeGetHeight(instance));
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public CAllocatedObject<JuklearRect> toNative(Juklear juklear) {
-        return CAllocatedObject
+    public JuklearRect(Juklear juklear, float x, float y, float width, float height) {
+        this.instance = CAllocatedObject
                 .<JuklearRect>of(nativeAllocNkRect(x, y, width, height))
                 .freeFunction(JuklearRect::nativeFreeNkRect)
                 .submit(juklear);
     }
 
+    public float getX() {
+        return nativeGetX();
+    }
+
+    public float getY() {
+        return nativeGetY();
+    }
+
+    public float getWidth() {
+        return nativeGetWidth();
+    }
+
+    public float getHeight() {
+        return nativeGetHeight();
+    }
+
     private static native long nativeAllocNkRect(float x, float y, float width, float height);
     private static native void nativeFreeNkRect(long handle);
 
-    private static native float nativeGetX(CAccessibleObject<JuklearRect> instance);
-    private static native float nativeGetY(CAccessibleObject<JuklearRect> instance);
-    private static native float nativeGetWidth(CAccessibleObject<JuklearRect> instance);
-    private static native float nativeGetHeight(CAccessibleObject<JuklearRect> instance);
+    private native float nativeGetX();
+    private native float nativeGetY();
+    private native float nativeGetWidth();
+    private native float nativeGetHeight();
+
+    @Override
+    public long getHandle() {
+        return instance.getHandle();
+    }
 }

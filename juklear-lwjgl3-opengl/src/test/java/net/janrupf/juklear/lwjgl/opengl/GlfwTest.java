@@ -170,7 +170,7 @@ public class GlfwTest {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 context.draw(widthPointer.get(0), heightPointer.get(0),
-                        new JuklearVec2(1.0f, 1.0f), JuklearAntialiasing.ON);
+                        new JuklearVec2(juklear, 1.0f, 1.0f), JuklearAntialiasing.ON);
             }
 
             glfwSwapBuffers(window);

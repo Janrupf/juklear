@@ -4,36 +4,19 @@
 
 #include "juklear/juklear.h"
 
-JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_drawing_JuklearDrawNullTexture_nativeAllocateNkDrawNullTexture
-    (JNIEnv *env, jclass caller_class, jobject java_texture, jobject java_uv) {
-    nk_draw_null_texture_t *null_texture = malloc(sizeof(nk_draw_null_texture_t));
-    if(!null_texture)  {
-        JAVA_OUT_OF_MEMORY(env, "Failed to allocate nk_draw_null_texture");
-        return 0;
-    }
-
-    void *texture = JAVA_HANDLE(env, java_texture);
-    nk_vec2_t *uv = JAVA_HANDLE(env, java_uv);
-
-    null_texture->texture.ptr = texture;
-    null_texture->uv = *uv;
-
-    return (jlong) null_texture;
-}
-
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_drawing_JuklearDrawNullTexture_nativeFreeNkDrawNullTexture
     (JNIEnv *env, jclass caller_class, jlong handle) {
     free((void *) handle);
 }
 
 JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_drawing_JuklearDrawNullTexture_nativeGetTexture
-    (JNIEnv *env, jclass caller_class, jobject instance) {
+    (JNIEnv *env, jobject instance) {
     nk_draw_null_texture_t *null_texture = JAVA_HANDLE(env, instance);
     return (jlong) null_texture->texture.ptr;
 }
 
 JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_drawing_JuklearDrawNullTexture_nativeGetUvHandle
-    (JNIEnv *env, jclass caller_class, jobject instance) {
+    (JNIEnv *env, jobject instance) {
     nk_draw_null_texture_t *null_texture = JAVA_HANDLE(env, instance);
     return (jlong) &null_texture->uv;
 }
