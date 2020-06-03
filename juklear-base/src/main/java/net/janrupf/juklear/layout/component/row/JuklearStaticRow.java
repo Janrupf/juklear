@@ -7,24 +7,16 @@ import net.janrupf.juklear.layout.component.base.JuklearAbstractContainer;
 import net.janrupf.juklear.layout.component.base.JuklearComponent;
 
 public class JuklearStaticRow extends JuklearAbstractContainer<JuklearComponent> {
-    private float height;
     private int itemWidth;
+    private float height;
 
     public JuklearStaticRow(int itemWidth) {
-        this(0, itemWidth);
+        this(itemWidth, 0);
     }
 
-    public JuklearStaticRow(float height, int itemWidth) {
-        this.height = height;
+    public JuklearStaticRow(int itemWidth, float height) {
         this.itemWidth = itemWidth;
-    }
-
-    public void setHeight(float height) {
         this.height = height;
-    }
-
-    public float getHeight() {
-        return height;
     }
 
     public void setItemWidth(int itemWidth) {
@@ -33,6 +25,14 @@ public class JuklearStaticRow extends JuklearAbstractContainer<JuklearComponent>
 
     public int getItemWidth() {
         return itemWidth;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public float getHeight() {
+        return height;
     }
 
     @Override

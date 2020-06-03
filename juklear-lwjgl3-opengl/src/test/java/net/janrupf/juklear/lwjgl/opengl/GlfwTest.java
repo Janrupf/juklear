@@ -15,6 +15,7 @@ import net.janrupf.juklear.layout.JuklearLayoutUtils;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
 import net.janrupf.juklear.layout.component.*;
 import net.janrupf.juklear.layout.component.row.JuklearDynamicRow;
+import net.janrupf.juklear.layout.component.row.JuklearStaticRow;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearNatives;
 import org.lwjgl.glfw.Callbacks;
@@ -130,12 +131,12 @@ public class GlfwTest {
         secondRow.addChild(new JuklearSpacing(1));
         testWindow.addChild(secondRow);
 
-        JuklearDynamicRow thirdRow = new JuklearDynamicRow(256);
-
         JuklearImage juklearImage = JuklearImageConvert.fromBufferedImage(
                 juklear,
                 ImageIO.read(getClass().getResource("/downscaled_logo.png"))
         );
+
+        JuklearStaticRow thirdRow = new JuklearStaticRow(juklearImage.getWidth(), juklearImage.getHeight());
 
         thirdRow.addChild(new JuklearImageDisplay(juklearImage));
         testWindow.addChild(thirdRow);
