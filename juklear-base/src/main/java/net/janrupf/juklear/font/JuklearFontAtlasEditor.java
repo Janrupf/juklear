@@ -10,15 +10,6 @@ public class JuklearFontAtlasEditor implements CAccessibleObject<JuklearFontAtla
         this.atlas = atlas;
     }
 
-    public JuklearFont addFromFile(String path, float fontSize) {
-        return new JuklearFont(
-                atlas,
-                CAllocatedObject
-                        .<JuklearFont>of(nativeNkFontAtlasAddFromFile(path, fontSize))
-                        .withoutFree()
-        );
-    }
-
     public JuklearFont addDefault(float fontSize) {
         return new JuklearFont(
                 atlas,
@@ -35,8 +26,6 @@ public class JuklearFontAtlasEditor implements CAccessibleObject<JuklearFontAtla
     public JuklearFontAtlas getAtlas() {
         return atlas;
     }
-
-    private native long nativeNkFontAtlasAddFromFile(String path, float fontSize);
 
     private native long nativeNkFontAtlasAddDefault(float fontSize);
 
