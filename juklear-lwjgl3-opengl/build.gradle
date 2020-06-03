@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 plugins {
     id 'java-library'
 }
@@ -19,4 +21,46 @@ dependencies {
 
     testImplementation group: 'org.lwjgl', name: 'lwjgl-glfw', version: '3.2.3'
     testRuntimeOnly group: 'org.lwjgl', name: 'lwjgl-glfw', version: '3.2.3', classifier: 'natives-linux'
+}
+
+task runTestWithRenderdoc {
+    doLast {
+        File.createTempFile("temp", ".cap").with {renderdocCaptureFile ->
+            renderdocCaptureFile.deleteOnExit()
+
+            renderdocCaptureFile.text = JsonOutput.toJson([
+                    rdocCaptureSettings: 1,
+                    settings: [
+                            autoStart: true,
+                            commandLine: "-Djava.library.path=${nativeBinariesDir.absolutePath} " +
+                                    "-Dfile.encoding=UTF-8 " +
+                                    "-classpath ${sourceSets.test.runtimeClasspath.asPath} " +
+                                    "net.janrupf.juklear.lwjgl.opengl.GlfwTest",
+                            environment: [],
+                            executable: "/usr/bin/java",
+                            inject: false,
+                            numQueuedFrames: 0,
+                            options: [
+                                    allowFullscreen: true,
+                                    allowVSync: true,
+                                    apiValidation: false,
+                                    captureAllCmdLists: false,
+                                    captureCallstacks: false,
+                                    captureCallstacksOnlyDraws: false,
+                                    debugOutputMute: true,
+                                    delayForDebugger: 0,
+                                    hookIntoChildren: false,
+                                    refAllResources: false,
+                                    verifyBufferAccess: false
+                            ],
+                            queueFrameCap: 0,
+                            workingDir: ""
+                    ]
+            ])
+
+            exec {
+                commandLine 'qrenderdoc', renderdocCaptureFile.absolutePath
+            }
+        }
+    }
 }
