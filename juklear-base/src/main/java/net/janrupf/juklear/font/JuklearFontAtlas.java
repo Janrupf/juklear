@@ -1,9 +1,11 @@
 package net.janrupf.juklear.font;
 
 import net.janrupf.juklear.Juklear;
+import net.janrupf.juklear.annotation.AntiFreeReference;
 import net.janrupf.juklear.drawing.JuklearDrawNullTexture;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
+import net.janrupf.juklear.image.JuklearJavaImage;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -13,6 +15,9 @@ public class JuklearFontAtlas implements CAccessibleObject<JuklearFontAtlas> {
     private final Juklear juklear;
 
     private JuklearFontAtlasEditor currentEditor;
+
+    @AntiFreeReference
+    private JuklearJavaImage fontAtlasImage;
 
     private JuklearFontAtlas(CAllocatedObject<JuklearFontAtlas> instance, Juklear juklear) {
         this.instance = instance;
@@ -33,10 +38,10 @@ public class JuklearFontAtlas implements CAccessibleObject<JuklearFontAtlas> {
         int atlasFormat = juklear.getBackend().fontAtlasFormat().toNative();
 
         CAccessibleObject<?> image = CAllocatedObject.of(nativeNkFontAtlasBake(dimensions, atlasFormat)).withoutFree();
-        CAccessibleObject<?> texture = juklear.getBackend().uploadFontAtlas(image, dimensions.get(0), dimensions.get(1));
+        fontAtlasImage = juklear.getBackend().uploadFontAtlas(image, dimensions.get(0), dimensions.get(1));
 
         JuklearDrawNullTexture nullTexture =
-                JuklearDrawNullTexture.takeOwnership(juklear, nativeNkFontAtlasEnd(texture));
+                JuklearDrawNullTexture.takeOwnership(juklear, nativeNkFontAtlasEnd(fontAtlasImage));
 
         juklear.getBackend().setNullTexture(nullTexture);
 

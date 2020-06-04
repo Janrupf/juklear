@@ -7,8 +7,11 @@ import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.drawing.JuklearDrawNullTexture;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.font.JuklearFontAtlasFormat;
-import net.janrupf.juklear.image.JuklearImage;
+import net.janrupf.juklear.image.JuklearImageFormat;
+import net.janrupf.juklear.image.JuklearJavaImage;
 import net.janrupf.juklear.math.JuklearVec2;
+
+import java.nio.ByteBuffer;
 
 public class JuklearOpenGL implements JuklearBackend {
     private Juklear juklear;
@@ -32,7 +35,7 @@ public class JuklearOpenGL implements JuklearBackend {
     }
 
     @Override
-    public CAccessibleObject<?> uploadFontAtlas(CAccessibleObject<?> image, int width, int height) {
+    public JuklearJavaImage uploadFontAtlas(CAccessibleObject<?> image, int width, int height) {
         return device.uploadFontAtlas(image, width, height);
     }
 
@@ -42,7 +45,7 @@ public class JuklearOpenGL implements JuklearBackend {
     }
 
     @Override
-    public CAccessibleObject<?> createImage(JuklearImage image) {
-        return new JuklearOpenGLImage(device.getPreFrameTasks(), device.uploadTexture(image));
+    public CAccessibleObject<?> createImage(JuklearImageFormat format, ByteBuffer data, int width, int height) {
+        return new JuklearOpenGLImage(device.getPreFrameTasks(), device.uploadTexture(format, data, width, height));
     }
 }

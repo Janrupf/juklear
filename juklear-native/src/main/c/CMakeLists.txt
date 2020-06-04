@@ -48,7 +48,7 @@ set(JUKLEAR_SOURCE
         src/font/juklear_font_atlas_editor.c
         src/font/juklear_font_atlas_format.c
 
-        src/image/juklear_image.c
+        src/image/juklear_java_image.c
 
         src/input/juklear_mouse_button.c
         src/input/juklear_input.c

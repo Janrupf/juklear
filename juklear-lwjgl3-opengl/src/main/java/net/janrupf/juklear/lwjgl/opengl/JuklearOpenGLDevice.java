@@ -5,7 +5,8 @@ import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.drawing.*;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
-import net.janrupf.juklear.image.JuklearImage;
+import net.janrupf.juklear.image.JuklearImageFormat;
+import net.janrupf.juklear.image.JuklearJavaImage;
 import net.janrupf.juklear.lwjgl.opengl.exception.JuklearOpenGLFatalException;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.util.JuklearBuffer;
@@ -110,7 +111,13 @@ public class JuklearOpenGLDevice {
                 return;
             }
 
-            glBindTexture(GL_TEXTURE_2D, (int) drawCommand.getTexture().getHandle());
+            JuklearJavaImage image = new JuklearJavaImage(
+                    CAllocatedObject
+                        .<JuklearJavaImage>of(drawCommand.getTexture().getHandle())
+                        .withoutFree()
+            );
+
+            glBindTexture(GL_TEXTURE_2D, (int) image.getBackendObject().getHandle());
             glScissor(
                     (int) (drawCommand.getClipRect().getX() * scale.getX()),
                     (int) ((height -
@@ -148,7 +155,7 @@ public class JuklearOpenGLDevice {
         glPopAttrib();
     }
 
-    public CAccessibleObject<?> uploadFontAtlas(CAccessibleObject<?> image, int width, int height) {
+    public JuklearJavaImage uploadFontAtlas(CAccessibleObject<?> image, int width, int height) {
         int fontTexture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, fontTexture);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -156,10 +163,15 @@ public class JuklearOpenGLDevice {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
                 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getHandle());
 
-        return CAllocatedObject.of(fontTexture).withoutFree();
+        return JuklearJavaImage.forFontAtlas(
+                juklear,
+                CAllocatedObject.of(fontTexture).withoutFree(),
+                width,
+                height
+        );
     }
 
-    public int uploadTexture(JuklearImage image) {
+    public int uploadTexture(JuklearImageFormat format, ByteBuffer data, int width, int height) {
         int id = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, id);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -167,20 +179,16 @@ public class JuklearOpenGLDevice {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 
-        ByteBuffer buffer = ByteBuffer.allocateDirect(image.getData().length);
-        buffer.put(image.getData());
-        buffer.flip();
-
-        switch (image.getFormat()) {
+        switch (format) {
             case UNSIGNED_BYTE_RGBA:
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(),
-                        0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height,
+                        0, GL_RGBA, GL_UNSIGNED_BYTE, data);
                 break;
 
             default:
                 glDeleteTextures(id);
                 throw new UnsupportedOperationException(
-                        "The OpenGL2 backend does not support the image format " + image.getFormat().name());
+                        "The OpenGL2 backend does not support the image format " + format.name());
         }
 
         return id;

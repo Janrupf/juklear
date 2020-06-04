@@ -20,7 +20,7 @@ final def NATIVE_CLASSES = [
         "net.janrupf.juklear.font.JuklearFontAtlasEditor",
         "net.janrupf.juklear.font.JuklearFontAtlasFormat",
 
-        "net.janrupf.juklear.image.JuklearImage",
+        "net.janrupf.juklear.image.JuklearJavaImage",
 
         "net.janrupf.juklear.input.JuklearInput",
         "net.janrupf.juklear.input.JuklearKey",

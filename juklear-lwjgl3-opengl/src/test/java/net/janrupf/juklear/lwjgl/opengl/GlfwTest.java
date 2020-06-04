@@ -6,7 +6,7 @@ import net.janrupf.juklear.drawing.JuklearAntialiasing;
 import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.font.JuklearFontAtlas;
 import net.janrupf.juklear.font.JuklearFontAtlasEditor;
-import net.janrupf.juklear.image.JuklearImage;
+import net.janrupf.juklear.image.JuklearJavaImage;
 import net.janrupf.juklear.image.JuklearImageConvert;
 import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.input.JuklearKey;
@@ -131,7 +131,7 @@ public class GlfwTest {
         secondRow.addChild(new JuklearSpacing(1));
         testWindow.addChild(secondRow);
 
-        JuklearImage juklearImage = JuklearImageConvert.fromBufferedImage(
+        JuklearJavaImage juklearImage = JuklearImageConvert.fromBufferedImage(
                 juklear,
                 ImageIO.read(getClass().getResource("/downscaled_logo.png"))
         );

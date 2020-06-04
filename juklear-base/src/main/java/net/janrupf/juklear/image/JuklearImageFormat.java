@@ -1,15 +1,22 @@
 package net.janrupf.juklear.image;
 
-public enum JuklearImageFormat {
-    UNSIGNED_BYTE_RGBA;
+import java.nio.ByteBuffer;
 
-    public void check(byte[] data, int width, int height) throws JuklearImageFormatException {
+public enum JuklearImageFormat {
+    UNSIGNED_BYTE_RGBA,
+    FONT_ATLAS;
+
+    public void check(ByteBuffer data, int width, int height) throws JuklearImageFormatException {
         switch (this) {
             case UNSIGNED_BYTE_RGBA:
                 assertFormat(
-                        data.length == width * height * 4, "" +
-                                "data.length is not equal to with * height * 4"
+                        data.remaining() == width * height * 4, "" +
+                                "data.remaining() is not equal to with * height * 4"
                 );
+                break;
+
+            case FONT_ATLAS:
+                assertFormat(false, "Don't set the format to font atlas manually");
                 break;
 
             default:
@@ -22,5 +29,13 @@ public enum JuklearImageFormat {
         if(!ok) {
             throw new JuklearImageFormatException(message);
         }
+    }
+
+    public int toNative() {
+        return ordinal();
+    }
+
+    public static JuklearImageFormat fromNative(int id) {
+        return values()[id];
     }
 }
