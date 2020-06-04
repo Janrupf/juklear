@@ -5,6 +5,8 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 
 import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 public class JuklearJavaImage implements CAccessibleObject<JuklearJavaImage> {
     public static ByteBuffer ensureDirect(ByteBuffer buffer) {
@@ -23,21 +25,30 @@ public class JuklearJavaImage implements CAccessibleObject<JuklearJavaImage> {
 
         CAccessibleObject<?> backendObject = juklear.getBackend().createImage(
                 format, ensureDirect(data), width, height);
+
+        AtomicInteger useCount = new AtomicInteger(1);
+
         this.instance = CAllocatedObject
                 .<JuklearJavaImage>of(nativeAllocateInstanceStruct(
                         backendObject,
                         format.toNative(),
                         data,
                         width,
-                        height
+                        height,
+                        useCount
                 ))
-                .freeFunction(JuklearJavaImage::nativeFreeInstanceStruct)
+                .freeFunction(new RefCountingFreeFunction(useCount))
                 .dependsOn(backendObject)
                 .submit(juklear);
     }
 
-    public JuklearJavaImage(CAccessibleObject<JuklearJavaImage> instance) {
+    private JuklearJavaImage(CAccessibleObject<JuklearJavaImage> instance) {
         this.instance = instance;
+        explicitRef();
+    }
+
+    public static JuklearJavaImage wrapExisting(CAccessibleObject<JuklearJavaImage> instance) {
+        return new JuklearJavaImage(instance);
     }
 
     private JuklearJavaImage(
@@ -46,15 +57,18 @@ public class JuklearJavaImage implements CAccessibleObject<JuklearJavaImage> {
             throw new IllegalArgumentException("This constructor is only for the font atlas");
         }
 
+        AtomicInteger useCount = new AtomicInteger(1);
+
         this.instance = CAllocatedObject
                 .<JuklearJavaImage>of(nativeAllocateInstanceStruct(
                         backendObject,
                         format.toNative(),
                         null,
                         width,
-                        height
+                        height,
+                        useCount
                 ))
-                .freeFunction(JuklearJavaImage::nativeFreeInstanceStruct)
+                .freeFunction(new RefCountingFreeFunction(useCount))
                 .dependsOn(backendObject)
                 .submit(juklear);
     }
@@ -97,6 +111,16 @@ public class JuklearJavaImage implements CAccessibleObject<JuklearJavaImage> {
 
     private native int nativeGetHeight();
 
+    public void explicitRef() {
+        nativeGetUseCount().incrementAndGet();
+    }
+
+    public void explicitDeref() {
+        nativeGetUseCount().decrementAndGet();
+    }
+
+    private native AtomicInteger nativeGetUseCount();
+
     @Override
     public long getHandle() {
         return instance.getHandle();
@@ -118,8 +142,24 @@ public class JuklearJavaImage implements CAccessibleObject<JuklearJavaImage> {
             int format,
             ByteBuffer data,
             int width,
-            int height
+            int height,
+            AtomicInteger useCount
     );
 
     private static native void nativeFreeInstanceStruct(long handle);
+
+    private static class RefCountingFreeFunction implements Consumer<Long> {
+        private final AtomicInteger useCount;
+
+        private RefCountingFreeFunction(AtomicInteger useCount) {
+            this.useCount = useCount;
+        }
+
+        @Override
+        public void accept(Long handle) {
+            if(useCount.decrementAndGet() == 0) {
+                nativeFreeInstanceStruct(handle);
+            }
+        }
+    }
 }

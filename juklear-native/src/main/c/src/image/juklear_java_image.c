@@ -10,6 +10,7 @@ typedef struct juklear_image {
     jobject java_data;
     int width;
     int height;
+    jobject java_use_count;
     nk_image_t nk_image;
 } juklear_image_t;
 
@@ -34,6 +35,11 @@ JNIEXPORT jint JNICALL Java_net_janrupf_juklear_image_JuklearJavaImage_nativeGet
     return NATIVE_FIELD(env, juklear_image_t, instance, height);
 }
 
+JNIEXPORT jobject JNICALL
+Java_net_janrupf_juklear_image_JuklearJavaImage_nativeGetUseCount(JNIEnv *env, jobject instance) {
+    return NATIVE_FIELD(env, juklear_image_t, instance, java_use_count);
+}
+
 JNIEXPORT jlong JNICALL
 Java_net_janrupf_juklear_image_JuklearJavaImage_nativeGetNkImageHandle(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, juklear_image_t, instance, nk_image);
@@ -46,7 +52,8 @@ JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_image_JuklearJavaImage_nativeAl
     jint format,
     jobject java_data,
     jint width,
-    jint height) {
+    jint height,
+    jobject java_use_count) {
 
     juklear_image_t *instance = malloc(sizeof(juklear_image_t));
     instance->backend_object = JAVA_HANDLE(env, java_backend_object);
@@ -54,6 +61,7 @@ JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_image_JuklearJavaImage_nativeAl
     instance->java_data = java_data ? (*env)->NewGlobalRef(env, java_data) : NULL;
     instance->width = width;
     instance->height = height;
+    instance->java_use_count = (*env)->NewGlobalRef(env, java_use_count);
     instance->nk_image = nk_image_ptr(instance);
 
     return (jlong) instance;
@@ -65,5 +73,6 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_image_JuklearJavaImage_nativeFre
     if(instance->java_data) {
         (*env)->DeleteGlobalRef(env, instance->java_data);
     }
+    (*env)->DeleteGlobalRef(env, instance->java_use_count);
     free(instance);
 }

@@ -111,7 +111,7 @@ public class JuklearOpenGLDevice {
                 return;
             }
 
-            JuklearJavaImage image = new JuklearJavaImage(
+            JuklearJavaImage image = JuklearJavaImage.wrapExisting(
                     CAllocatedObject
                         .<JuklearJavaImage>of(drawCommand.getTexture().getHandle())
                         .withoutFree()
@@ -132,6 +132,8 @@ public class JuklearOpenGLDevice {
             constElementBuffer.position(
                     (int) (constElementBuffer.position() +
                             (JuklearConstants.DRAW_INDEX_SIZE * drawCommand.getElementCount())));
+
+            image.explicitDeref();
         });
 
         context.clear();
