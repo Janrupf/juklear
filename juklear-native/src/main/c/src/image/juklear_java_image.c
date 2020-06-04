@@ -40,6 +40,11 @@ Java_net_janrupf_juklear_image_JuklearJavaImage_nativeGetUseCount(JNIEnv *env, j
     return NATIVE_FIELD(env, juklear_image_t, instance, java_use_count);
 }
 
+JNIEXPORT jobject JNICALL Java_net_janrupf_juklear_image_JuklearJavaImage_nativeGetUseCountStatic
+    (JNIEnv *env, jclass caller_class, jlong handle) {
+    return ((juklear_image_t *) handle)->java_use_count;
+}
+
 JNIEXPORT jlong JNICALL
 Java_net_janrupf_juklear_image_JuklearJavaImage_nativeGetNkImageHandle(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, juklear_image_t, instance, nk_image);

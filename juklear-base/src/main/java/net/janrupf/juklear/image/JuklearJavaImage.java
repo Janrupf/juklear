@@ -44,11 +44,18 @@ public class JuklearJavaImage implements CAccessibleObject<JuklearJavaImage> {
 
     private JuklearJavaImage(CAccessibleObject<JuklearJavaImage> instance) {
         this.instance = instance;
-        explicitRef();
     }
 
-    public static JuklearJavaImage wrapExisting(CAccessibleObject<JuklearJavaImage> instance) {
-        return new JuklearJavaImage(instance);
+    public static JuklearJavaImage wrapExisting(Juklear juklear, long handle) {
+        AtomicInteger useCount = nativeGetUseCountStatic(handle);
+        useCount.incrementAndGet();
+
+        return new JuklearJavaImage(
+                CAllocatedObject
+                    .<JuklearJavaImage>of(handle)
+                    .freeFunction(new RefCountingFreeFunction(useCount))
+                    .submit(juklear)
+        );
     }
 
     private JuklearJavaImage(
@@ -120,6 +127,8 @@ public class JuklearJavaImage implements CAccessibleObject<JuklearJavaImage> {
     }
 
     private native AtomicInteger nativeGetUseCount();
+
+    private static native AtomicInteger nativeGetUseCountStatic(long handle);
 
     @Override
     public long getHandle() {

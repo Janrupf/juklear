@@ -112,9 +112,8 @@ public class JuklearOpenGLDevice {
             }
 
             JuklearJavaImage image = JuklearJavaImage.wrapExisting(
-                    CAllocatedObject
-                        .<JuklearJavaImage>of(drawCommand.getTexture().getHandle())
-                        .withoutFree()
+                    juklear,
+                    drawCommand.getTexture().getHandle()
             );
 
             glBindTexture(GL_TEXTURE_2D, (int) image.getBackendObject().getHandle());
@@ -132,8 +131,6 @@ public class JuklearOpenGLDevice {
             constElementBuffer.position(
                     (int) (constElementBuffer.position() +
                             (JuklearConstants.DRAW_INDEX_SIZE * drawCommand.getElementCount())));
-
-            image.explicitDeref();
         });
 
         context.clear();
