@@ -15,7 +15,7 @@ def lwjglClassifier = {
     if(Os.isFamily(Os.FAMILY_WINDOWS)) {
         return "natives-windows"
     } else if(Os.isFamily(Os.FAMILY_MAC)) {
-        return "natives-osx"
+        return "natives-macos"
     } else if(Os.isFamily(Os.FAMILY_UNIX)) {
         return "natives-linux"
     } else {
