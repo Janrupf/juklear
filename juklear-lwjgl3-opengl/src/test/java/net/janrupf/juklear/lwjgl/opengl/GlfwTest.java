@@ -11,7 +11,6 @@ import net.janrupf.juklear.image.JuklearImageConvert;
 import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.input.JuklearKey;
 import net.janrupf.juklear.input.JuklearMouseButton;
-import net.janrupf.juklear.layout.JuklearLayoutUtils;
 import net.janrupf.juklear.layout.JuklearPanelFlags;
 import net.janrupf.juklear.layout.component.*;
 import net.janrupf.juklear.layout.component.row.JuklearDynamicRow;
@@ -44,7 +43,6 @@ public class GlfwTest {
 
     private Juklear juklear;
     private JuklearContext context;
-    private JuklearLayoutUtils layoutUtils;
 
     private final JuklearWindow testWindow;
     private final JuklearButton testButton;

@@ -29,7 +29,8 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkIn
 
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkFontAtlasBegin
     (JNIEnv *env, jobject instance) {
-    nk_font_atlas_t *atlas = JAVA_HANDLE(env, instance);nk_font_atlas_begin(atlas);
+    nk_font_atlas_t *atlas = JAVA_HANDLE(env, instance);
+    nk_font_atlas_begin(atlas);
 }
 
 JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkFontAtlasBake
