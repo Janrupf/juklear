@@ -41,8 +41,8 @@ JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_font_JuklearFontAtlas_nativeNkF
     jint height;
 
     const void *image = nk_font_atlas_bake(atlas, &width, &height, format);
-    dimensions[0] = htobe32(width);
-    dimensions[1] = htobe32(height);
+    dimensions[0] = JUKLEAR_TO_BIG_ENDIAN(width);
+    dimensions[1] = JUKLEAR_TO_BIG_ENDIAN(height);
 
     return (jlong) image;
 }
