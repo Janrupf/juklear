@@ -21,3 +21,7 @@ typedef struct nk_image nk_image_t;
 typedef struct nk_color nk_color_t;
 typedef struct nk_style nk_style_t;
 typedef struct nk_style_text nk_style_text_t;
+typedef struct nk_style_item nk_style_item_t;
+typedef struct nk_style_button nk_style_button_t;
+typedef struct nk_style_window_header nk_style_window_header_t;
+typedef struct nk_style_window nk_style_window_t;

@@ -68,9 +68,17 @@ set(JUKLEAR_SOURCE
         src/math/juklear_rect.c
         src/math/juklear_vec2.c
 
+        src/style/item/juklear_style_item.c
+        src/style/item/juklear_style_item_type.c
+
+        src/style/juklear_button_style.c
         src/style/juklear_color.c
+        src/style/juklear_header_alignment.c
         src/style/juklear_style.c
+        src/style/juklear_symbol_type.c
         src/style/juklear_text_style.c
+        src/style/juklear_window_header_style.c
+        src/style/juklear_window_style.c
 
         src/util/juklear_buffer.c
         src/util/juklear_constants.c

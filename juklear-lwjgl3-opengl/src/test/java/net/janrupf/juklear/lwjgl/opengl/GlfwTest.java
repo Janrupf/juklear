@@ -59,6 +59,7 @@ public class GlfwTest {
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_SAMPLES, 8);
 
         this.window = glfwCreateWindow(300, 300, "Juklear test", 0, 0);
         if(window == 0) {
@@ -97,6 +98,8 @@ public class GlfwTest {
         GL.createCapabilities();
         GLUtil.setupDebugMessageCallback(System.err);
 
+        glEnable(GL_MULTISAMPLE);
+
         JuklearNatives.setupWithTemporaryFolder();
         // System.loadLibrary("juklear");
         juklear = Juklear.usingInternalGarbageCollection(new JuklearOpenGL());
@@ -117,7 +120,10 @@ public class GlfwTest {
         testWindow.addFlag(JuklearPanelFlags.NO_SCROLLBAR);
 
         testButton = new JuklearButton("Click me!");
-        testButton.addListener(context, (e) -> testButton.setLabel("Clicked!"));
+        testButton.addListener(context, (e) -> {
+            testButton.setLabel("Clicked!");
+            context.getStyle().getButton().getHover().getAsColor().setRed(0);
+        });
 
         JuklearDynamicRow firstRow = new JuklearDynamicRow(100);
         firstRow.addChild(testButton);
@@ -142,6 +148,10 @@ public class GlfwTest {
         testWindow.addChild(thirdRow);
 
         context.addTopLevel(testWindow);
+
+        context.getStyle().getButton().getHover().getAsColor().setRed(255);
+        context.getStyle().getButton().setRounding(20.9f);
+        context.getStyle().getWindow().setBorder(1);
     }
 
     public void loop() {
@@ -170,7 +180,7 @@ public class GlfwTest {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 context.draw(widthPointer.get(0), heightPointer.get(0),
-                        new JuklearVec2(juklear, 1.0f, 1.0f), JuklearAntialiasing.ON);
+                        new JuklearVec2(juklear, 1.0f, 1.0f), JuklearAntialiasing.OFF);
             }
 
             glfwSwapBuffers(window);

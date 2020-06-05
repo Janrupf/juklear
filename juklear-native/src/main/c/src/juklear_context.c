@@ -61,3 +61,8 @@ JNIEXPORT void JNICALL Java_net_janrupf_juklear_JuklearContext_nativeNkClear
     nk_context_t *context = JAVA_HANDLE(env, instance);
     nk_clear(context);
 }
+
+JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_JuklearContext_nativeGetStyleHandle
+    (JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_context_t, instance, style);
+}

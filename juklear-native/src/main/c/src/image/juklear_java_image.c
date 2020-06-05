@@ -4,16 +4,6 @@
 
 #include "net_janrupf_juklear_image_JuklearJavaImage.h"
 
-typedef struct juklear_image {
-    void *backend_object;
-    int format;
-    jobject java_data;
-    int width;
-    int height;
-    jobject java_use_count;
-    nk_image_t nk_image;
-} juklear_image_t;
-
 JNIEXPORT jlong JNICALL
 Java_net_janrupf_juklear_image_JuklearJavaImage_nativeGetBackendObject(JNIEnv *env, jobject instance) {
     return (jlong) NATIVE_FIELD(env, juklear_image_t, instance, backend_object);

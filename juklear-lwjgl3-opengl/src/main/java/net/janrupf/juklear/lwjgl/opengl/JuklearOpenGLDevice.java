@@ -125,8 +125,13 @@ public class JuklearOpenGLDevice {
                     (int) (drawCommand.getClipRect().getHeight() * scale.getY())
             );
 
+            long memAddr = MemoryUtil.memAddress(constElementBuffer);
+            if(memAddr == 0) {
+                throw new IllegalStateException();
+            }
+
             glDrawElements(GL_TRIANGLES, (int) drawCommand.getElementCount(),
-                    GL_UNSIGNED_SHORT, MemoryUtil.memAddress(constElementBuffer));
+                    GL_UNSIGNED_SHORT, memAddr);
 
             constElementBuffer.position(
                     (int) (constElementBuffer.position() +

@@ -18,6 +18,16 @@ typedef struct JuklearGlobal {
     jmethodID long_consumer_accept_method;
 } JuklearGlobal_t;
 
+typedef struct juklear_image {
+    void *backend_object;
+    int format;
+    jobject java_data;
+    int width;
+    int height;
+    jobject java_use_count;
+    nk_image_t nk_image;
+} juklear_image_t;
+
 extern JuklearGlobal_t JUKLEAR_GLOBAL;
 
 #define JAVA_HANDLE(env, object_ref) \

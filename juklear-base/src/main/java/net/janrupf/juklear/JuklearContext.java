@@ -13,6 +13,7 @@ import net.janrupf.juklear.font.JuklearFont;
 import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.layout.component.base.JuklearTopLevelComponent;
 import net.janrupf.juklear.math.JuklearVec2;
+import net.janrupf.juklear.style.JuklearStyle;
 import net.janrupf.juklear.util.JuklearBuffer;
 import net.janrupf.juklear.util.JuklearConvertResult;
 
@@ -173,6 +174,12 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     public JuklearInput getInput() {
         return input;
     }
+
+    public JuklearStyle getStyle() {
+        return new JuklearStyle(JuklearStyle.styleWrap(nativeGetStyleHandle(), this));
+    }
+
+    private native long nativeGetStyleHandle();
 
     @Override
     public long getHandle() {
