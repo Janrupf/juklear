@@ -18,38 +18,35 @@ public class Juklear {
     private final JuklearGarbageCollector garbageCollector;
     private final JuklearBackend backend;
 
-    public static Juklear usingInternalGarbageCollection(JuklearBackend backend)
-            throws JuklearInitializationException{
+    public static Juklear usingInternalGarbageCollection(JuklearBackend backend) {
         return new Juklear(backend);
     }
 
     public static Juklear usingExternalGarbageCollection(
-            JuklearBackend backend, JuklearGarbageCollector garbageCollector)
-            throws JuklearInitializationException {
+            JuklearBackend backend, JuklearGarbageCollector garbageCollector) {
         return new Juklear(backend, garbageCollector);
     }
 
-    private Juklear(JuklearBackend backend) throws JuklearInitializationException {
+    private Juklear(JuklearBackend backend) {
         this.backend = backend;
         this.garbageCollector = new JuklearDefaultGarbageCollector();
         ((JuklearDefaultGarbageCollector) this.garbageCollector).run();
-
-        backend.init(this);
     }
 
-    private Juklear(JuklearBackend backend, JuklearGarbageCollector garbageCollector)
-            throws JuklearInitializationException{
+    private Juklear(JuklearBackend backend, JuklearGarbageCollector garbageCollector) {
         this.backend = backend;
 
         this.garbageCollector = garbageCollector;
-
-        backend.init(this);
     }
 
     public void registerNativeObject(CAllocatedObject<?> object) {
         if(object instanceof JuklearDestructibleObject) {
             garbageCollector.register((JuklearDestructibleObject) object);
         }
+    }
+
+    public void init() throws JuklearInitializationException {
+        backend.init(this);
     }
 
     public JuklearContext defaultContext(JuklearFont font) {

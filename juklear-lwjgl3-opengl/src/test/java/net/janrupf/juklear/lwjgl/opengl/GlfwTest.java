@@ -101,6 +101,7 @@ public class GlfwTest {
         JuklearNatives.setupWithTemporaryFolder();
         // System.loadLibrary("juklear");
         juklear = Juklear.usingInternalGarbageCollection(new JuklearOpenGL());
+        juklear.init();
 
         JuklearFontAtlas fontAtlas = juklear.defaultFontAtlas();
 
