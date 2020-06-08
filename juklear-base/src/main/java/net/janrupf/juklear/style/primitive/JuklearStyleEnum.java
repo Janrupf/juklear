@@ -1,6 +1,8 @@
 package net.janrupf.juklear.style.primitive;
 
+import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
+import net.janrupf.juklear.style.state.JuklearPushedStyle;
 import net.janrupf.juklear.util.JuklearEnum;
 
 public class JuklearStyleEnum<E extends Enum<E> & JuklearEnum> implements CAccessibleObject<Integer> {
@@ -32,6 +34,42 @@ public class JuklearStyleEnum<E extends Enum<E> & JuklearEnum> implements CAcces
     }
 
     private native void nativeSet(int value);
+
+    public JuklearPushedStyle push(JuklearContext context) {
+        if(!nativePush(context)) {
+            throw new IllegalStateException("Failed to push flags (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    private native boolean nativePush(CAccessibleObject<JuklearContext> context);
+
+    public JuklearPushedStyle push(JuklearContext context, E value) {
+        if(!nativePush(context, value.value())) {
+            throw new IllegalStateException("Failed to push flags (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    public JuklearPushedStyle push(JuklearContext context, JuklearStyleEnum<E> value) {
+        if(!nativePush(context, value.nativeGet())) {
+            throw new IllegalStateException("Failed to push flags (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    private native boolean nativePush(CAccessibleObject<JuklearContext> context, int value);
+
+    private void pop(JuklearContext context) {
+        if(!nativePop(context)) {
+            throw new IllegalStateException("Failed to pop flags (empty stack?)");
+        }
+    }
+
+    private native boolean nativePop(JuklearContext context);
 
     @Override
     public long getHandle() {

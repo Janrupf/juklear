@@ -1,12 +1,12 @@
 package net.janrupf.juklear.style.item;
 
 import net.janrupf.juklear.Juklear;
+import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
-import net.janrupf.juklear.image.JuklearImage;
-import net.janrupf.juklear.image.JuklearImageFormat;
 import net.janrupf.juklear.image.JuklearJavaImage;
 import net.janrupf.juklear.style.JuklearColor;
+import net.janrupf.juklear.style.state.JuklearPushedStyle;
 
 public class JuklearStyleItem implements CAccessibleObject<JuklearStyleItem> {
     private final CAccessibleObject<JuklearStyleItem> instance;
@@ -67,10 +67,37 @@ public class JuklearStyleItem implements CAccessibleObject<JuklearStyleItem> {
         }
 
         nativeSetType(JuklearStyleItemType.IMAGE.toNative());
+        image.explicitRef();
         nativeSetImageData(image);
     }
 
     private native void nativeSetImageData(CAccessibleObject<JuklearJavaImage> image);
+
+    public JuklearPushedStyle push(JuklearContext context) {
+        if(!nativePush(context)) {
+            throw new IllegalStateException("Failed to push style item (stack overrun?)");
+        }
+
+        if(getType() == JuklearStyleItemType.IMAGE) {
+            getAsImage(context.getJuklear()).explicitRef();
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    private native boolean nativePush(CAccessibleObject<JuklearContext> context);
+
+    private void pop(JuklearContext context) {
+        if(!nativePop(context)) {
+            throw new IllegalStateException("Failed to pop style item (empty stack?)");
+        }
+
+        if(getType() == JuklearStyleItemType.IMAGE) {
+            getAsImage(context.getJuklear()).explicitDeref();
+        }
+    }
+
+    private native boolean nativePop(CAccessibleObject<JuklearContext> context);
 
     @Override
     public long getHandle() {

@@ -1,8 +1,10 @@
 package net.janrupf.juklear.math;
 
 import net.janrupf.juklear.Juklear;
+import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
+import net.janrupf.juklear.style.state.JuklearPushedStyle;
 
 public class JuklearVec2 implements CAccessibleObject<JuklearVec2> {
     private final CAccessibleObject<JuklearVec2> instance;
@@ -43,6 +45,34 @@ public class JuklearVec2 implements CAccessibleObject<JuklearVec2> {
 
     private native float nativeGetY();
     private native void nativeSetY(float y);
+
+    public JuklearPushedStyle push(JuklearContext context) {
+        if(!nativePush(context)) {
+            throw new IllegalStateException("Failed to push vec2 (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    private native boolean nativePush(CAccessibleObject<JuklearContext> context);
+
+    public JuklearPushedStyle push(JuklearContext context, float x, float y) {
+        if(!nativePush(context, x, y)) {
+            throw new IllegalStateException("Failed to push vec2 (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    private native boolean nativePush(CAccessibleObject<JuklearContext> context, float x, float y);
+
+    private void pop(JuklearContext context) {
+        if(!nativePop(context)) {
+            throw new IllegalStateException("Failed to pop vec2 (empty stack?)");
+        }
+    }
+
+    private native boolean nativePop(CAccessibleObject<JuklearContext> context);
 
     @Override
     public long getHandle() {

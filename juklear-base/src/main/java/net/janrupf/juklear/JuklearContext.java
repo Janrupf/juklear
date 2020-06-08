@@ -14,6 +14,8 @@ import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.layout.component.base.JuklearTopLevelComponent;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.style.JuklearStyle;
+import net.janrupf.juklear.style.state.JuklearStylePopable;
+import net.janrupf.juklear.style.state.JuklearPushedStyle;
 import net.janrupf.juklear.util.JuklearBuffer;
 import net.janrupf.juklear.util.JuklearConvertResult;
 
@@ -31,6 +33,7 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     private final Queue<JuklearEvent> events;
     private final Map<JuklearEvent, Set<JuklearEventListener<?>>> listeners;
     private final List<JuklearTopLevelComponent> topLevelComponents;
+    private final Map<Class<?>, Stack<JuklearPushedStyle>> pushedStyles;
 
     private boolean drawing;
     private long nextUniqueId;
@@ -43,6 +46,7 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
         this.events = new LinkedList<>();
         this.listeners = new HashMap<>();
         this.topLevelComponents = new ArrayList<>();
+        this.pushedStyles = new HashMap<>();
     }
 
     static JuklearContext createDefault(Juklear juklear, JuklearFont font) {
@@ -180,6 +184,27 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     }
 
     private native long nativeGetStyleHandle();
+
+    public void registerStylePush(JuklearStylePopable popable) {
+        JuklearPushedStyle pushed = new JuklearPushedStyle(this, popable);
+        pushedStyles.computeIfAbsent(popable.getClass(), (k) -> new Stack<>()).push(pushed);
+    }
+
+    public void registerStylePop(JuklearPushedStyle style) {
+        JuklearStylePopable popable = style.getPushed();
+        Stack<JuklearPushedStyle> pushed = pushedStyles.get(popable.getClass());
+        if(pushed == null || pushed.isEmpty()) {
+            throw new IllegalStateException("No style of type " + popable.getClass() + " pushed");
+        } else if(!pushed.peek().equals(style)) {
+            throw new IllegalStateException("Style to pop is not on top of stack");
+        } else {
+            pushed.pop();
+        }
+    }
+
+    public Juklear getJuklear() {
+        return juklear;
+    }
 
     @Override
     public long getHandle() {

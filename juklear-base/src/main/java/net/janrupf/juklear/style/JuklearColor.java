@@ -1,6 +1,8 @@
 package net.janrupf.juklear.style;
 
+import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
+import net.janrupf.juklear.style.state.JuklearPushedStyle;
 
 public class JuklearColor implements CAccessibleObject<JuklearColor> {
     private final CAccessibleObject<JuklearColor> instance;
@@ -68,4 +70,36 @@ public class JuklearColor implements CAccessibleObject<JuklearColor> {
 
     private native byte nativeGetAlpha();
     private native void nativeSetAlpha(byte a);
+
+    public JuklearPushedStyle push(JuklearContext context) {
+        if(!nativePush(context, this)) {
+            throw new IllegalStateException("Failed to push color (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    private native boolean nativePush(JuklearContext context, CAccessibleObject<JuklearColor> value);
+
+    public JuklearPushedStyle push(JuklearContext context, int r, int g, int b) {
+        return push(context, r, g, b, 255);
+    }
+
+    public JuklearPushedStyle push(JuklearContext context, int r, int g, int b, int a) {
+        if(!nativePush(context, r, g, b, a)) {
+            throw new IllegalStateException("Failed to push color (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    private native boolean nativePush(JuklearContext context, int r, int g, int b, int a);
+
+    private void pop(JuklearContext context) {
+        if(!nativePop(context)) {
+            throw new IllegalStateException("Failed to pop color (stack empty?)");
+        }
+    }
+
+    private native boolean nativePop(JuklearContext context);
 }

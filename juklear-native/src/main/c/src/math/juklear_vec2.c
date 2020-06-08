@@ -38,3 +38,26 @@ JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_math_JuklearVec2_nativeGetY(JN
 JNIEXPORT void JNICALL Java_net_janrupf_juklear_math_JuklearVec2_nativeSetY(JNIEnv *env, jobject instance, jfloat y) {
     NATIVE_FIELD(env, nk_vec2_t, instance, y) = y;
 }
+
+JNIEXPORT jboolean JNICALL Java_net_janrupf_juklear_math_JuklearVec2_nativePush__Lnet_janrupf_juklear_ffi_CAccessibleObject_2
+    (JNIEnv *env, jobject instance, jobject java_context) {
+    nk_vec2_t *handle = JAVA_HANDLE(env, instance);
+    nk_vec2_t value = *handle;
+    nk_context_t *context = JAVA_HANDLE(env, java_context);
+
+    return nk_style_push_vec2(context, handle, value);
+}
+
+JNIEXPORT jboolean JNICALL Java_net_janrupf_juklear_math_JuklearVec2_nativePush__Lnet_janrupf_juklear_ffi_CAccessibleObject_2FF
+    (JNIEnv *env, jobject instance, jobject java_context, jfloat x, jfloat y) {
+    nk_vec2_t *handle = JAVA_HANDLE(env, instance);
+    nk_context_t *context = JAVA_HANDLE(env, java_context);
+
+    return nk_style_push_vec2(context, handle, nk_vec2(x, y));
+}
+
+JNIEXPORT jboolean JNICALL Java_net_janrupf_juklear_math_JuklearVec2_nativePop
+    (JNIEnv *env, jobject instance, jobject java_context) {
+    nk_context_t *context = JAVA_HANDLE(env, java_context);
+    return nk_style_pop_vec2(context);
+}

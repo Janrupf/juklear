@@ -1,6 +1,8 @@
 package net.janrupf.juklear.style.primitive;
 
+import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
+import net.janrupf.juklear.style.state.JuklearPushedStyle;
 import net.janrupf.juklear.util.JuklearFlag;
 
 import java.util.HashSet;
@@ -46,6 +48,51 @@ public class JuklearStyleFlags<F extends Enum<F> & JuklearFlag> implements CAcce
     }
 
     private native void nativeSet(int value);
+
+    public JuklearPushedStyle push(JuklearContext context) {
+        if(!nativePush(context)) {
+            throw new IllegalStateException("Failed to push flags (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    private native boolean nativePush(CAccessibleObject<JuklearContext> context);
+
+    public JuklearPushedStyle push(JuklearContext context, JuklearStyleFlags<F> value) {
+        if(!nativePush(context, value.nativeGet())) {
+            throw new IllegalStateException("Failed to push flags (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    public JuklearPushedStyle push(JuklearContext context, Set<F> value) {
+        if(!nativePush(context, JuklearFlag.or(value))) {
+            throw new IllegalStateException("Failed to push flags (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    @SafeVarargs
+    public final JuklearPushedStyle push(JuklearContext context, F... values) {
+        if(!nativePush(context, JuklearFlag.or(values))) {
+            throw new IllegalStateException("Failed to push flags (stack overrun?)");
+        }
+
+        return new JuklearPushedStyle(context, this::pop);
+    }
+
+    private native boolean nativePush(CAccessibleObject<JuklearContext> context, int value);
+
+    private void pop(JuklearContext context) {
+        if (!nativePop(context)) {
+            throw new IllegalStateException("Failed to pop flags (empty stack?)");
+        }
+    }
+
+    private native boolean nativePop(CAccessibleObject<JuklearContext> context);
 
     @Override
     public long getHandle() {
