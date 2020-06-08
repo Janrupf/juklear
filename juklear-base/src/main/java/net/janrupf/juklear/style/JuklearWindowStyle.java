@@ -3,6 +3,7 @@ package net.janrupf.juklear.style;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.style.item.JuklearStyleItem;
+import net.janrupf.juklear.style.primitive.JuklearStyleFloat;
 
 public class JuklearWindowStyle implements CAccessibleObject<JuklearWindowStyle> {
     private final CAccessibleObject<JuklearWindowStyle> instance;
@@ -77,113 +78,59 @@ public class JuklearWindowStyle implements CAccessibleObject<JuklearWindowStyle>
 
     private native long nativeGetScalerHandle();
 
-    public float getBorder() {
-        return nativeGetBorder();
+    public JuklearStyleFloat getBorder() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetBorderHandle(), this));
     }
 
-    private native float nativeGetBorder();
+    private native long nativeGetBorderHandle();
 
-    public void setBorder(float border) {
-        nativeSetBorder(border);
+    public JuklearStyleFloat getComboBorder() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetComboBorderHandle(), this));
     }
 
-    private native void nativeSetBorder(float border);
+    private native long nativeGetComboBorderHandle();
 
-    public float getComboBorder() {
-        return nativeGetComboBorder();
+    public JuklearStyleFloat getContextualBorder() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetContextualBorderHandle(), this));
     }
 
-    private native float nativeGetComboBorder();
+    private native long nativeGetContextualBorderHandle();
 
-    public void setComboBorder(float border) {
-        nativeSetComboBorder(border);
+    public JuklearStyleFloat getMenuBorder() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetMenuBorderHandle(), this));
     }
 
-    private native void nativeSetComboBorder(float border);
+    private native long nativeGetMenuBorderHandle();
 
-    public float getContextualBorder() {
-        return nativeGetContextualBorder();
+    public JuklearStyleFloat getGroupBorder() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetGroupBorderHandle(), this));
     }
 
-    private native float nativeGetContextualBorder();
+    private native long nativeGetGroupBorderHandle();
 
-    public void setContextualBorder(float border) {
-        nativeSetContextualBorder(border);
+    public JuklearStyleFloat getTooltipBorder() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetTooltipBorderHandle(), this));
     }
 
-    private native void nativeSetContextualBorder(float border);
+    private native long nativeGetTooltipBorderHandle();
 
-    public float getMenuBorder() {
-        return nativeGetMenuBorder();
+    public JuklearStyleFloat getPopupBorder() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetPopupBorderHandle(), this));
     }
 
-    private native float nativeGetMenuBorder();
+    private native long nativeGetPopupBorderHandle();
 
-    public void setMenuBorder(float border) {
-        nativeSetMenuBorder(border);
+    public JuklearStyleFloat getMinRowHeightPadding() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetMinRowHeightPaddingHandle(), this));
     }
 
-    private native void nativeSetMenuBorder(float border);
+    private native long nativeGetMinRowHeightPaddingHandle();
 
-    public float getGroupBorder() {
-        return nativeGetGroupBorder();
+    public JuklearStyleFloat getRounding() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetRoundingHandle(), this));
     }
 
-    private native float nativeGetGroupBorder();
-
-    public void setGroupBorder(float border) {
-        nativeSetGroupBorder(border);
-    }
-
-    private native void nativeSetGroupBorder(float border);
-
-    public float getTooltipBorder() {
-        return nativeGetTooltipBorder();
-    }
-
-    private native float nativeGetTooltipBorder();
-
-    public void setTooltipBorder(float border) {
-        nativeSetTooltipBorder(border);
-    }
-
-    private native void nativeSetTooltipBorder(float border);
-
-    public float getPopupBorder() {
-        return nativeGetPopupBorder();
-    }
-
-    private native float nativeGetPopupBorder();
-
-    public void setPopupBorder(float border) {
-        nativeSetPopupBorder(border);
-    }
-
-    private native void nativeSetPopupBorder(float border);
-
-    public float getMinRowHeightPadding() {
-        return nativeGetMinRowHeightPadding();
-    }
-
-    private native float nativeGetMinRowHeightPadding();
-
-    public void setMinRowHeightPadding(float border) {
-        nativeSetMinRowHeightPadding(border);
-    }
-
-    private native void nativeSetMinRowHeightPadding(float border);
-
-    public float getRounding() {
-        return nativeGetRounding();
-    }
-
-    private native float nativeGetRounding();
-
-    public void setRounding(float rounding) {
-        nativeSetRounding(rounding);
-    }
-
-    private native void nativeSetRounding(float rounding);
+    private native long nativeGetRoundingHandle();
 
     public JuklearVec2 getSpacing() {
         return new JuklearVec2(JuklearStyle.styleWrap(nativeGetSpacingHandle(), this));

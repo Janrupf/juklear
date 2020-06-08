@@ -12,11 +12,13 @@ Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetFixedBackgroundHandle
     return NATIVE_HANDLE(env, nk_style_window_t, instance, fixed_background);
 }
 
-JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetBackgroundHandle(JNIEnv *env, jobject instance) {
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetBackgroundHandle(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, nk_style_window_t, instance, background);
 }
 
-JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetBorderColorHandle(JNIEnv *env, jobject instance) {
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetBorderColorHandle(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, nk_style_window_t, instance, border_color);
 }
 
@@ -50,91 +52,58 @@ Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetTooltipBorderColorHan
     return NATIVE_HANDLE(env, nk_style_window_t, instance, tooltip_border_color);
 }
 
-JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetScalerHandle(JNIEnv *env, jobject instance) {
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetScalerHandle(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, nk_style_window_t, instance, scaler);
 }
 
-
-JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetBorder(JNIEnv *env, jobject instance) {
-    return NATIVE_FIELD(env, nk_style_window_t, instance, border);
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetBorderHandle(JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_style_window_t, instance, border);
 }
 
-JNIEXPORT void JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeSetBorder(JNIEnv *env, jobject instance, jfloat border) {
-    NATIVE_FIELD(env, nk_style_window_t, instance, border) = border;
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetComboBorderHandle(JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_style_window_t, instance, combo_border);
 }
 
-JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetComboBorder(JNIEnv *env, jobject instance) {
-    return NATIVE_FIELD(env, nk_style_window_t, instance, combo_border);
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetContextualBorderHandle(JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_style_window_t, instance, contextual_border);
 }
 
-JNIEXPORT void JNICALL
-Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeSetComboBorder(JNIEnv *env, jobject instance, jfloat border) {
-    NATIVE_FIELD(env, nk_style_window_t, instance, combo_border) = border;
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetMenuBorderHandle(JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_style_window_t, instance, menu_border);
 }
 
-JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetContextualBorder(JNIEnv *env, jobject instance) {
-    return NATIVE_FIELD(env, nk_style_window_t, instance, contextual_border);
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetGroupBorderHandle(JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_style_window_t, instance, group_border);
 }
 
-JNIEXPORT void JNICALL
-Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeSetContextualBorder(JNIEnv *env, jobject instance, jfloat border) {
-    NATIVE_FIELD(env, nk_style_window_t, instance, contextual_border) = border;
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetTooltipBorderHandle(JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_style_window_t, instance, tooltip_border);
 }
 
-JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetMenuBorder(JNIEnv *env, jobject instance) {
-    return NATIVE_FIELD(env, nk_style_window_t, instance, menu_border);
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetPopupBorderHandle(JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_style_window_t, instance, popup_border);
 }
 
-JNIEXPORT void JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeSetMenuBorder(JNIEnv *env, jobject instance, jfloat border) {
-    NATIVE_FIELD(env, nk_style_window_t, instance, menu_border) = border;
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetMinRowHeightPaddingHandle(JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_style_window_t, instance, min_row_height_padding);
 }
 
-JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetGroupBorder(JNIEnv *env, jobject instance) {
-    return NATIVE_FIELD(env, nk_style_window_t, instance, group_border);
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetRoundingHandle(JNIEnv *env, jobject instance) {
+    return NATIVE_HANDLE(env, nk_style_window_t, instance, rounding);
 }
 
-JNIEXPORT void JNICALL
-Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeSetGroupBorder(JNIEnv *env, jobject instance, jfloat border) {
-    NATIVE_FIELD(env, nk_style_window_t, instance, group_border) = border;
-}
-
-JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetTooltipBorder(JNIEnv *env, jobject instance) {
-    return NATIVE_FIELD(env, nk_style_window_t, instance, tooltip_border);
-}
-
-JNIEXPORT void JNICALL
-Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeSetTooltipBorder(JNIEnv *env, jobject instance, jfloat border) {
-    NATIVE_FIELD(env, nk_style_window_t, instance, tooltip_border) = border;
-}
-
-JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetPopupBorder(JNIEnv *env, jobject instance) {
-    return NATIVE_FIELD(env, nk_style_window_t, instance, popup_border);
-}
-
-JNIEXPORT void JNICALL
-Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeSetPopupBorder(JNIEnv *env, jobject instance, jfloat border) {
-    NATIVE_FIELD(env, nk_style_window_t, instance, popup_border) = border;
-}
-
-JNIEXPORT jfloat JNICALL
-Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetMinRowHeightPadding(JNIEnv *env, jobject instance) {
-    return NATIVE_FIELD(env, nk_style_window_t, instance, min_row_height_padding);
-}
-
-JNIEXPORT void JNICALL
-Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeSetMinRowHeightPadding(JNIEnv *env, jobject instance, jfloat min_row_height_padding) {
-    NATIVE_FIELD(env, nk_style_window_t, instance, min_row_height_padding) = min_row_height_padding;
-}
-
-JNIEXPORT jfloat JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetRounding(JNIEnv *env, jobject instance) {
-    return NATIVE_FIELD(env, nk_style_window_t, instance, rounding);
-}
-
-JNIEXPORT void JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeSetRounding(JNIEnv *env, jobject instance, jfloat rounding) {
-    NATIVE_FIELD(env, nk_style_window_t, instance, rounding) = rounding;
-}
-
-JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetSpacingHandle(JNIEnv *env, jobject instance) {
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetSpacingHandle(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, nk_style_window_t, instance, spacing);
 }
 
@@ -143,11 +112,13 @@ Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetScrollbarSizeHandle(J
     return NATIVE_HANDLE(env, nk_style_window_t, instance, scrollbar_size);
 }
 
-JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetMinSizeHandle(JNIEnv *env, jobject instance) {
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetMinSizeHandle(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, nk_style_window_t, instance, min_size);
 }
 
-JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetPaddingHandle(JNIEnv *env, jobject instance) {
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetPaddingHandle(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, nk_style_window_t, instance, padding);
 }
 
@@ -171,10 +142,12 @@ Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetContextualPaddingHand
     return NATIVE_HANDLE(env, nk_style_window_t, instance, contextual_padding);
 }
 
-JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetMenuPaddingHandle(JNIEnv *env, jobject instance) {
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetMenuPaddingHandle(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, nk_style_window_t, instance, menu_padding);
 }
 
-JNIEXPORT jlong JNICALL Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetTooltipPadding(JNIEnv *env, jobject instance) {
+JNIEXPORT jlong JNICALL
+Java_net_janrupf_juklear_style_JuklearWindowStyle_nativeGetTooltipPadding(JNIEnv *env, jobject instance) {
     return NATIVE_HANDLE(env, nk_style_window_t, instance, tooltip_padding);
 }
