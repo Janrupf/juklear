@@ -2,8 +2,12 @@ package net.janrupf.juklear.style;
 
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.layout.JuklearTextAlignmentFlag;
+import net.janrupf.juklear.layout.JuklearTextAlignmentFlags;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.style.item.JuklearStyleItem;
+import net.janrupf.juklear.style.primitive.JuklearStyleEnum;
+import net.janrupf.juklear.style.primitive.JuklearStyleFlags;
+import net.janrupf.juklear.style.primitive.JuklearStyleFloat;
 import net.janrupf.juklear.util.JuklearFlag;
 
 import java.util.Set;
@@ -68,39 +72,24 @@ public class JuklearButtonStyle implements CAccessibleObject<JuklearButtonStyle>
 
     private native long nativeGetTextActiveHandle();
 
-    public void setTextAlignment(JuklearTextAlignmentFlag... flags) {
-        nativeSetTextAlignment(JuklearFlag.or(flags));
+    public JuklearStyleFlags<JuklearTextAlignmentFlags> getTextAlignment() {
+        return new JuklearStyleFlags<>(
+                JuklearTextAlignmentFlags.class, JuklearStyle.styleWrap(nativeGetTextAlignmentHandle(), this));
     }
 
-    public void setTextAlignment(Set<JuklearTextAlignmentFlag> flags) {
-        nativeSetTextAlignment(JuklearFlag.or(flags));
+    private native long nativeGetTextAlignmentHandle();
+
+    private JuklearStyleFloat getBorder() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetBorderHandle(), this));
     }
 
-    private native void nativeSetTextAlignment(int flags);
+    private native long nativeGetBorderHandle();
 
-    public float getBorder() {
-        return nativeGetBorder();
+    public JuklearStyleFloat getRounding() {
+        return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetRoundingHandle(), this));
     }
 
-    private native float nativeGetBorder();
-
-    public void setBorder(float border) {
-        nativeSetBorder(border);
-    }
-
-    private native void nativeSetBorder(float border);
-
-    public float getRounding() {
-        return nativeGetRounding();
-    }
-
-    private native float nativeGetRounding();
-
-    public void setRounding(float rounding) {
-        nativeSetRounding(rounding);
-    }
-
-    private native void nativeSetRounding(float rounding);
+    private native long nativeGetRoundingHandle();
 
     public JuklearVec2 getPadding() {
         return new JuklearVec2(JuklearStyle.styleWrap(nativeGetPaddingHandle(), this));
