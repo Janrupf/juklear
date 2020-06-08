@@ -43,6 +43,10 @@ final def NATIVE_CLASSES = [
         "net.janrupf.juklear.style.item.JuklearStyleItem",
         "net.janrupf.juklear.style.item.JuklearStyleItemType",
 
+        "net.janrupf.juklear.style.primitive.JuklearStyleEnum",
+        "net.janrupf.juklear.style.primitive.JuklearStyleFlags",
+        "net.janrupf.juklear.style.primitive.JuklearStyleFloat",
+
         "net.janrupf.juklear.style.JuklearButtonStyle",
         "net.janrupf.juklear.style.JuklearColor",
         "net.janrupf.juklear.style.JuklearHeaderAlignment",

@@ -71,6 +71,10 @@ set(JUKLEAR_SOURCE
         src/style/item/juklear_style_item.c
         src/style/item/juklear_style_item_type.c
 
+        src/style/primitive/juklear_style_enum.c
+        src/style/primitive/juklear_style_flags.c
+        src/style/primitive/juklear_style_float.c
+
         src/style/juklear_button_style.c
         src/style/juklear_color.c
         src/style/juklear_header_alignment.c

@@ -1,6 +1,8 @@
 package net.janrupf.juklear.style;
 
-public enum JuklearHeaderAlignment {
+import net.janrupf.juklear.util.JuklearEnum;
+
+public enum JuklearHeaderAlignment implements JuklearEnum {
     LEFT(0),
     RIGHT(1);
 
@@ -28,4 +30,9 @@ public enum JuklearHeaderAlignment {
 
     private static native int nativeFromNative(int id);
     private static native int nativeToNative(int id);
+
+    @Override
+    public int value() {
+        return toNative();
+    }
 }
