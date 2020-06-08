@@ -3,6 +3,7 @@ package net.janrupf.juklear.style;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.style.item.JuklearStyleItem;
+import net.janrupf.juklear.style.primitive.JuklearStyleEnum;
 
 public class JuklearWindowHeaderStyle implements CAccessibleObject<JuklearWindowHeaderStyle> {
     private final CAccessibleObject<JuklearWindowHeaderStyle> instance;
@@ -41,41 +42,26 @@ public class JuklearWindowHeaderStyle implements CAccessibleObject<JuklearWindow
 
     private native long nativeGetMinimizeButtonHandle();
 
-    public JuklearSymbolType getCloseSymbol() {
-        return JuklearSymbolType.fromNative(nativeGetCloseSymbol());
+    public JuklearStyleEnum<JuklearSymbolType> getCloseSymbol() {
+        return new JuklearStyleEnum<>(
+                JuklearSymbolType.class, JuklearStyle.styleWrap(nativeGetCloseSymbolHandle(), this));
     }
 
-    private native int nativeGetCloseSymbol();
+    private native long nativeGetCloseSymbolHandle();
 
-    public void setCloseSymbol(JuklearSymbolType symbol) {
-        nativeSetCloseSymbol(symbol.toNative());
+    public JuklearStyleEnum<JuklearSymbolType> getMinimizeSymbol() {
+        return new JuklearStyleEnum<>(
+                JuklearSymbolType.class, JuklearStyle.styleWrap(nativeGetMinimizeSymbolHandle(), this));
     }
 
-    private native void nativeSetCloseSymbol(int id);
+    private native long nativeGetMinimizeSymbolHandle();
 
-    public JuklearSymbolType getMinimizeSymbol() {
-        return JuklearSymbolType.fromNative(nativeGetMinimizeSymbol());
+    public JuklearStyleEnum<JuklearSymbolType> getMaximizeSymbol() {
+        return new JuklearStyleEnum<>(
+                JuklearSymbolType.class, JuklearStyle.styleWrap(nativeGetMaximizeSymbolHandle(), this));
     }
 
-    private native int nativeGetMinimizeSymbol();
-
-    public void setMinimizeSymbol(JuklearSymbolType type) {
-        nativeSetMinimizeSymbol(type.toNative());
-    }
-
-    private native void nativeSetMinimizeSymbol(int id);
-
-    public JuklearSymbolType getMaximizeSymbol() {
-        return JuklearSymbolType.fromNative(nativeGetMaximizeSymbol());
-    }
-
-    private native int nativeGetMaximizeSymbol();
-
-    public void setMaximizeSymbol(JuklearSymbolType type) {
-        nativeSetMaximizeSymbol(type.toNative());
-    }
-
-    private native void nativeSetMaximizeSymbol(int id);
+    private native long nativeGetMaximizeSymbolHandle();
 
     public JuklearColor getLabelNormal() {
         return new JuklearColor(JuklearStyle.styleWrap(nativeGetLabelNormalHandle(), this));
@@ -95,17 +81,12 @@ public class JuklearWindowHeaderStyle implements CAccessibleObject<JuklearWindow
 
     private native long nativeGetLabelActiveHandle();
 
-    public JuklearHeaderAlignment getAlignment() {
-        return JuklearHeaderAlignment.fromNative(nativeGetAlignment());
+    public JuklearStyleEnum<JuklearHeaderAlignment> getAlignment() {
+        return new JuklearStyleEnum<>(
+                JuklearHeaderAlignment.class, JuklearStyle.styleWrap(nativeGetAlignmentHandle(), this));
     }
 
-    private native int nativeGetAlignment();
-
-    public void setAlignment(JuklearHeaderAlignment alignment) {
-        nativeSetAlignment(alignment.toNative());
-    }
-
-    private native void nativeSetAlignment(int alignment);
+    private native long nativeGetAlignmentHandle();
 
     public JuklearVec2 getPadding() {
         return new JuklearVec2(JuklearStyle.styleWrap(nativeGetPaddingHandle(), this));

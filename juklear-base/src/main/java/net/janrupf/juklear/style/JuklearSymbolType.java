@@ -1,8 +1,9 @@
 package net.janrupf.juklear.style;
 
 import net.janrupf.juklear.style.item.JuklearStyleItemType;
+import net.janrupf.juklear.util.JuklearEnum;
 
-public enum JuklearSymbolType {
+public enum JuklearSymbolType implements JuklearEnum {
     NONE(0),
     X(1),
     UNDERSCORE(2),
@@ -41,4 +42,9 @@ public enum JuklearSymbolType {
 
     private static native int nativeFromNative(int id);
     private static native int nativeToNative(int id);
+
+    @Override
+    public int value() {
+        return toNative();
+    }
 }
