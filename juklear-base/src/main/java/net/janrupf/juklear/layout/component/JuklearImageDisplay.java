@@ -19,7 +19,7 @@ public class JuklearImageDisplay extends JuklearAbstractComponent {
     }
 
     @Override
-    public void draw(Juklear juklear, JuklearContext context) {
+    protected void doDraw(Juklear juklear, JuklearContext context) {
         nativeNkImage(context, image);
     }
 

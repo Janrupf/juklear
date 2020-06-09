@@ -24,7 +24,7 @@ public class JuklearButton extends JuklearAbstractEventComponent<JuklearButtonCl
     }
 
     @Override
-    public void draw(Juklear juklear, JuklearContext context) {
+    protected void doDraw(Juklear juklear, JuklearContext context) {
         if(nativeNkButtonLabel(context, label)) {
             emitEvent(context);
         }

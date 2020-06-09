@@ -39,7 +39,7 @@ public class JuklearLabel extends JuklearAbstractComponent {
     }
 
     @Override
-    public void draw(Juklear juklear, JuklearContext context) {
+    protected void doDraw(Juklear juklear, JuklearContext context) {
         nativeNkLabel(context, text, JuklearFlag.or(flags));
     }
 

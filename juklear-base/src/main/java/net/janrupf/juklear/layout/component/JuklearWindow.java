@@ -22,8 +22,6 @@ public class JuklearWindow extends JuklearAbstractContainer<JuklearContainer<?>>
 
     private final Set<JuklearWindowFlag> flags;
 
-    private boolean drawing;
-
     public JuklearWindow(String title) {
         this.title = title;
         this.width = 600;
@@ -51,16 +49,13 @@ public class JuklearWindow extends JuklearAbstractContainer<JuklearContainer<?>>
     }
 
     @Override
-    public void draw(Juklear juklear, JuklearContext context) {
-        try {
-            drawing = true;
-            if (nativeNkBeginTitled(context, uniqueId, title, x, y, width, height, JuklearFlag.or(flags))) {
-                drawAllChildren(juklear, context);
-            }
-        } finally {
-            drawing = false;
-            nativeNkEnd(context);
-        }
+    protected boolean beginDraw(Juklear juklear, JuklearContext context) {
+        return nativeNkBeginTitled(context, uniqueId, title, x, y, width, height, JuklearFlag.or(flags));
+    }
+
+    @Override
+    protected void endDraw(Juklear juklear, JuklearContext context) {
+        nativeNkEnd(context);
     }
 
     public static native boolean nativeNkBeginTitled(
