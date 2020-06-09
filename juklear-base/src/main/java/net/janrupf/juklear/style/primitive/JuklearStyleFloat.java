@@ -2,6 +2,7 @@ package net.janrupf.juklear.style.primitive;
 
 import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
+import net.janrupf.juklear.style.state.JuklearPushableStyle;
 import net.janrupf.juklear.style.state.JuklearPushedStyle;
 
 public class JuklearStyleFloat implements CAccessibleObject<Float> {
@@ -28,6 +29,10 @@ public class JuklearStyleFloat implements CAccessibleObject<Float> {
 
     private native void nativeSet(float value);
 
+    public JuklearPushableStyle<JuklearStyleFloat> preparePush() {
+        return new JuklearPushableStyle<>(this::push);
+    }
+
     public JuklearPushedStyle push(JuklearContext context) {
         if(!nativePop(context)) {
             throw new IllegalStateException("Failed to push float (stack overrun?)");
@@ -37,11 +42,19 @@ public class JuklearStyleFloat implements CAccessibleObject<Float> {
 
     private native boolean nativePush(CAccessibleObject<JuklearContext> context);
 
+    public JuklearPushableStyle<JuklearStyleFloat> preparePush(JuklearStyleFloat value) {
+        return new JuklearPushableStyle<>((context) -> push(context, value));
+    }
+
     public JuklearPushedStyle push(JuklearContext context, JuklearStyleFloat value) {
         if(!nativePush(context, value.get())) {
             throw new IllegalStateException("Failed to push float (stack overrun?)");
         }
         return new JuklearPushedStyle(context, this::pop);
+    }
+
+    public JuklearPushableStyle<JuklearStyleFloat> preparePush(float value) {
+        return new JuklearPushableStyle<>((context) -> push(context, value));
     }
 
     public JuklearPushedStyle push(JuklearContext context, float value) {

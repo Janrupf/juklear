@@ -6,6 +6,8 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
 import net.janrupf.juklear.image.JuklearJavaImage;
 import net.janrupf.juklear.style.JuklearColor;
+import net.janrupf.juklear.style.primitive.JuklearStyleFloat;
+import net.janrupf.juklear.style.state.JuklearPushableStyle;
 import net.janrupf.juklear.style.state.JuklearPushedStyle;
 
 public class JuklearStyleItem implements CAccessibleObject<JuklearStyleItem> {
@@ -72,6 +74,10 @@ public class JuklearStyleItem implements CAccessibleObject<JuklearStyleItem> {
     }
 
     private native void nativeSetImageData(CAccessibleObject<JuklearJavaImage> image);
+
+    public JuklearPushableStyle<JuklearStyleFloat> preparePush() {
+        return new JuklearPushableStyle<>(this::push);
+    }
 
     public JuklearPushedStyle push(JuklearContext context) {
         if(!nativePush(context)) {

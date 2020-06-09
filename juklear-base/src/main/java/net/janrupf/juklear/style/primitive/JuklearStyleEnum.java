@@ -2,6 +2,7 @@ package net.janrupf.juklear.style.primitive;
 
 import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
+import net.janrupf.juklear.style.state.JuklearPushableStyle;
 import net.janrupf.juklear.style.state.JuklearPushedStyle;
 import net.janrupf.juklear.util.JuklearEnum;
 
@@ -35,6 +36,10 @@ public class JuklearStyleEnum<E extends Enum<E> & JuklearEnum> implements CAcces
 
     private native void nativeSet(int value);
 
+    public JuklearPushableStyle<JuklearStyleEnum<E>> preparePush() {
+        return new JuklearPushableStyle<>(this::push);
+    }
+
     public JuklearPushedStyle push(JuklearContext context) {
         if(!nativePush(context)) {
             throw new IllegalStateException("Failed to push flags (stack overrun?)");
@@ -45,12 +50,20 @@ public class JuklearStyleEnum<E extends Enum<E> & JuklearEnum> implements CAcces
 
     private native boolean nativePush(CAccessibleObject<JuklearContext> context);
 
+    public JuklearPushableStyle<JuklearStyleEnum<E>> preparePush(E value) {
+        return new JuklearPushableStyle<>((context) -> push(context, value));
+    }
+
     public JuklearPushedStyle push(JuklearContext context, E value) {
         if(!nativePush(context, value.value())) {
             throw new IllegalStateException("Failed to push flags (stack overrun?)");
         }
 
         return new JuklearPushedStyle(context, this::pop);
+    }
+
+    public JuklearPushableStyle<JuklearStyleEnum<E>> preparePush(JuklearStyleEnum<E> value) {
+        return new JuklearPushableStyle<>((context) -> push(context, value));
     }
 
     public JuklearPushedStyle push(JuklearContext context, JuklearStyleEnum<E> value) {
