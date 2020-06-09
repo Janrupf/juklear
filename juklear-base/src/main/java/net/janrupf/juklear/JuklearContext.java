@@ -185,16 +185,14 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
 
     private native long nativeGetStyleHandle();
 
-    public void registerStylePush(JuklearStylePopable popable) {
-        JuklearPushedStyle pushed = new JuklearPushedStyle(this, popable);
-        pushedStyles.computeIfAbsent(popable.getClass(), (k) -> new Stack<>()).push(pushed);
+    public void registerStylePush(Class<?> pushedClass, JuklearPushedStyle pushed) {
+        pushedStyles.computeIfAbsent(pushedClass, (k) -> new Stack<>()).push(pushed);
     }
 
-    public void registerStylePop(JuklearPushedStyle style) {
-        JuklearStylePopable popable = style.getPushed();
-        Stack<JuklearPushedStyle> pushed = pushedStyles.get(popable.getClass());
+    public void registerStylePop(Class<?> poppedClass, JuklearPushedStyle style) {
+        Stack<JuklearPushedStyle> pushed = pushedStyles.get(poppedClass);
         if(pushed == null || pushed.isEmpty()) {
-            throw new IllegalStateException("No style of type " + popable.getClass() + " pushed");
+            throw new IllegalStateException("No style of type " + poppedClass + " pushed");
         } else if(!pushed.peek().equals(style)) {
             throw new IllegalStateException("Style to pop is not on top of stack");
         } else {

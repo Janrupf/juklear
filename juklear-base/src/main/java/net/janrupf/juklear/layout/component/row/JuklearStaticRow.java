@@ -35,16 +35,19 @@ public class JuklearStaticRow extends JuklearAbstractContainer<JuklearComponent>
         return height;
     }
 
-    @Override
-    public void draw(Juklear juklear, JuklearContext context) {
-        nativeNkLayoutRowStatic(context, height, itemWidth, children.size());
-        drawAllChildren(juklear, context);
-    }
-
     public static native void nativeNkLayoutRowStatic(
             CAccessibleObject<JuklearContext> context,
             float height,
             int itemWidth,
             int columns
     );
+
+    @Override
+    protected boolean beginDraw(Juklear juklear, JuklearContext context) {
+        nativeNkLayoutRowStatic(context, height, itemWidth, children.size());
+        return true;
+    }
+
+    @Override
+    protected void endDraw(Juklear juklear, JuklearContext context) {}
 }

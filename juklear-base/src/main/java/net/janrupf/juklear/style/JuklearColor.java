@@ -1,8 +1,13 @@
 package net.janrupf.juklear.style;
 
+import net.janrupf.juklear.Juklear;
 import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
+import net.janrupf.juklear.ffi.CAllocatedObject;
+import net.janrupf.juklear.style.state.JuklearPushableStyle;
 import net.janrupf.juklear.style.state.JuklearPushedStyle;
+
+import java.nio.ByteBuffer;
 
 public class JuklearColor implements CAccessibleObject<JuklearColor> {
     private final CAccessibleObject<JuklearColor> instance;
@@ -10,6 +15,25 @@ public class JuklearColor implements CAccessibleObject<JuklearColor> {
     public JuklearColor(CAccessibleObject<JuklearColor> instance) {
         this.instance = instance;
     }
+
+    public JuklearColor(Juklear juklear, int r, int g, int b) {
+        this(juklear, r, g, b, 255);
+    }
+
+    public JuklearColor(Juklear juklear, int r, int g, int b, int a) {
+        this.instance = CAllocatedObject
+                .<JuklearColor>of(nativeAllocateInstanceStruct(
+                        (byte) r,
+                        (byte) g,
+                        (byte) b,
+                        (byte) a
+                ))
+                .freeFunction(JuklearColor::nativeFreeInstanceStruct)
+                .submit(juklear);
+    }
+
+    private static native long nativeAllocateInstanceStruct(byte r, byte g, byte b, byte a);
+    private static native void nativeFreeInstanceStruct(long handle);
 
     @Override
     public long getHandle() {
@@ -49,7 +73,7 @@ public class JuklearColor implements CAccessibleObject<JuklearColor> {
     }
 
     public int getRGBA() {
-        return (nativeGetRed() << 24) | (nativeGetGreen() << 16) | (nativeGetBlue() << 8) | nativeGetAlpha();
+        return (getRed() << 24) | (getGreen() << 16) | (getBlue() << 8) | getAlpha();
     }
 
     public void setRGBA(int rgba) {
@@ -71,18 +95,30 @@ public class JuklearColor implements CAccessibleObject<JuklearColor> {
     private native byte nativeGetAlpha();
     private native void nativeSetAlpha(byte a);
 
+    public JuklearPushableStyle<JuklearColor> preparePush() {
+        return new JuklearPushableStyle<>(this::push);
+    }
+
     public JuklearPushedStyle push(JuklearContext context) {
         if(!nativePush(context, this)) {
             throw new IllegalStateException("Failed to push color (stack overrun?)");
         }
 
-        return new JuklearPushedStyle(context, this::pop);
+        return new JuklearPushedStyle(context, getClass(), this::pop);
     }
 
     private native boolean nativePush(JuklearContext context, CAccessibleObject<JuklearColor> value);
 
+    public JuklearPushableStyle<JuklearColor> preparePush(int r, int g, int b) {
+        return new JuklearPushableStyle<>((context) -> push(context, r, g, b));
+    }
+
     public JuklearPushedStyle push(JuklearContext context, int r, int g, int b) {
         return push(context, r, g, b, 255);
+    }
+
+    public JuklearPushableStyle<JuklearColor> preparePush(int r, int g, int b, int a) {
+        return new JuklearPushableStyle<>((context) -> push(context, r, g, b, a));
     }
 
     public JuklearPushedStyle push(JuklearContext context, int r, int g, int b, int a) {
@@ -90,7 +126,7 @@ public class JuklearColor implements CAccessibleObject<JuklearColor> {
             throw new IllegalStateException("Failed to push color (stack overrun?)");
         }
 
-        return new JuklearPushedStyle(context, this::pop);
+        return new JuklearPushedStyle(context,  getClass(), this::pop);
     }
 
     private native boolean nativePush(JuklearContext context, int r, int g, int b, int a);

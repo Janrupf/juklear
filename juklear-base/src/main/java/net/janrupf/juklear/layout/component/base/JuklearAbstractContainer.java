@@ -5,9 +5,7 @@ import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.style.state.JuklearPushableStyle;
 import net.janrupf.juklear.style.state.JuklearPushedStyle;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class JuklearAbstractContainer<T extends JuklearComponent>
         extends JuklearAbstractComponent implements JuklearContainer<T> {
@@ -35,6 +33,9 @@ public abstract class JuklearAbstractContainer<T extends JuklearComponent>
     }
 
     protected final void drawAllChildren(Juklear juklear, JuklearContext context) {
+        Deque<JuklearPushedStyle> childPushedStyles = new LinkedList<>();
+        childStyles.forEach((style) -> childPushedStyles.addLast(style.push(context)));
+
         children.forEach((child) -> {
             if(child.getUniqueId() == null) {
                 child.setUniqueId(context.provideUniqueId(child));
@@ -42,21 +43,35 @@ public abstract class JuklearAbstractContainer<T extends JuklearComponent>
 
             child.draw(juklear, context);
         });
+
+        JuklearPushedStyle toPop;
+        while ((toPop = childPushedStyles.pollLast()) != null) {
+            toPop.close();
+        }
     }
 
     @Override
     public void draw(Juklear juklear, JuklearContext context) {
-        List<JuklearPushedStyle> ownPushedStyles = new ArrayList<>();
+        Deque<JuklearPushedStyle> ownPushedStyles = new LinkedList<>();
+
         try {
-            ownStyles.forEach((style) -> ownPushedStyles.add(style.push(context)));
+            ownStyles.forEach((style) -> ownPushedStyles.addLast(style.push(context)));
             if (beginDraw(juklear, context)) {
-                ownPushedStyles.forEach(JuklearPushedStyle::close);
+                JuklearPushedStyle toPop;
+                while ((toPop = ownPushedStyles.pollLast()) != null) {
+                    toPop.close();
+                }
+
                 drawAllChildren(juklear, context);
-                ownStyles.forEach((style) -> ownPushedStyles.add(style.push(context)));
+
+                ownStyles.forEach((style) -> ownPushedStyles.addLast(style.push(context)));
             }
             endDraw(juklear, context);
         } finally {
-            ownPushedStyles.forEach(JuklearPushedStyle::close);
+            JuklearPushedStyle toPop;
+            while ((toPop = ownPushedStyles.pollLast()) != null) {
+                toPop.close();
+            }
         }
     }
 

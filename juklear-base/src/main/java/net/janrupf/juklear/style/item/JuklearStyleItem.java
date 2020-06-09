@@ -75,8 +75,17 @@ public class JuklearStyleItem implements CAccessibleObject<JuklearStyleItem> {
 
     private native void nativeSetImageData(CAccessibleObject<JuklearJavaImage> image);
 
-    public JuklearPushableStyle<JuklearStyleFloat> preparePush() {
+    public JuklearPushableStyle<JuklearStyleItem> preparePush() {
         return new JuklearPushableStyle<>(this::push);
+    }
+
+    public JuklearPushableStyle<JuklearStyleItem> preparePush(int r, int g, int b) {
+        return preparePush(r, g, b, 255);
+    }
+
+    public JuklearPushableStyle<JuklearStyleItem> preparePush(int r, int g, int b, int a) {
+        return preparePush().afterPush((context) -> setAsColor(context.getJuklear(),
+                new JuklearColor(context.getJuklear(), r, g, b, a)));
     }
 
     public JuklearPushedStyle push(JuklearContext context) {
@@ -88,7 +97,7 @@ public class JuklearStyleItem implements CAccessibleObject<JuklearStyleItem> {
             getAsImage(context.getJuklear()).explicitRef();
         }
 
-        return new JuklearPushedStyle(context, this::pop);
+        return new JuklearPushedStyle(context, getClass(), this::pop);
     }
 
     private native boolean nativePush(CAccessibleObject<JuklearContext> context);

@@ -37,7 +37,7 @@ public class JuklearStyleFloat implements CAccessibleObject<Float> {
         if(!nativePop(context)) {
             throw new IllegalStateException("Failed to push float (stack overrun?)");
         }
-        return new JuklearPushedStyle(context, this::pop);
+        return new JuklearPushedStyle(context, getClass(), this::pop);
     }
 
     private native boolean nativePush(CAccessibleObject<JuklearContext> context);
@@ -50,7 +50,7 @@ public class JuklearStyleFloat implements CAccessibleObject<Float> {
         if(!nativePush(context, value.get())) {
             throw new IllegalStateException("Failed to push float (stack overrun?)");
         }
-        return new JuklearPushedStyle(context, this::pop);
+        return new JuklearPushedStyle(context, getClass(), this::pop);
     }
 
     public JuklearPushableStyle<JuklearStyleFloat> preparePush(float value) {
@@ -61,7 +61,7 @@ public class JuklearStyleFloat implements CAccessibleObject<Float> {
         if(!nativePush(context, value)) {
             throw new IllegalStateException("Failed to push float (stack overrun?)");
         }
-        return new JuklearPushedStyle(context, this::pop);
+        return new JuklearPushedStyle(context, getClass(), this::pop);
     }
 
     private native boolean nativePush(CAccessibleObject<JuklearContext> context, float value);

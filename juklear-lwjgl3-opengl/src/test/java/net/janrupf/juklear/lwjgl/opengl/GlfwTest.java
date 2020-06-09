@@ -119,12 +119,14 @@ public class GlfwTest {
         testWindow.addFlag(JuklearPanelFlags.NO_SCROLLBAR);
 
         testButton = new JuklearButton("Click me!");
+        testButton.addOwnStyle(context.getStyle().getButton().getHover().preparePush(0, 255, 0));
         testButton.addListener(context, (e) -> {
             testButton.setLabel("Clicked!");
             context.getStyle().getButton().getHover().getAsColor().setRed(0);
         });
 
         JuklearDynamicRow firstRow = new JuklearDynamicRow(100);
+        firstRow.addChildStyle(context.getStyle().getButton().getHover().preparePush(255, 0, 0));
         firstRow.addChild(testButton);
         firstRow.addChild(new JuklearSpacing(1));
         firstRow.addChild(new JuklearButton("Another button"));
@@ -147,10 +149,6 @@ public class GlfwTest {
         testWindow.addChild(thirdRow);
 
         context.addTopLevel(testWindow);
-
-        context.getStyle().getButton().getHover().getAsColor().setRed(255);
-        context.getStyle().getButton().setRounding(20.9f);
-        context.getStyle().getWindow().setBorder(1);
     }
 
     public void loop() {

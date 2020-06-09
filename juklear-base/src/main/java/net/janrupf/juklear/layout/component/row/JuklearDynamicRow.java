@@ -22,14 +22,18 @@ public class JuklearDynamicRow extends JuklearAbstractContainer<JuklearComponent
     }
 
     @Override
-    public void draw(Juklear juklear, JuklearContext context) {
+    protected boolean beginDraw(Juklear juklear, JuklearContext context) {
         nativeNkLayoutRowDynamic(context, height, children.size());
-        drawAllChildren(juklear, context);
+        return true;
     }
+
+    @Override
+    protected void endDraw(Juklear juklear, JuklearContext context) {}
 
     public static native void nativeNkLayoutRowDynamic(
             CAccessibleObject<JuklearContext> context,
             float height,
             int columns
     );
+
 }

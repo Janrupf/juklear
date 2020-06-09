@@ -45,7 +45,7 @@ public class JuklearStyleEnum<E extends Enum<E> & JuklearEnum> implements CAcces
             throw new IllegalStateException("Failed to push flags (stack overrun?)");
         }
 
-        return new JuklearPushedStyle(context, this::pop);
+        return new JuklearPushedStyle(context, getClass(), this::pop);
     }
 
     private native boolean nativePush(CAccessibleObject<JuklearContext> context);
@@ -59,7 +59,7 @@ public class JuklearStyleEnum<E extends Enum<E> & JuklearEnum> implements CAcces
             throw new IllegalStateException("Failed to push flags (stack overrun?)");
         }
 
-        return new JuklearPushedStyle(context, this::pop);
+        return new JuklearPushedStyle(context, getClass(), this::pop);
     }
 
     public JuklearPushableStyle<JuklearStyleEnum<E>> preparePush(JuklearStyleEnum<E> value) {
@@ -71,7 +71,7 @@ public class JuklearStyleEnum<E extends Enum<E> & JuklearEnum> implements CAcces
             throw new IllegalStateException("Failed to push flags (stack overrun?)");
         }
 
-        return new JuklearPushedStyle(context, this::pop);
+        return new JuklearPushedStyle(context, getClass(), this::pop);
     }
 
     private native boolean nativePush(CAccessibleObject<JuklearContext> context, int value);
