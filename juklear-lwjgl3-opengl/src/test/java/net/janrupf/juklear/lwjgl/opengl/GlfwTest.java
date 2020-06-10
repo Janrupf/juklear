@@ -178,6 +178,8 @@ public class GlfwTest {
 
                 context.draw(widthPointer.get(0), heightPointer.get(0),
                         new JuklearVec2(juklear, 1.0f, 1.0f), JuklearAntialiasing.OFF);
+
+                testWindow.setBounds(0, 0, widthPointer.get(0), heightPointer.get(0));
             }
 
             glfwSwapBuffers(window);
