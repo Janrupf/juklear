@@ -24,16 +24,16 @@ def lwjglClassifier = {
 }
 
 dependencies {
-    implementation group: 'org.lwjgl', name: 'lwjgl', version: '3.2.3'
-    runtimeOnly group: 'org.lwjgl', name: 'lwjgl', version: '3.2.3', classifier: lwjglClassifier()
+    implementation group: 'org.lwjgl', name: 'lwjgl', version: '3.2.2'
+    runtimeOnly group: 'org.lwjgl', name: 'lwjgl', version: '3.2.2', classifier: lwjglClassifier()
 
-    implementation group: 'org.lwjgl', name: 'lwjgl-opengl', version: '3.2.3'
-    runtimeOnly group: 'org.lwjgl', name: 'lwjgl-opengl', version: '3.2.3', classifier: lwjglClassifier()
+    implementation group: 'org.lwjgl', name: 'lwjgl-opengl', version: '3.2.2'
+    runtimeOnly group: 'org.lwjgl', name: 'lwjgl-opengl', version: '3.2.2', classifier: lwjglClassifier()
 
     implementation project(':juklear-base')
 
-    testImplementation group: 'org.lwjgl', name: 'lwjgl-glfw', version: '3.2.3'
-    testRuntimeOnly group: 'org.lwjgl', name: 'lwjgl-glfw', version: '3.2.3', classifier: lwjglClassifier()
+    testImplementation group: 'org.lwjgl', name: 'lwjgl-glfw', version: '3.2.2'
+    testRuntimeOnly group: 'org.lwjgl', name: 'lwjgl-glfw', version: '3.2.2', classifier: lwjglClassifier()
 }
 
 task runTestWithRenderdoc {
