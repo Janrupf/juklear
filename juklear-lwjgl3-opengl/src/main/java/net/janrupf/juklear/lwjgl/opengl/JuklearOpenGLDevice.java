@@ -118,10 +118,10 @@ public class JuklearOpenGLDevice {
 
             glBindTexture(GL_TEXTURE_2D, (int) image.getBackendObject().getHandle());
             glScissor(
-                    (int) (drawCommand.getClipRect().getX() * scale.getX()),
+                    (int) (drawCommand.getClipRect().getX() * scale.getX()) - 1,
                     (int) ((height -
                             (drawCommand.getClipRect().getY() + drawCommand.getClipRect().getHeight())) * scale.getY()),
-                    (int) (drawCommand.getClipRect().getWidth() * scale.getX()),
+                    (int) (drawCommand.getClipRect().getWidth() * scale.getX()) + 1,
                     (int) (drawCommand.getClipRect().getHeight() * scale.getY())
             );
 
