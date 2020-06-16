@@ -104,6 +104,7 @@ add_library(juklear SHARED ${JUKLEAR_SOURCE})
 target_link_libraries(juklear PUBLIC ${JNI_LIBRARIES} nuklear)
 target_include_directories(juklear PUBLIC ${JUKLEAR_INCLUDE_DIR})
 target_include_directories(juklear PRIVATE ${JNI_INCLUDE_DIRS} ${GENERATED_JNI_HEADERS_DIR})
+target_compile_definitions(juklear PUBLIC NK_BUTTON_TRIGGER_ON_RELEASE=1)
 
 #######################
 # Set compile options #

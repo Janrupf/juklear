@@ -138,7 +138,6 @@ public class JuklearOpenGLDevice {
                             (JuklearConstants.DRAW_INDEX_SIZE * drawCommand.getElementCount())));
         });
 
-        context.clear();
         commandBuffer.clear();
 
         glDisableClientState(GL_VERTEX_ARRAY);
