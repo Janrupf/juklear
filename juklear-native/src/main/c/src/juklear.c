@@ -5,7 +5,7 @@
 
 JuklearGlobal_t JUKLEAR_GLOBAL;
 
-jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env;
     int supported_version = (*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_8);
     if(supported_version == JNI_OK) {
@@ -106,7 +106,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     return supported_version;
 }
 
-void JNI_OnUnload(JavaVM *vm, void *reserved) {
+JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved) {
     JNIEnv *env;
     (*vm)->GetEnv(vm, (void **) &env, JUKLEAR_GLOBAL.active_jni_version);
 
