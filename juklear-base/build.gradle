@@ -2,6 +2,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 group 'net.janrupf'
@@ -150,4 +151,11 @@ OutputStream prefixedOutputStream(String prefix, OutputStream parentStream) {
         }
     }
     return ret
+}
+
+commonPublish(project) {
+    pom {
+        name = "Juklear"
+        description = "Nukelar for Java"
+    }
 }

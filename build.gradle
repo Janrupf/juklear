@@ -1,4 +1,59 @@
+plugins {
+    id 'maven-publish'
+}
+
 group 'net.janrupf'
 version '0.1.0'
 
 apply from: 'ci.gradle'
+
+ext.commonPublish = { Project currentProject, Closure config ->
+    currentProject.publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from currentProject.components.java
+
+                configure(it, config)
+
+                version = rootProject.version
+
+                pom {
+                    url = "https://github.com/Janrupf/juklear"
+
+                    licenses {
+                        license {
+                            name = "MIT"
+                            url = "https://opensource.org/licenses/MIT"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = "janrupf"
+                            email = "business.janrupf@gmail.com"
+                        }
+                    }
+
+                    scm {
+                        connection = "scm:git:git://github.com/Janrupf/juklear.git"
+                        developerConnection = "scm:git:ssh://github.com/Janrupf/juklear.git"
+                        url = "https://github.com/Janrupf/juklear"
+                    }
+                }
+            }
+        }
+    }
+}
+
+subprojects {
+    tasks.withType(GenerateModuleMetadata) {
+        enabled = false
+    }
+
+    pluginManager.withPlugin("java") {
+        java {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+}
