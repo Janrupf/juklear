@@ -121,6 +121,7 @@ public class GlfwTest {
 
         testButton = new JuklearButton("Click me!");
         testButton.addOwnStyle(context.getStyle().getButton().getHover().preparePush(0, 255, 0));
+        testButton.addOwnStyle(context.getStyle().getButton().getRounding().preparePush(20f));
         testButton.addListener(context, (e) -> {
             testButton.setLabel("Clicked!");
             context.getStyle().getButton().getHover().getAsColor().setRed(0);

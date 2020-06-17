@@ -1,5 +1,11 @@
 #pragma once
 
+#define NK_SIN juklear_sin
+#define NK_COS juklear_cos
+
+float juklear_sin(float x);
+float juklear_cos(float x);
+
 #define NK_INCLUDE_FONT_BAKING
 #define NK_INCLUDE_DEFAULT_ALLOCATOR
 #define NK_INCLUDE_DEFAULT_FONT
