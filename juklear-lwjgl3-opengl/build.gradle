@@ -91,6 +91,12 @@ commonPublish(project) {
             }.each {
                 it.parent().remove(it)
             }
+
+            node.dependencies.'*'.findAll {
+                it.groupId.text() == 'net.janrupf' && it.artifactId.text() == 'juklear-base'
+            }.each {
+                it.scope*.value = 'compile'
+            }
         }
     }
 }
