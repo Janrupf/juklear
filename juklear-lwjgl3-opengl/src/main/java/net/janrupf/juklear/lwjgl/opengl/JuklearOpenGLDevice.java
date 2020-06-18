@@ -53,16 +53,23 @@ public class JuklearOpenGLDevice {
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
         glLoadIdentity();
+
         glOrtho(
-            width - (width / scale.getX()),
-            width / scale.getX(),
-            height / scale.getY(),
-            height - (height / scale.getY()),
+            0.0,
+            width,
+            height,
+            0.0,
             -1.0,
             1.0);
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glLoadIdentity();
+
+        float deadXOffset = (width - (scale.getX() * width)) / 2;
+        float deadYOffset = (height - (scale.getY() * height)) / 2;
+        glTranslatef(deadXOffset, deadYOffset, 1);
+
+        glScalef(scale.getX(), scale.getY(), 1);
 
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
