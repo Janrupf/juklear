@@ -44,7 +44,7 @@ public class JuklearOpenGLDevice {
         glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
         glDisable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
-        glEnable(GL_SCISSOR_TEST);
+        glDisable(GL_SCISSOR_TEST);
         glEnable(GL_BLEND);
         glEnable(GL_TEXTURE_2D);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -53,7 +53,13 @@ public class JuklearOpenGLDevice {
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
         glLoadIdentity();
-        glOrtho(0, width, height, 0.0, -1.0, 1.0);
+        glOrtho(
+            width - (width / scale.getX()),
+            width / scale.getX(),
+            height / scale.getY(),
+            height - (height / scale.getY()),
+            -1.0,
+            1.0);
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glLoadIdentity();
@@ -117,13 +123,13 @@ public class JuklearOpenGLDevice {
             );
 
             glBindTexture(GL_TEXTURE_2D, (int) image.getBackendObject().getHandle());
-            glScissor(
+            /* glScissor(
                     (int) (drawCommand.getClipRect().getX() * scale.getX()) - 5,
                     (int) ((height -
                             (drawCommand.getClipRect().getY() + drawCommand.getClipRect().getHeight())) * scale.getY()),
                     (int) (drawCommand.getClipRect().getWidth() * scale.getX()) + 10,
                     (int) (drawCommand.getClipRect().getHeight() * scale.getY())
-            );
+            ); */
 
             long memAddr = MemoryUtil.memAddress(constElementBuffer);
             if(memAddr == 0) {
