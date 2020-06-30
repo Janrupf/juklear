@@ -48,7 +48,7 @@ extern JuklearGlobal_t JUKLEAR_GLOBAL;
 #define JAVA_FATAL_ERROR(env, message) \
     (*env)->ThrowNew(env, JUKLEAR_GLOBAL.juklear_fatal_exception_class, JUKLEAR_SOURCE_LOCATION " => " message)
 
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__APPLE__)
 #   define bswap16(x) ((x)>>8 | ((x)&255)<<8)
 #   define bswap32(x) ((bswap16((x)>>16)&65535)|(bswap16((x)&65535)<<16))
 #   if BYTE_ORDER == LITTLE_ENDIAN

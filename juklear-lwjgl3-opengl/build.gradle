@@ -3,6 +3,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 group 'net.janrupf'
@@ -73,6 +74,28 @@ task runTestWithRenderdoc {
 
             exec {
                 commandLine 'qrenderdoc', renderdocCaptureFile.absolutePath
+            }
+        }
+    }
+}
+
+commonPublish(project) {
+    pom {
+        name = "Juklear LJWGL3 OpenGL"
+        description = "plug-and-play Juklear rendering for OpenGL using LWJGL3"
+
+        withXml {
+            def node = asNode()
+            node.dependencies.'*'.findAll {
+                it.groupId.text() == 'org.lwjgl' && it.classifier.text() == lwjglClassifier()
+            }.each {
+                it.parent().remove(it)
+            }
+
+            node.dependencies.'*'.findAll {
+                it.groupId.text() == 'net.janrupf' && it.artifactId.text() == 'juklear-base'
+            }.each {
+                it.scope*.value = 'compile'
             }
         }
     }

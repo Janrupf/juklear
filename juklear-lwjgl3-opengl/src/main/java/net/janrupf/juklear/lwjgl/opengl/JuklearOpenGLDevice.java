@@ -44,7 +44,7 @@ public class JuklearOpenGLDevice {
         glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
         glDisable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
-        glEnable(GL_SCISSOR_TEST);
+        glDisable(GL_SCISSOR_TEST);
         glEnable(GL_BLEND);
         glEnable(GL_TEXTURE_2D);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -53,10 +53,23 @@ public class JuklearOpenGLDevice {
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
         glLoadIdentity();
-        glOrtho(0, width, height, 0.0, -1.0, 1.0);
+
+        glOrtho(
+            0.0,
+            width,
+            height,
+            0.0,
+            -1.0,
+            1.0);
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glLoadIdentity();
+
+        float deadXOffset = (width - (scale.getX() * width)) / 2;
+        float deadYOffset = (height - (scale.getY() * height)) / 2;
+        glTranslatef(deadXOffset, deadYOffset, 1);
+
+        glScalef(scale.getX(), scale.getY(), 1);
 
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -81,9 +94,9 @@ public class JuklearOpenGLDevice {
                     .build())
                 .vertexSize(JuklearOpenGLVertex.byteSize())
                 .nullTexture(nullTexture)
-                .circleSegmentCount(22)
-                .curveSegmentCount(22)
-                .arcSegmentCount(22)
+                .circleSegmentCount(1000)
+                .curveSegmentCount(1000)
+                .arcSegmentCount(1000)
                 .globalAlpha(1.0f)
                 .shapeAA(antialiasing)
                 .lineAA(antialiasing)
@@ -117,13 +130,13 @@ public class JuklearOpenGLDevice {
             );
 
             glBindTexture(GL_TEXTURE_2D, (int) image.getBackendObject().getHandle());
-            glScissor(
-                    (int) (drawCommand.getClipRect().getX() * scale.getX()),
+            /* glScissor(
+                    (int) (drawCommand.getClipRect().getX() * scale.getX()) - 5,
                     (int) ((height -
                             (drawCommand.getClipRect().getY() + drawCommand.getClipRect().getHeight())) * scale.getY()),
-                    (int) (drawCommand.getClipRect().getWidth() * scale.getX()),
+                    (int) (drawCommand.getClipRect().getWidth() * scale.getX()) + 10,
                     (int) (drawCommand.getClipRect().getHeight() * scale.getY())
-            );
+            ); */
 
             long memAddr = MemoryUtil.memAddress(constElementBuffer);
             if(memAddr == 0) {
@@ -138,7 +151,6 @@ public class JuklearOpenGLDevice {
                             (JuklearConstants.DRAW_INDEX_SIZE * drawCommand.getElementCount())));
         });
 
-        context.clear();
         commandBuffer.clear();
 
         glDisableClientState(GL_VERTEX_ARRAY);

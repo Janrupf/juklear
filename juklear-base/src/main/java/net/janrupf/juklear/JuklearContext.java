@@ -102,6 +102,24 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
 
     private native void nativeNkClear();
 
+    public void noopDraw() {
+        input.checkDrawingAllowed();
+
+        if(drawing) {
+            throw new IllegalStateException("This context is being drawn already");
+        }
+
+        events.clear();
+
+        drawing = true;
+        try {
+            topLevelComponents.forEach((component) -> component.draw(juklear, this));
+            clear();
+        } finally {
+            drawing = false;
+        }
+    }
+
     public void draw(int width, int height, JuklearVec2 scale, JuklearAntialiasing antialiasing) {
         input.checkDrawingAllowed();
 
@@ -111,11 +129,11 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
 
         events.clear();
 
-
         drawing = true;
         try {
             topLevelComponents.forEach((component) -> component.draw(juklear, this));
             juklear.getBackend().draw(this, width, height, scale, antialiasing);
+            clear();
         } finally {
             drawing = false;
         }
@@ -168,6 +186,10 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
 
     public void removeTopLevel(JuklearTopLevelComponent component) {
         this.topLevelComponents.remove(component);
+    }
+
+    public List<JuklearTopLevelComponent> getTopLevelComponents() {
+        return Collections.unmodifiableList(topLevelComponents);
     }
 
     public JuklearInput beginInput() {

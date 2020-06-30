@@ -79,7 +79,7 @@ public class JuklearButtonStyle implements CAccessibleObject<JuklearButtonStyle>
 
     private native long nativeGetTextAlignmentHandle();
 
-    private JuklearStyleFloat getBorder() {
+    public JuklearStyleFloat getBorder() {
         return new JuklearStyleFloat(JuklearStyle.styleWrap(nativeGetBorderHandle(), this));
     }
 

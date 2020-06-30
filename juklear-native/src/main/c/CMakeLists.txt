@@ -1,3 +1,8 @@
+#####################
+# Pre project setup #
+#####################
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.10" CACHE STRING "Minimum OS X deployment version" FORCE)
+
 #################
 # Project setup #
 #################
@@ -54,6 +59,11 @@ set(JUKLEAR_SOURCE
         src/input/juklear_input.c
         src/input/juklear_key.c
 
+        src/layout/component/row/template/juklear_templated_row.c
+        src/layout/component/row/template/juklear_templated_row_dynamic.c
+        src/layout/component/row/template/juklear_templated_row_static.c
+        src/layout/component/row/template/juklear_templated_row_variable.c
+
         src/layout/component/row/juklear_dynamic_row.c
         src/layout/component/row/juklear_static_row.c
 
@@ -99,6 +109,7 @@ add_library(juklear SHARED ${JUKLEAR_SOURCE})
 target_link_libraries(juklear PUBLIC ${JNI_LIBRARIES} nuklear)
 target_include_directories(juklear PUBLIC ${JUKLEAR_INCLUDE_DIR})
 target_include_directories(juklear PRIVATE ${JNI_INCLUDE_DIRS} ${GENERATED_JNI_HEADERS_DIR})
+target_compile_definitions(juklear PUBLIC NK_BUTTON_TRIGGER_ON_RELEASE=1)
 
 #######################
 # Set compile options #
