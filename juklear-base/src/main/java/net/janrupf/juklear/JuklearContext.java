@@ -188,6 +188,10 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
         this.topLevelComponents.remove(component);
     }
 
+    public List<JuklearTopLevelComponent> getTopLevelComponents() {
+        return Collections.unmodifiableList(topLevelComponents);
+    }
+
     public JuklearInput beginInput() {
         input.begin();
         return input;
