@@ -9,6 +9,8 @@ import net.janrupf.juklear.layout.component.base.JuklearAbstractComponent;
 
 public class JuklearImageDisplay extends JuklearAbstractComponent<JuklearImageDisplay> {
     private final JuklearImage image;
+    private float paddingX;
+    private float paddingY;
 
     public JuklearImageDisplay(JuklearJavaImage image) {
         this.image = image.asDrawable();
@@ -18,11 +20,36 @@ public class JuklearImageDisplay extends JuklearAbstractComponent<JuklearImageDi
         this.image = image;
     }
 
-    @Override
-    protected void doDraw(Juklear juklear, JuklearContext context) {
-        nativeNkImage(context, image);
+    public void setPaddingX(float paddingX) {
+        this.paddingX = paddingX;
     }
 
-    public static native void nativeNkImage(
-            CAccessibleObject<JuklearContext> context, CAccessibleObject<JuklearImage> image);
+    public float getPaddingX() {
+        return paddingX;
+    }
+
+    public void setPaddingY(float paddingY) {
+        this.paddingY = paddingY;
+    }
+
+    public float getPaddingY() {
+        return paddingY;
+    }
+
+    public void setPadding(float x, float y) {
+        this.paddingX = x;
+        this.paddingY = y;
+    }
+
+    @Override
+    protected void doDraw(Juklear juklear, JuklearContext context) {
+        nativeNkImagePadding(context, image, paddingX, paddingY);
+    }
+
+    public static native void nativeNkImagePadding(
+            CAccessibleObject<JuklearContext> context,
+            CAccessibleObject<JuklearImage> image,
+            float paddingX,
+            float paddingY
+    );
 }

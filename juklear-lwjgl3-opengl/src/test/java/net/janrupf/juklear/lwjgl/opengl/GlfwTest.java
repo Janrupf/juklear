@@ -147,7 +147,9 @@ public class GlfwTest {
 
         JuklearStaticRow thirdRow = new JuklearStaticRow(juklearImage.getWidth(), juklearImage.getHeight());
 
-        thirdRow.addChild(new JuklearImageDisplay(juklearImage));
+        JuklearImageDisplay logoDisplay = new JuklearImageDisplay(juklearImage);
+        logoDisplay.setPadding(40, 40);
+        thirdRow.addChild(logoDisplay);
         testWindow.addChild(thirdRow);
 
         JuklearTemplatedRow forthRowInner = new JuklearTemplatedRow(50);
