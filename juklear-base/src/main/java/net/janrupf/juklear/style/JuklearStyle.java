@@ -1,7 +1,11 @@
 package net.janrupf.juklear.style;
 
+import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.ffi.CAllocatedObject;
+import net.janrupf.juklear.font.JuklearUserFont;
+import net.janrupf.juklear.style.state.JuklearPushableStyle;
+import net.janrupf.juklear.style.state.JuklearPushedStyle;
 
 public class JuklearStyle implements CAccessibleObject<JuklearStyle> {
     private final CAccessibleObject<JuklearStyle> instance;
@@ -39,6 +43,28 @@ public class JuklearStyle implements CAccessibleObject<JuklearStyle> {
     }
 
     private native long nativeGetWindowHandle();
+
+    private static native boolean nativeNkStylePushFont(
+            CAccessibleObject<JuklearContext> context, CAccessibleObject<JuklearUserFont> font);
+
+    private static native boolean nativeNkStylePopFont(CAccessibleObject<JuklearContext> context);
+
+    public JuklearPushableStyle<JuklearUserFont> preparePushFont(JuklearUserFont font) {
+        return new JuklearPushableStyle<>((context) -> pushFont(context, font));
+    }
+
+    public JuklearPushedStyle pushFont(JuklearContext context, JuklearUserFont font) {
+        if (!nativeNkStylePushFont(context, font)) {
+            throw new IllegalStateException("Failed to push font (stack overrun?)");
+        }
+        return new JuklearPushedStyle(context, JuklearUserFont.class, this::popFont);
+    }
+
+    public void popFont(JuklearContext context) {
+        if (!nativeNkStylePopFont(context)) {
+            throw new IllegalStateException("Failed to pop font (stack empty?)");
+        }
+    }
 
     @Override
     public long getHandle() {
