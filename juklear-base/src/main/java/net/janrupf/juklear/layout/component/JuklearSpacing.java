@@ -5,7 +5,7 @@ import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.layout.component.base.JuklearAbstractComponent;
 
-public class JuklearSpacing extends JuklearAbstractComponent {
+public class JuklearSpacing extends JuklearAbstractComponent<JuklearSpacing> {
     private int columns;
 
     public JuklearSpacing(int columns) {

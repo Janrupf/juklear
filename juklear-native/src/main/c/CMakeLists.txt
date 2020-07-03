@@ -6,7 +6,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET "10.10" CACHE STRING "Minimum OS X deployment ve
 #################
 # Project setup #
 #################
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.15)
 project(juklear C)
 
 #####################

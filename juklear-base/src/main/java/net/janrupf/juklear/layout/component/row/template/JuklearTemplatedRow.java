@@ -6,7 +6,7 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.layout.component.base.JuklearAbstractContainer;
 import net.janrupf.juklear.layout.component.base.JuklearComponent;
 
-public class JuklearTemplatedRow extends JuklearAbstractContainer<JuklearTemplatedRowComponent> {
+public class JuklearTemplatedRow extends JuklearAbstractContainer<JuklearTemplatedRow, JuklearTemplatedRowComponent<?>> {
     private float rowHeight;
 
     public JuklearTemplatedRow() {
@@ -25,20 +25,20 @@ public class JuklearTemplatedRow extends JuklearAbstractContainer<JuklearTemplat
         this.rowHeight = rowHeight;
     }
 
-    public JuklearTemplatedRowDynamic addDynamic(JuklearComponent component) {
-        JuklearTemplatedRowDynamic row = new JuklearTemplatedRowDynamic(component);
+    public <C extends JuklearComponent<C>> JuklearTemplatedRowDynamic<C> addDynamic(C component) {
+        JuklearTemplatedRowDynamic<C> row = new JuklearTemplatedRowDynamic<>(component);
         addChild(row);
         return row;
     }
 
-    public JuklearTemplatedRowVariable addVariable(float minWidth, JuklearComponent component) {
-        JuklearTemplatedRowVariable row = new JuklearTemplatedRowVariable(minWidth, component);
+    public <C extends JuklearComponent<C>> JuklearTemplatedRowVariable<C> addVariable(float minWidth, C component) {
+        JuklearTemplatedRowVariable<C> row = new JuklearTemplatedRowVariable<>(minWidth, component);
         addChild(row);
         return row;
     }
 
-    public JuklearTemplatedRowStatic addStatic(float width, JuklearComponent component) {
-        JuklearTemplatedRowStatic row = new JuklearTemplatedRowStatic(width, component);
+    public <C extends JuklearComponent<C>> JuklearTemplatedRowStatic<C> addStatic(float width, C component) {
+        JuklearTemplatedRowStatic<C> row = new JuklearTemplatedRowStatic<>(width, component);
         addChild(row);
         return row;
     }
@@ -52,9 +52,11 @@ public class JuklearTemplatedRow extends JuklearAbstractContainer<JuklearTemplat
     }
 
     @Override
-    protected void endDraw(Juklear juklear, JuklearContext context) {}
+    protected void endDraw(Juklear juklear, JuklearContext context) {
+    }
 
     public static native void nativeNkLayoutRowTemplateBegin(
             CAccessibleObject<JuklearContext> context, float rowHeight);
+
     public static native void nativeNkLayoutRowTemplateEnd(CAccessibleObject<JuklearContext> context);
 }

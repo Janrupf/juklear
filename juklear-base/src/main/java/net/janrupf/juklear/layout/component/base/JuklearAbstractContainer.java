@@ -7,9 +7,9 @@ import net.janrupf.juklear.style.state.JuklearPushedStyle;
 
 import java.util.*;
 
-public abstract class JuklearAbstractContainer<T extends JuklearComponent>
-        extends JuklearAbstractComponent implements JuklearContainer<T> {
-    protected final List<T> children;
+public abstract class JuklearAbstractContainer<T extends JuklearAbstractContainer<T, K>, K extends JuklearComponent<?>>
+        extends JuklearAbstractComponent<T> implements JuklearContainer<T, K> {
+    protected final List<K> children;
     protected final List<JuklearPushableStyle<?>> childStyles;
 
     protected JuklearAbstractContainer() {
@@ -18,17 +18,18 @@ public abstract class JuklearAbstractContainer<T extends JuklearComponent>
     }
 
     @Override
-    public void addChild(T child) {
+    public T addChild(K child) {
         children.add(child);
+        return (T) this;
     }
 
     @Override
-    public boolean containsChild(T child) {
+    public boolean containsChild(K child) {
         return children.contains(child);
     }
 
     @Override
-    public boolean removeChild(T child) {
+    public boolean removeChild(K child) {
         return children.remove(child);
     }
 
@@ -82,8 +83,9 @@ public abstract class JuklearAbstractContainer<T extends JuklearComponent>
     protected abstract void endDraw(Juklear juklear, JuklearContext context);
 
     @Override
-    public void addChildStyle(JuklearPushableStyle<?> style) {
+    public T addChildStyle(JuklearPushableStyle<?> style) {
         childStyles.add(style);
+        return (T) this;
     }
 
     @Override

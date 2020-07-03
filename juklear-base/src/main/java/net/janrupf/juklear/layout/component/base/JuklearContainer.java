@@ -4,12 +4,16 @@ import net.janrupf.juklear.style.state.JuklearPushableStyle;
 
 import java.util.List;
 
-public interface JuklearContainer<T extends JuklearComponent> extends JuklearComponent {
-    void addChild(T child);
-    boolean containsChild(T child);
-    boolean removeChild(T child);
+public interface JuklearContainer<T extends JuklearContainer<T, K>, K extends JuklearComponent<?>> extends JuklearComponent<T> {
+  T addChild(K child);
 
-    void addChildStyle(JuklearPushableStyle<?> style);
-    boolean removeChildStyle(JuklearPushableStyle<?> style);
-    List<JuklearPushableStyle<?>> getChildStyles();
+  boolean containsChild(K child);
+
+  boolean removeChild(K child);
+
+  T addChildStyle(JuklearPushableStyle<?> style);
+
+  boolean removeChildStyle(JuklearPushableStyle<?> style);
+
+  List<JuklearPushableStyle<?>> getChildStyles();
 }

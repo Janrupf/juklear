@@ -4,10 +4,10 @@ import net.janrupf.juklear.JuklearContext;
 import net.janrupf.juklear.event.JuklearEvent;
 import net.janrupf.juklear.event.JuklearEventListener;
 
-public abstract class JuklearAbstractEventComponent<T extends JuklearEvent> extends JuklearAbstractComponent {
-    protected final T event;
+public abstract class JuklearAbstractEventComponent<T extends JuklearAbstractEventComponent<T, E>, E extends JuklearEvent<?, ?>> extends JuklearAbstractComponent<T> {
+    protected final E event;
 
-    public JuklearAbstractEventComponent(T event) {
+    public JuklearAbstractEventComponent(E event) {
         this.event = event;
     }
 
@@ -15,11 +15,11 @@ public abstract class JuklearAbstractEventComponent<T extends JuklearEvent> exte
         context.enqueueEvent(event);
     }
 
-    public final void addListener(JuklearContext context, JuklearEventListener<T> listener) {
+    public final void addListener(JuklearContext context, JuklearEventListener<E> listener) {
         context.registerListener(event, listener);
     }
 
-    public final void removeListener(JuklearContext context, JuklearEventListener<T> listener) {
+    public final void removeListener(JuklearContext context, JuklearEventListener<E> listener) {
         context.removeListener(event, listener);
     }
 }

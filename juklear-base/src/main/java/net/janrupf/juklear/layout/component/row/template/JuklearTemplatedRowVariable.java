@@ -6,11 +6,11 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.layout.component.base.JuklearAbstractComponent;
 import net.janrupf.juklear.layout.component.base.JuklearComponent;
 
-public class JuklearTemplatedRowVariable extends JuklearAbstractComponent implements JuklearTemplatedRowComponent {
+public class JuklearTemplatedRowVariable<C extends JuklearComponent<C>> extends JuklearAbstractComponent<JuklearTemplatedRowVariable<C>> implements JuklearTemplatedRowComponent<JuklearTemplatedRowVariable<C>> {
     private float minWidth;
-    private JuklearComponent content;
+    private C content;
 
-    public JuklearTemplatedRowVariable(float minWidth, JuklearComponent content) {
+    public JuklearTemplatedRowVariable(float minWidth, C content) {
         this.minWidth = minWidth;
         this.content = content;
     }
@@ -23,11 +23,11 @@ public class JuklearTemplatedRowVariable extends JuklearAbstractComponent implem
         this.minWidth = minWidth;
     }
 
-    public JuklearComponent getContent() {
+    public C getContent() {
         return content;
     }
 
-    public void setContent(JuklearComponent content) {
+    public void setContent(C content) {
         this.content = content;
     }
 

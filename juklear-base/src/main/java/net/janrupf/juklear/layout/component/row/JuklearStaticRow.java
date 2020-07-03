@@ -6,7 +6,7 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.layout.component.base.JuklearAbstractContainer;
 import net.janrupf.juklear.layout.component.base.JuklearComponent;
 
-public class JuklearStaticRow extends JuklearAbstractContainer<JuklearComponent> {
+public class JuklearStaticRow extends JuklearAbstractContainer<JuklearStaticRow, JuklearComponent<?>> {
     private int itemWidth;
     private float height;
 
@@ -49,5 +49,6 @@ public class JuklearStaticRow extends JuklearAbstractContainer<JuklearComponent>
     }
 
     @Override
-    protected void endDraw(Juklear juklear, JuklearContext context) {}
+    protected void endDraw(Juklear juklear, JuklearContext context) {
+    }
 }

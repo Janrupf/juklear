@@ -6,11 +6,11 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.layout.component.base.JuklearAbstractComponent;
 import net.janrupf.juklear.layout.component.base.JuklearComponent;
 
-public class JuklearTemplatedRowStatic extends JuklearAbstractComponent implements JuklearTemplatedRowComponent {
+public class JuklearTemplatedRowStatic<C extends JuklearComponent<C>> extends JuklearAbstractComponent<JuklearTemplatedRowStatic<C>> implements JuklearTemplatedRowComponent<JuklearTemplatedRowStatic<C>> {
     private float width;
-    private JuklearComponent content;
+    private C content;
 
-    public JuklearTemplatedRowStatic(float width, JuklearComponent content) {
+    public JuklearTemplatedRowStatic(float width, C content) {
         this.width = width;
         this.content = content;
     }

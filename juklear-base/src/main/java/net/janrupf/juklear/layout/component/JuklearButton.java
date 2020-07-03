@@ -6,7 +6,7 @@ import net.janrupf.juklear.event.JuklearButtonClickedEvent;
 import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.layout.component.base.JuklearAbstractEventComponent;
 
-public class JuklearButton extends JuklearAbstractEventComponent<JuklearButtonClickedEvent> {
+public class JuklearButton extends JuklearAbstractEventComponent<JuklearButton, JuklearButtonClickedEvent> {
     private String label;
 
     public JuklearButton(String label) {
@@ -25,7 +25,7 @@ public class JuklearButton extends JuklearAbstractEventComponent<JuklearButtonCl
 
     @Override
     protected void doDraw(Juklear juklear, JuklearContext context) {
-        if(nativeNkButtonLabel(context, label)) {
+        if (nativeNkButtonLabel(context, label)) {
             emitEvent(context);
         }
     }

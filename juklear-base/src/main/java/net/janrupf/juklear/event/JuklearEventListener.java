@@ -1,11 +1,11 @@
 package net.janrupf.juklear.event;
 
 @FunctionalInterface
-public interface JuklearEventListener<T extends JuklearEvent> {
+public interface JuklearEventListener<T extends JuklearEvent<?, ?>> {
     void onEvent(T event);
 
     @SuppressWarnings("unchecked")
-    default void accept(JuklearEvent event) {
+    default void accept(T event) {
         onEvent((T) event);
     }
 }

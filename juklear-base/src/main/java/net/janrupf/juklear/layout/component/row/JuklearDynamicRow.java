@@ -6,7 +6,7 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.layout.component.base.JuklearAbstractContainer;
 import net.janrupf.juklear.layout.component.base.JuklearComponent;
 
-public class JuklearDynamicRow extends JuklearAbstractContainer<JuklearComponent> {
+public class JuklearDynamicRow extends JuklearAbstractContainer<JuklearDynamicRow, JuklearComponent<?>> {
     private float height;
 
     public JuklearDynamicRow(float height) {

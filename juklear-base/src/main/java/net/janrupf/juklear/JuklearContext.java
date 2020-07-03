@@ -14,7 +14,6 @@ import net.janrupf.juklear.input.JuklearInput;
 import net.janrupf.juklear.layout.component.base.JuklearTopLevelComponent;
 import net.janrupf.juklear.math.JuklearVec2;
 import net.janrupf.juklear.style.JuklearStyle;
-import net.janrupf.juklear.style.state.JuklearStylePopable;
 import net.janrupf.juklear.style.state.JuklearPushedStyle;
 import net.janrupf.juklear.util.JuklearBuffer;
 import net.janrupf.juklear.util.JuklearConvertResult;
@@ -30,9 +29,9 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     private final JuklearFont font;
     private final CAllocatedObject<JuklearContext> instance;
     private final JuklearInput input;
-    private final Queue<JuklearEvent> events;
-    private final Map<JuklearEvent, Set<JuklearEventListener<?>>> listeners;
-    private final List<JuklearTopLevelComponent> topLevelComponents;
+    private final Queue<JuklearEvent<?, ?>> events;
+    private final Map<JuklearEvent<?, ?>, Set<JuklearEventListener<?>>> listeners;
+    private final List<JuklearTopLevelComponent<?>> topLevelComponents;
     private final Map<Class<?>, Stack<JuklearPushedStyle>> pushedStyles;
 
     private boolean drawing;
@@ -105,7 +104,7 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     public void noopDraw() {
         input.checkDrawingAllowed();
 
-        if(drawing) {
+        if (drawing) {
             throw new IllegalStateException("This context is being drawn already");
         }
 
@@ -123,7 +122,7 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
     public void draw(int width, int height, JuklearVec2 scale, JuklearAntialiasing antialiasing) {
         input.checkDrawingAllowed();
 
-        if(drawing) {
+        if (drawing) {
             throw new IllegalStateException("This context is being drawn already");
         }
 
@@ -139,8 +138,8 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
         }
     }
 
-    public void enqueueEvent(JuklearEvent event) {
-        if(!drawing) {
+    public void enqueueEvent(JuklearEvent<?, ?> event) {
+        if (!drawing) {
             throw new IllegalStateException("Tried to enqueue event while not drawing");
         }
 
@@ -151,23 +150,23 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
         JuklearEvent event;
         while ((event = events.poll()) != null) {
             Set<JuklearEventListener<?>> eventListeners = listeners.get(event);
-            if(eventListeners != null) {
-                for (JuklearEventListener<?> listener : eventListeners) {
+            if (eventListeners != null) {
+                for (JuklearEventListener listener : eventListeners) {
                     listener.accept(event);
                 }
             }
         }
     }
 
-    public <T extends JuklearEvent> void registerListener(T event, JuklearEventListener<T> listener) {
+    public <E extends JuklearEvent<?, ?>> void registerListener(E event, JuklearEventListener<E> listener) {
         listeners.computeIfAbsent(event, (k) -> new HashSet<>()).add(listener);
     }
 
-    public <T extends JuklearEvent> void removeListener(T event, JuklearEventListener<T> listener) {
+    public <E extends JuklearEvent<?, ?>> void removeListener(E event, JuklearEventListener<E> listener) {
         Set<JuklearEventListener<?>> eventListeners = listeners.get(event);
-        if(eventListeners != null) {
+        if (eventListeners != null) {
             eventListeners.remove(listener);
-            if(eventListeners.isEmpty()) {
+            if (eventListeners.isEmpty()) {
                 listeners.remove(event);
             }
         }
@@ -177,18 +176,18 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
         return o.getClass().getName() + nextUniqueId++;
     }
 
-    public void addTopLevel(JuklearTopLevelComponent component) {
-        if(component.getUniqueId() == null) {
+    public void addTopLevel(JuklearTopLevelComponent<?> component) {
+        if (component.getUniqueId() == null) {
             component.setUniqueId(provideUniqueId(component));
         }
         this.topLevelComponents.add(component);
     }
 
-    public void removeTopLevel(JuklearTopLevelComponent component) {
+    public void removeTopLevel(JuklearTopLevelComponent<?> component) {
         this.topLevelComponents.remove(component);
     }
 
-    public List<JuklearTopLevelComponent> getTopLevelComponents() {
+    public List<JuklearTopLevelComponent<?>> getTopLevelComponents() {
         return Collections.unmodifiableList(topLevelComponents);
     }
 
@@ -213,9 +212,9 @@ public class JuklearContext implements CAccessibleObject<JuklearContext> {
 
     public void registerStylePop(Class<?> poppedClass, JuklearPushedStyle style) {
         Stack<JuklearPushedStyle> pushed = pushedStyles.get(poppedClass);
-        if(pushed == null || pushed.isEmpty()) {
+        if (pushed == null || pushed.isEmpty()) {
             throw new IllegalStateException("No style of type " + poppedClass + " pushed");
-        } else if(!pushed.peek().equals(style)) {
+        } else if (!pushed.peek().equals(style)) {
             throw new IllegalStateException("Style to pop is not on top of stack");
         } else {
             pushed.pop();

@@ -7,7 +7,7 @@ import net.janrupf.juklear.image.JuklearImage;
 import net.janrupf.juklear.image.JuklearJavaImage;
 import net.janrupf.juklear.layout.component.base.JuklearAbstractComponent;
 
-public class JuklearImageDisplay extends JuklearAbstractComponent {
+public class JuklearImageDisplay extends JuklearAbstractComponent<JuklearImageDisplay> {
     private final JuklearImage image;
 
     public JuklearImageDisplay(JuklearJavaImage image) {

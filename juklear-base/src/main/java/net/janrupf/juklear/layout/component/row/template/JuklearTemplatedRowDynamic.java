@@ -6,18 +6,18 @@ import net.janrupf.juklear.ffi.CAccessibleObject;
 import net.janrupf.juklear.layout.component.base.JuklearAbstractComponent;
 import net.janrupf.juklear.layout.component.base.JuklearComponent;
 
-public class JuklearTemplatedRowDynamic extends JuklearAbstractComponent implements JuklearTemplatedRowComponent {
-    private JuklearComponent content;
+public class JuklearTemplatedRowDynamic<C extends JuklearComponent<C>> extends JuklearAbstractComponent<JuklearTemplatedRowDynamic<C>> implements JuklearTemplatedRowComponent<JuklearTemplatedRowDynamic<C>> {
+    private C content;
 
-    public JuklearTemplatedRowDynamic(JuklearComponent content) {
+    public JuklearTemplatedRowDynamic(C content) {
         this.content = content;
     }
 
-    public JuklearComponent getContent() {
+    public C getContent() {
         return content;
     }
 
-    public void setContent(JuklearComponent content) {
+    public void setContent(C content) {
         this.content = content;
     }
 
