@@ -34,7 +34,7 @@ public abstract class JuklearAbstractContainer<T extends JuklearAbstractContaine
         return children.remove(child);
     }
 
-    protected final void drawAllChildren(Juklear juklear, JuklearContext context) {
+    protected void drawAllChildren(Juklear juklear, JuklearContext context) {
         Deque<JuklearPushedStyle> childPushedStyles = new LinkedList<>();
         childStyles.forEach((style) -> childPushedStyles.addLast(style.push(context)));
 

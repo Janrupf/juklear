@@ -39,6 +39,7 @@ final def NATIVE_CLASSES = [
         "net.janrupf.juklear.layout.component.JuklearGroup",
         "net.janrupf.juklear.layout.component.JuklearImageDisplay",
         "net.janrupf.juklear.layout.component.JuklearLabel",
+        "net.janrupf.juklear.layout.component.JuklearListView",
         "net.janrupf.juklear.layout.component.JuklearSpacing",
         "net.janrupf.juklear.layout.component.JuklearWindow",
 

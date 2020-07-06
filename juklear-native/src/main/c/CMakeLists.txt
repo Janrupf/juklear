@@ -71,6 +71,7 @@ set(JUKLEAR_SOURCE
         src/layout/component/juklear_group.c
         src/layout/component/juklear_image_display.c
         src/layout/component/juklear_label.c
+        src/layout/component/juklear_list_view.c
         src/layout/component/juklear_spacing.c
         src/layout/component/juklear_window.c
 

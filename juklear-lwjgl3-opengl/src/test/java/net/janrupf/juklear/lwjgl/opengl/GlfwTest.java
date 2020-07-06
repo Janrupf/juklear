@@ -23,6 +23,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.CallbackI;
 import org.lwjgl.system.MemoryStack;
 
 import javax.imageio.ImageIO;
@@ -170,8 +171,32 @@ public class GlfwTest {
         fifthRowGroup.addOwnStyle(context.getStyle().getWindow().getGroupBorderColor().preparePush(255, 0, 0));
 
         fifthRow.addChild(fifthRowGroup);
-
         testWindow.addChild(fifthRow);
+
+        JuklearListView listView = new JuklearListView(20);
+        for(int i = 0; i < 10; i++) {
+            JuklearDynamicRow row = new JuklearDynamicRow(20);
+            row.addChild(new JuklearButton(Integer.toString(i)));
+
+            listView.addChild(row);
+        }
+
+        JuklearDynamicRow listViewRow = new JuklearDynamicRow(100);
+        listViewRow.addChild(listView);
+        testWindow.addChild(listViewRow);
+
+        JuklearDynamicRow scrollTestRow = new JuklearDynamicRow(100);
+        JuklearGroup scrollTestGroup = new JuklearGroup();
+
+        for(int i = 0; i < 10; i++) {
+            JuklearDynamicRow row = new JuklearDynamicRow(20);
+            row.addChild(new JuklearButton(Integer.toString(i)));
+
+            scrollTestGroup.addChild(row);
+        }
+
+        scrollTestRow.addChild(scrollTestGroup);
+        testWindow.addChild(scrollTestRow);
 
         context.addTopLevel(testWindow);
     }

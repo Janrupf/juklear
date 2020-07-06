@@ -31,3 +31,4 @@ typedef struct nk_style_button nk_style_button_t;
 typedef struct nk_style_window_header nk_style_window_header_t;
 typedef struct nk_style_window nk_style_window_t;
 typedef struct nk_user_font nk_user_font_t;
+typedef struct nk_list_view nk_list_view_t;
