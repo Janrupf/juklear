@@ -39,6 +39,9 @@ public class JuklearTemplatedRowVariable<C extends JuklearComponent<C>> extends 
 
     @Override
     protected void doDraw(Juklear juklear, JuklearContext context) {
+        if(content.getUniqueId() == null) {
+            content.setUniqueId(context.provideUniqueId(content));
+        }
         content.draw(juklear, context);
     }
 

@@ -28,6 +28,9 @@ public class JuklearTemplatedRowDynamic<C extends JuklearComponent<C>> extends J
 
     @Override
     protected void doDraw(Juklear juklear, JuklearContext context) {
+        if(content.getUniqueId() == null) {
+            content.setUniqueId(context.provideUniqueId(content));
+        }
         content.draw(juklear, context);
     }
 
