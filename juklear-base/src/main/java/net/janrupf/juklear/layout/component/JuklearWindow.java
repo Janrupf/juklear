@@ -100,7 +100,7 @@ public class JuklearWindow extends JuklearAbstractContainer<JuklearWindow, Jukle
     }
 
     @Override
-    protected void endDraw(Juklear juklear, JuklearContext context) {
+    protected void endDraw(Juklear juklear, JuklearContext context, boolean hasDrawn) {
         nativeNkEnd(context);
     }
 

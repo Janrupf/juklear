@@ -159,6 +159,23 @@ public class GlfwTest {
 
         testWindow.addChild(forthRowInner);
 
+        JuklearDynamicRow fifthRow = new JuklearDynamicRow(70);
+        fifthRow.addChild(new JuklearButton("Beside group button"));
+
+        JuklearGroup fifthRowGroup = new JuklearGroup();
+
+        JuklearDynamicRow firstBesideRow = new JuklearDynamicRow(30);
+        firstBesideRow.addChild(new JuklearButton("In group 1"));
+        fifthRowGroup.addChild(firstBesideRow);
+
+        JuklearDynamicRow secondBesideRow = new JuklearDynamicRow(30);
+        secondBesideRow.addChild(new JuklearButton("In group 2"));
+        fifthRowGroup.addChild(secondBesideRow);
+
+        fifthRow.addChild(fifthRowGroup);
+
+        testWindow.addChild(fifthRow);
+
         context.addTopLevel(testWindow);
     }
 

@@ -52,7 +52,7 @@ public class JuklearTemplatedRow extends JuklearAbstractContainer<JuklearTemplat
     }
 
     @Override
-    protected void endDraw(Juklear juklear, JuklearContext context) {
+    protected void endDraw(Juklear juklear, JuklearContext context, boolean hasDrawn) {
     }
 
     public static native void nativeNkLayoutRowTemplateBegin(

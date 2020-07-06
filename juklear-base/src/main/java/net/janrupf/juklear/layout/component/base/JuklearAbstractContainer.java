@@ -17,6 +17,7 @@ public abstract class JuklearAbstractContainer<T extends JuklearAbstractContaine
         this.childStyles = new ArrayList<>();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T addChild(K child) {
         children.add(child);
@@ -57,7 +58,8 @@ public abstract class JuklearAbstractContainer<T extends JuklearAbstractContaine
 
         try {
             ownStyles.forEach((style) -> ownPushedStyles.addLast(style.push(context)));
-            if (beginDraw(juklear, context)) {
+            boolean hasDrawn;
+            if (hasDrawn = beginDraw(juklear, context)) {
                 JuklearPushedStyle toPop;
                 while ((toPop = ownPushedStyles.pollLast()) != null) {
                     toPop.close();
@@ -67,7 +69,7 @@ public abstract class JuklearAbstractContainer<T extends JuklearAbstractContaine
 
                 ownStyles.forEach((style) -> ownPushedStyles.addLast(style.push(context)));
             }
-            endDraw(juklear, context);
+            endDraw(juklear, context, hasDrawn);
         } finally {
             JuklearPushedStyle toPop;
             while ((toPop = ownPushedStyles.pollLast()) != null) {
@@ -80,8 +82,9 @@ public abstract class JuklearAbstractContainer<T extends JuklearAbstractContaine
     protected void doDraw(Juklear juklear, JuklearContext context) {}
 
     protected abstract boolean beginDraw(Juklear juklear, JuklearContext context);
-    protected abstract void endDraw(Juklear juklear, JuklearContext context);
+    protected abstract void endDraw(Juklear juklear, JuklearContext context, boolean hasDrawn);
 
+    @SuppressWarnings("unchecked")
     @Override
     public T addChildStyle(JuklearPushableStyle<?> style) {
         childStyles.add(style);

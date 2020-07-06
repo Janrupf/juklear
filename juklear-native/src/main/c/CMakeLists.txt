@@ -68,6 +68,7 @@ set(JUKLEAR_SOURCE
         src/layout/component/row/juklear_static_row.c
 
         src/layout/component/juklear_button.c
+        src/layout/component/juklear_group.c
         src/layout/component/juklear_image_display.c
         src/layout/component/juklear_label.c
         src/layout/component/juklear_spacing.c

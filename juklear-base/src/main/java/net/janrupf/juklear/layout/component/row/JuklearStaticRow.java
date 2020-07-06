@@ -49,6 +49,6 @@ public class JuklearStaticRow extends JuklearAbstractContainer<JuklearStaticRow,
     }
 
     @Override
-    protected void endDraw(Juklear juklear, JuklearContext context) {
+    protected void endDraw(Juklear juklear, JuklearContext context, boolean hasDrawn) {
     }
 }

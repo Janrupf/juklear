@@ -28,7 +28,7 @@ public class JuklearDynamicRow extends JuklearAbstractContainer<JuklearDynamicRo
     }
 
     @Override
-    protected void endDraw(Juklear juklear, JuklearContext context) {}
+    protected void endDraw(Juklear juklear, JuklearContext context, boolean hasDrawn) {}
 
     public static native void nativeNkLayoutRowDynamic(
             CAccessibleObject<JuklearContext> context,
