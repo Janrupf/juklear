@@ -11,7 +11,7 @@ import net.janrupf.juklear.util.JuklearFlag;
 import java.util.HashSet;
 import java.util.Set;
 
-public class JuklearGroup extends JuklearAbstractContainer<JuklearWindow, JuklearContainer<?, ?>> {
+public class JuklearGroup extends JuklearAbstractContainer<JuklearGroup, JuklearContainer<?, ?>> {
     private final Set<JuklearPanelFlag> flags;
     private String title;
 
