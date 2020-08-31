@@ -1,3 +1,5 @@
+# Not actively maintained
+
 <h1 align="center">
     <img src="./artwork/Full%20Lockup/Full%20Color/Logo.png" alt="Logo" width="256">
 </h1>
